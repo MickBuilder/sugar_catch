@@ -1,32 +1,36 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sugar_catch/features/home/presentation/screens/home_screen.dart';
+import 'package:sugar_catch/core/router/app_router.dart';
 import 'package:sugar_catch/core/services/cache_service.dart';
+import 'package:sugar_catch/core/services/history_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  
-  // Initialize cache service
+
+  // Initialize services
   await CacheService.init();
-  
+  await HistoryService.init();
+
   runApp(const ProviderScope(child: SugarCatchApp()));
 }
 
-class SugarCatchApp extends StatelessWidget {
+class SugarCatchApp extends ConsumerWidget {
   const SugarCatchApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(appRouterProvider);
+
+    return CupertinoApp.router(
       title: 'Sugar Catch',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
-        useMaterial3: true,
+      theme: const CupertinoThemeData(
+        primaryColor: CupertinoColors.systemGreen,
+        brightness: Brightness.light,
       ),
-      home: const HomeScreen(),
+      routerConfig: router,
     );
   }
 }

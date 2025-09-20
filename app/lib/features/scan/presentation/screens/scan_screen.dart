@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sugar_catch/features/scan/scan_provider.dart';
 import 'package:sugar_catch/features/scan/presentation/screens/product_screen.dart';
 
@@ -36,26 +38,26 @@ class ScanScreen extends HookConsumerWidget {
       };
     }, []);
 
-    return Scaffold(
+    return CupertinoPageScaffold(
       backgroundColor: const Color(0xFF1A1A1A),
-      appBar: AppBar(
+      navigationBar: CupertinoNavigationBar(
         backgroundColor: const Color(0xFF1A1A1A),
-        leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+        border: null,
+        leading: CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () => context.go('/home'),
+          child: const Icon(CupertinoIcons.xmark, color: CupertinoColors.white),
         ),
-        title: const Text(
+        middle: const Text(
           'Scan Barcode',
           style: TextStyle(
-            color: Colors.white,
+            color: CupertinoColors.white,
             fontWeight: FontWeight.bold,
             fontSize: 18,
           ),
         ),
-        centerTitle: true,
-        elevation: 0,
       ),
-      body: Stack(
+      child: Stack(
         children: [
           // Main content
           Column(
@@ -80,12 +82,18 @@ class ScanScreen extends HookConsumerWidget {
                         MobileScanner(
                           controller: scannerController,
                           onDetect: (capture) async {
-                            print('📱 [SCAN_SCREEN] Barcode detected, checking state...');
-                            print('📱 [SCAN_SCREEN] isProcessing: ${isProcessing.value}, scannerPaused: ${scannerPaused.value}');
-                            
+                            print(
+                              '📱 [SCAN_SCREEN] Barcode detected, checking state...',
+                            );
+                            print(
+                              '📱 [SCAN_SCREEN] isProcessing: ${isProcessing.value}, scannerPaused: ${scannerPaused.value}',
+                            );
+
                             // Prevent multiple processing
                             if (isProcessing.value || scannerPaused.value) {
-                              print('📱 [SCAN_SCREEN] Already processing or paused, ignoring detection');
+                              print(
+                                '📱 [SCAN_SCREEN] Already processing or paused, ignoring detection',
+                              );
                               return;
                             }
 
@@ -93,7 +101,9 @@ class ScanScreen extends HookConsumerWidget {
                             if (barcodes.isNotEmpty) {
                               final String? code = barcodes.first.rawValue;
                               if (code != null) {
-                                print('📱 [SCAN_SCREEN] Valid barcode detected: $code');
+                                print(
+                                  '📱 [SCAN_SCREEN] Valid barcode detected: $code',
+                                );
                                 isProcessing.value = true;
 
                                 // Pause scanning immediately to prevent multiple scans
@@ -104,13 +114,17 @@ class ScanScreen extends HookConsumerWidget {
                                 try {
                                   // Store context mounted state before async operations
                                   if (!context.mounted) {
-                                    print('📱 [SCAN_SCREEN] Context not mounted, aborting');
+                                    print(
+                                      '📱 [SCAN_SCREEN] Context not mounted, aborting',
+                                    );
                                     return;
                                   }
 
                                   // Fetch product info and navigate to product screen
                                   if (context.mounted) {
-                                    print('📱 [SCAN_SCREEN] Calling _handleBarcodeDetected...');
+                                    print(
+                                      '📱 [SCAN_SCREEN] Calling _handleBarcodeDetected...',
+                                    );
                                     await _handleBarcodeDetected(
                                       context,
                                       ref,
@@ -121,11 +135,15 @@ class ScanScreen extends HookConsumerWidget {
                                   }
                                 } finally {
                                   // Reset the processing flag
-                                  print('📱 [SCAN_SCREEN] Resetting processing flag');
+                                  print(
+                                    '📱 [SCAN_SCREEN] Resetting processing flag',
+                                  );
                                   isProcessing.value = false;
                                 }
                               } else {
-                                print('📱 [SCAN_SCREEN] Barcode detected but rawValue is null');
+                                print(
+                                  '📱 [SCAN_SCREEN] Barcode detected but rawValue is null',
+                                );
                               }
                             } else {
                               print('📱 [SCAN_SCREEN] No barcodes in capture');
@@ -137,8 +155,11 @@ class ScanScreen extends HookConsumerWidget {
                           animation: animationController,
                           builder: (context, child) {
                             return Positioned(
-                              top: (MediaQuery.of(context).size.height * 0.025) + 
-                                   (MediaQuery.of(context).size.height * 0.5 * animationController.value),
+                              top:
+                                  (MediaQuery.of(context).size.height * 0.025) +
+                                  (MediaQuery.of(context).size.height *
+                                      0.5 *
+                                      animationController.value),
                               left: 16,
                               right: 16,
                               child: Container(
@@ -147,13 +168,14 @@ class ScanScreen extends HookConsumerWidget {
                                   gradient: LinearGradient(
                                     colors: [
                                       Colors.transparent,
-                                      Colors.green,
+                                      CupertinoColors.systemGreen,
                                       Colors.transparent,
                                     ],
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.green.withValues(alpha: 0.5),
+                                      color: CupertinoColors.systemGreen
+                                          .withValues(alpha: 0.5),
                                       blurRadius: 4,
                                       spreadRadius: 1,
                                     ),
@@ -168,7 +190,7 @@ class ScanScreen extends HookConsumerWidget {
                   ),
                 ),
               ),
-              
+
               // Search bar
               Container(
                 margin: const EdgeInsets.all(16),
@@ -177,15 +199,25 @@ class ScanScreen extends HookConsumerWidget {
                   color: const Color(0xFF3A3A3A),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: TextField(
-                  style: const TextStyle(color: Colors.white),
-                  decoration: const InputDecoration(
-                    hintText: 'Or search for a product',
-                    hintStyle: TextStyle(color: Colors.grey),
-                    prefixIcon: Icon(Icons.search, color: Colors.grey),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(vertical: 16),
+                child: CupertinoTextField(
+                  style: const TextStyle(color: CupertinoColors.white),
+                  placeholder: 'Or search for a product',
+                  placeholderStyle: const TextStyle(
+                    color: CupertinoColors.systemGrey,
                   ),
+                  prefix: const Padding(
+                    padding: EdgeInsets.only(left: 16),
+                    child: Icon(
+                      CupertinoIcons.search,
+                      color: CupertinoColors.systemGrey,
+                      size: 20,
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 16,
+                  ),
+                  decoration: const BoxDecoration(),
                   onSubmitted: (value) {
                     if (value.isNotEmpty) {
                       _handleManualSearch(context, ref, value, scannerPaused);
@@ -193,7 +225,7 @@ class ScanScreen extends HookConsumerWidget {
                   },
                 ),
               ),
-              
+
               const SizedBox(height: 20),
             ],
           ),
@@ -207,47 +239,40 @@ class ScanScreen extends HookConsumerWidget {
                 decoration: BoxDecoration(
                   color: const Color(0xFF1A1A1A),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: const Color(0xFF3A3A3A),
-                    width: 2,
-                  ),
+                  border: Border.all(color: const Color(0xFF3A3A3A), width: 2),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.15),
+                      color: CupertinoColors.black.withValues(alpha: 0.15),
                       blurRadius: 4,
                       offset: const Offset(4, 4),
                     ),
                   ],
                 ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () async {
-                      scannerPaused.value = false;
-                      await scannerController.start();
-                    },
-                    borderRadius: BorderRadius.circular(12),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.qr_code_scanner,
-                            color: Colors.green,
-                            size: 24,
+                child: CupertinoButton(
+                  onPressed: () async {
+                    scannerPaused.value = false;
+                    await scannerController.start();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          CupertinoIcons.qrcode_viewfinder,
+                          color: CupertinoColors.systemGreen,
+                          size: 24,
+                        ),
+                        const SizedBox(width: 12),
+                        const Text(
+                          'Tap to Scan Again',
+                          style: TextStyle(
+                            color: CupertinoColors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
                           ),
-                          const SizedBox(width: 12),
-                          const Text(
-                            'Tap to Scan Again',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -266,54 +291,48 @@ class ScanScreen extends HookConsumerWidget {
     ValueNotifier<bool> scannerPaused,
   ) async {
     print('🎯 [HANDLE_BARCODE] Starting barcode handling for: $barcode');
-    
+
     try {
       // Check if context is still mounted before proceeding
       if (!context.mounted) {
         print('🎯 [HANDLE_BARCODE] Context not mounted, aborting');
         return;
       }
-      
+
       print('🎯 [HANDLE_BARCODE] Calling scanNotifierProvider.scanBarcode...');
       await ref.read(scanNotifierProvider.notifier).scanBarcode(barcode);
       print('🎯 [HANDLE_BARCODE] scanBarcode completed successfully');
-      
+
       // Wait for the state to be properly updated and check it
       await Future.delayed(const Duration(milliseconds: 50));
       final currentState = ref.read(scanNotifierProvider);
-      print('🎯 [HANDLE_BARCODE] Current state after scan: ${currentState.runtimeType}');
+      print(
+        '🎯 [HANDLE_BARCODE] Current state after scan: ${currentState.runtimeType}',
+      );
       print('🎯 [HANDLE_BARCODE] Current state value: $currentState');
-      
+
       // Check again after async operation
       if (context.mounted) {
         print('🎯 [HANDLE_BARCODE] Navigating to ProductScreen...');
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const ProductScreen(),
-          ),
-        );
+        context.go('/product');
         print('🎯 [HANDLE_BARCODE] Navigation completed');
       } else {
-        print('🎯 [HANDLE_BARCODE] Context not mounted after scanBarcode, skipping navigation');
+        print(
+          '🎯 [HANDLE_BARCODE] Context not mounted after scanBarcode, skipping navigation',
+        );
       }
     } catch (e, stackTrace) {
       print('❌ [HANDLE_BARCODE] Error occurred: $e');
       print('❌ [HANDLE_BARCODE] Stack trace: $stackTrace');
-      
+
       // Reset scanning state on error
       print('🎯 [HANDLE_BARCODE] Resetting scanner state...');
       scannerPaused.value = false;
       await scannerController.start();
-      
+
       if (context.mounted) {
-        print('🎯 [HANDLE_BARCODE] Showing error snackbar...');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error scanning product: $e'),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 3),
-          ),
-        );
+        print('🎯 [HANDLE_BARCODE] Error scanning product: $e');
+        // TODO: Show Cupertino alert dialog for error
       }
     }
   }
@@ -327,24 +346,19 @@ class ScanScreen extends HookConsumerWidget {
     try {
       // For manual search, we'll use a mock barcode
       // In a real app, you'd implement a search API
-      await ref.read(scanNotifierProvider.notifier).scanBarcode('manual_search');
-      
+      await ref
+          .read(scanNotifierProvider.notifier)
+          .scanBarcode('manual_search');
+
       if (context.mounted) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const ProductScreen(),
-          ),
-        );
+        Navigator.of(
+          context,
+        ).push(CupertinoPageRoute(builder: (context) => const ProductScreen()));
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error searching product: $e'),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 3),
-          ),
-        );
+        print('🎯 [HANDLE_MANUAL_SEARCH] Error searching product: $e');
+        // TODO: Show Cupertino alert dialog for error
       }
     }
   }

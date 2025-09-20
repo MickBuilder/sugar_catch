@@ -42,13 +42,13 @@ class SugarAliases {
 
   static bool isHiddenSugar(String ingredientText) {
     final lowerText = ingredientText.toLowerCase();
-    
+
     for (final alias in aliases) {
       if (lowerText.contains(alias.toLowerCase())) {
         return true;
       }
     }
-    
+
     return false;
   }
 }

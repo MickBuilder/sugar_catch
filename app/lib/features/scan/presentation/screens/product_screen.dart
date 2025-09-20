@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sugar_catch/features/scan/scan_provider.dart';
 
@@ -8,90 +10,109 @@ class ProductScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scanState = ref.watch(scanNotifierProvider);
-    
+
     // Debug logging
     print('📱 [PRODUCT_SCREEN] scanState: $scanState');
     print('📱 [PRODUCT_SCREEN] scanState is null: ${scanState == null}');
     if (scanState != null) {
-      print('📱 [PRODUCT_SCREEN] scanState.productName: ${scanState.product.productName}');
+      print(
+        '📱 [PRODUCT_SCREEN] scanState.productName: ${scanState.product.productName}',
+      );
     }
 
-    return Scaffold(
-      backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
+    return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.systemGroupedBackground,
+      navigationBar: CupertinoNavigationBar(
+        backgroundColor: CupertinoColors.systemBackground,
+        border: null,
+        leading: CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/home');
+            }
+          },
+          child: const Icon(CupertinoIcons.back, color: CupertinoColors.label),
         ),
-        title: const Text(
+        middle: const Text(
           'Nutrition Facts',
           style: TextStyle(
-            color: Colors.black,
+            color: CupertinoColors.label,
             fontWeight: FontWeight.bold,
             fontSize: 18,
           ),
         ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close, color: Colors.black),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () => context.go('/scan'),
+          child: const Icon(CupertinoIcons.xmark, color: CupertinoColors.label),
+        ),
       ),
-      body: scanState == null
-          ? const Center(
-              child: Text('No product data available'),
-            )
-          : _buildProductContent(context, scanState),
-      bottomNavigationBar: scanState == null
-          ? null
-          : Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withValues(alpha: 0.2),
-                    blurRadius: 10,
-                    offset: const Offset(0, -2),
-                  ),
-                ],
-              ),
-              child: SafeArea(
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // TODO: Add to daily log functionality
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Added to daily log!'),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+      child: scanState == null
+          ? const Center(child: Text('No product data available'))
+          : Column(
+              children: [
+                Expanded(child: _buildProductContent(context, scanState)),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: const BoxDecoration(
+                    color: CupertinoColors.systemBackground,
+                    border: Border(
+                      top: BorderSide(
+                        color: CupertinoColors.separator,
+                        width: 0.5,
                       ),
-                      elevation: 0,
                     ),
-                    child: const Text(
-                      'Add to Daily Log',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                  ),
+                  child: SafeArea(
+                    child: SizedBox(
+                      height: 50,
+                      child: Row(
+                        children: [
+                          // Home button
+                          Expanded(
+                            child: CupertinoButton(
+                              onPressed: () => context.go('/home'),
+                              color: CupertinoColors.systemGrey6,
+                              borderRadius: BorderRadius.circular(12),
+                              child: const Text(
+                                'Home',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: CupertinoColors.label,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          // Add to Daily Log button
+                          Expanded(
+                            child: CupertinoButton(
+                              onPressed: () {
+                                // TODO: Add to daily log functionality
+                                print('Added to daily log!');
+                              },
+                              color: CupertinoColors.systemGreen,
+                              borderRadius: BorderRadius.circular(12),
+                              child: const Text(
+                                'Add to Daily Log',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: CupertinoColors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
     );
   }
@@ -99,7 +120,7 @@ class ProductScreen extends ConsumerWidget {
   Widget _buildProductContent(BuildContext context, ScanState data) {
     final product = data.product;
     final sugarInfo = data.sugarInfo;
-    
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -143,7 +164,7 @@ class ProductScreen extends ConsumerWidget {
                             child: CircularProgressIndicator(
                               value: loadingProgress.expectedTotalBytes != null
                                   ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
+                                        loadingProgress.expectedTotalBytes!
                                   : null,
                             ),
                           );
@@ -194,9 +215,9 @@ class ProductScreen extends ConsumerWidget {
               ],
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Sugar Analysis
           Text(
             'Sugar Analysis',
@@ -231,7 +252,10 @@ class ProductScreen extends ConsumerWidget {
                     // Sugar level text
                     Expanded(
                       child: Text(
-                        _getSugarLevelText(sugarInfo.sugarsPer100g, sugarInfo.productUnit),
+                        _getSugarLevelText(
+                          sugarInfo.sugarsPer100g,
+                          sugarInfo.productUnit,
+                        ),
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -256,7 +280,10 @@ class ProductScreen extends ConsumerWidget {
                           width: 8,
                           height: 8,
                           decoration: BoxDecoration(
-                            color: _getSugarLevelColor(sugarInfo.sugarsPer100g, sugarInfo.productUnit),
+                            color: _getSugarLevelColor(
+                              sugarInfo.sugarsPer100g,
+                              sugarInfo.productUnit,
+                            ),
                             shape: BoxShape.circle,
                           ),
                         ),
@@ -264,14 +291,17 @@ class ProductScreen extends ConsumerWidget {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // Color-coded sugar level bar
-                _buildSugarLevelBar(sugarInfo.sugarsPer100g, sugarInfo.productUnit),
-                
+                _buildSugarLevelBar(
+                  sugarInfo.sugarsPer100g,
+                  sugarInfo.productUnit,
+                ),
+
                 const SizedBox(height: 16),
-                
+
                 // Total sugar in product info alert
                 Container(
                   padding: const EdgeInsets.all(12),
@@ -305,9 +335,9 @@ class ProductScreen extends ConsumerWidget {
               ],
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Hidden Sugar Ingredients
           Text(
             'Hidden Sugar Ingredients',
@@ -334,11 +364,14 @@ class ProductScreen extends ConsumerWidget {
             ),
             child: sugarInfo.hiddenSugarIngredients.isNotEmpty
                 ? Column(
-                    children: sugarInfo.hiddenSugarIngredients.asMap().entries.map((entry) {
+                    children: sugarInfo.hiddenSugarIngredients.asMap().entries.map((
+                      entry,
+                    ) {
                       final index = entry.key;
                       final ingredient = entry.value;
-                      final isLast = index == sugarInfo.hiddenSugarIngredients.length - 1;
-                      
+                      final isLast =
+                          index == sugarInfo.hiddenSugarIngredients.length - 1;
+
                       return Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
@@ -441,7 +474,7 @@ class ProductScreen extends ConsumerWidget {
                     ),
                   ),
           ),
-          
+
           const SizedBox(height: 20),
         ],
       ),
@@ -533,14 +566,16 @@ class ProductScreen extends ConsumerWidget {
             ),
             child: Stack(
               children: [
-              // Current value indicator
-              Positioned(
-                left: _getSugarLevelPosition(sugarPer100g, 13.0) - 4, // Center the triangle
-                child: CustomPaint(
-                  painter: TrianglePainter(),
-                  size: const Size(8, 8),
+                // Current value indicator
+                Positioned(
+                  left:
+                      _getSugarLevelPosition(sugarPer100g, 13.0) -
+                      4, // Center the triangle
+                  child: CustomPaint(
+                    painter: TrianglePainter(),
+                    size: const Size(8, 8),
+                  ),
                 ),
-              ),
               ],
             ),
           ),
@@ -579,14 +614,16 @@ class ProductScreen extends ConsumerWidget {
             ),
             child: Stack(
               children: [
-              // Current value indicator
-              Positioned(
-                left: _getSugarLevelPosition(sugarPer100g, 45.0) - 4, // Center the triangle
-                child: CustomPaint(
-                  painter: TrianglePainter(),
-                  size: const Size(8, 8),
+                // Current value indicator
+                Positioned(
+                  left:
+                      _getSugarLevelPosition(sugarPer100g, 45.0) -
+                      4, // Center the triangle
+                  child: CustomPaint(
+                    painter: TrianglePainter(),
+                    size: const Size(8, 8),
+                  ),
                 ),
-              ),
               ],
             ),
           ),

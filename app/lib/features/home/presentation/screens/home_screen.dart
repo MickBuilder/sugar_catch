@@ -1,65 +1,333 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sugar_catch/features/scan/presentation/screens/scan_screen.dart';
+import 'package:sugar_catch/core/services/history_service.dart';
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('Sugar Catch'),
+    final recentHistory = useState<List<HistoryItem>>([]);
+    final weeklyData = useState<Map<String, double>>({});
+
+    useEffect(() {
+      // Load recent history and weekly data
+      recentHistory.value = HistoryService.getRecentHistory();
+      weeklyData.value = HistoryService.getWeeklySugarData();
+      return null;
+    }, []);
+
+    return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.systemGroupedBackground,
+      navigationBar: CupertinoNavigationBar(
+        backgroundColor: CupertinoColors.systemBackground,
+        middle: const Text(
+          'Home',
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
+        ),
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () {
+            // TODO: Implement notifications
+          },
+          child: const Icon(
+            CupertinoIcons.bell,
+            color: CupertinoColors.systemGrey,
+            size: 24,
+          ),
+        ),
       ),
-      body: const _HomeBody(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const ScanScreen(),
-            ),
-          );
-        },
-        tooltip: 'Scan barcode',
-        child: const Icon(Icons.qr_code_scanner),
+      child: Column(
+        children: [
+          // Weekly Snapshot - Fixed at top
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: _buildWeeklySnapshot(weeklyData.value),
+          ),
+
+          // History - Takes remaining space and scrollable
+          Expanded(child: _buildRecentlyScanned(recentHistory.value)),
+        ],
       ),
     );
   }
-}
 
-class _HomeBody extends StatelessWidget {
-  const _HomeBody();
+  Widget _buildWeeklySnapshot(Map<String, double> weeklyData) {
+    // Calculate average daily sugar consumption
+    final totalSugar = weeklyData.values.fold(0.0, (sum, value) => sum + value);
+    final averageDaily = weeklyData.isNotEmpty
+        ? totalSugar / weeklyData.length
+        : 0.0;
 
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: CupertinoColors.systemBackground,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: CupertinoColors.separator, width: 0.5),
+      ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.search,
-            size: 64,
-            color: Colors.orange,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Weekly Snapshot',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: CupertinoColors.label,
+                ),
+              ),
+              Text(
+                'Avg: ${averageDaily.toStringAsFixed(0)}g/day',
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: CupertinoColors.systemGrey,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 16),
-          Text(
-            'Welcome to Sugar Catch',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+          const SizedBox(height: 20),
+
+          // Days of week
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: ['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day) {
+              return Text(
+                day,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: CupertinoColors.systemGrey,
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 12),
+
+          // Weekly chart placeholder
+          Container(
+            height: 100,
+            decoration: BoxDecoration(
+              color: CupertinoColors.systemGrey6,
+              borderRadius: BorderRadius.circular(8),
             ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            'Track hidden sugar in your food',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey,
+            child: const Center(
+              child: Text(
+                'Weekly Chart\nComing Soon!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: CupertinoColors.systemGrey,
+                  fontSize: 14,
+                ),
+              ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildRecentlyScanned(List<HistoryItem> recentHistory) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Header
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Recently Scanned',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: CupertinoColors.label,
+                ),
+              ),
+              CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {
+                  // TODO: Navigate to full history
+                },
+                child: const Text(
+                  'View All',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: CupertinoColors.systemGreen,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        // Content - Takes remaining space
+        Expanded(
+          child: recentHistory.isEmpty
+              ? _buildEmptyState()
+              : ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: recentHistory.length,
+                  itemBuilder: (context, index) {
+                    return _buildHistoryItem(recentHistory[index]);
+                  },
+                ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.all(40),
+        decoration: BoxDecoration(
+          color: CupertinoColors.systemBackground,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: CupertinoColors.separator, width: 0.5),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              CupertinoIcons.qrcode_viewfinder,
+              size: 48,
+              color: CupertinoColors.systemGrey,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'No scans yet',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: CupertinoColors.systemGrey,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Start scanning products to see your history here',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: CupertinoColors.systemGrey2,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHistoryItem(HistoryItem item) {
+    final timeAgo = _getTimeAgo(item.scannedAt);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: CupertinoColors.systemBackground,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: CupertinoColors.separator, width: 0.5),
+      ),
+      child: Row(
+        children: [
+          // Product icon placeholder
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: CupertinoColors.systemGrey6,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              _getProductIcon(item.product.productName),
+              color: CupertinoColors.systemGrey,
+              size: 24,
+            ),
+          ),
+          const SizedBox(width: 16),
+
+          // Product info
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.product.productNameEn ?? item.product.productName,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: CupertinoColors.label,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${item.sugarInfo.totalSugarsInProduct.toStringAsFixed(1)}g sugar',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: CupertinoColors.systemGrey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Time ago
+          Text(
+            timeAgo,
+            style: const TextStyle(
+              fontSize: 12,
+              color: CupertinoColors.systemGrey2,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  IconData _getProductIcon(String productName) {
+    final name = productName.toLowerCase();
+    if (name.contains('cereal') || name.contains('cereal')) {
+      return CupertinoIcons.square_grid_2x2;
+    } else if (name.contains('yogurt') || name.contains('yoghurt')) {
+      return CupertinoIcons.drop;
+    } else if (name.contains('juice')) {
+      return CupertinoIcons.drop;
+    } else if (name.contains('soda') || name.contains('cola')) {
+      return CupertinoIcons.drop;
+    } else if (name.contains('chocolate') || name.contains('candy')) {
+      return CupertinoIcons.heart;
+    } else {
+      return CupertinoIcons.square_grid_2x2;
+    }
+  }
+
+  String _getTimeAgo(DateTime scannedAt) {
+    final now = DateTime.now();
+    final difference = now.difference(scannedAt);
+
+    if (difference.inMinutes < 60) {
+      return '${difference.inMinutes}m ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours}h ago';
+    } else if (difference.inDays == 1) {
+      return 'Yesterday';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays}d ago';
+    } else {
+      return '${(difference.inDays / 7).floor()}w ago';
+    }
   }
 }
