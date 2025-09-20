@@ -26,12 +26,3 @@ Many grocery products contain hidden added sugars, even in items that appear hea
    flutter run
    ```
 
-## Dependencies
-
-- **mobile_scanner**: Barcode scanning functionality
-- **http**: API calls to OpenFoodFacts
-- **fl_chart**: Sugar consumption visualization
-- **hive_ce & hive_ce_flutter**: Local data storage (Community Edition)
-- **json_annotation**: JSON serialization
-- **hooks_riverpod**: State management with hooks
-- **flutter_hooks**: React-style hooks for Flutter
