@@ -5,20 +5,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sugar_catch/features/scan/scan_provider.dart';
 
 class ProductScreen extends ConsumerWidget {
-  const ProductScreen({super.key});
+  final String barcode;
+  
+  const ProductScreen({super.key, required this.barcode});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scanState = ref.watch(scanNotifierProvider);
+    final productAsync = ref.watch(productByBarcodeProvider(barcode));
 
     // Debug logging
-    print('📱 [PRODUCT_SCREEN] scanState: $scanState');
-    print('📱 [PRODUCT_SCREEN] scanState is null: ${scanState == null}');
-    if (scanState != null) {
-      print(
-        '📱 [PRODUCT_SCREEN] scanState.productName: ${scanState.product.productName}',
-      );
-    }
+    print('📱 [PRODUCT_SCREEN] barcode: $barcode');
+    print('📱 [PRODUCT_SCREEN] productAsync: $productAsync');
 
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.systemGroupedBackground,
@@ -50,9 +47,10 @@ class ProductScreen extends ConsumerWidget {
           child: const Icon(CupertinoIcons.xmark, color: CupertinoColors.label),
         ),
       ),
-      child: scanState == null
-          ? const Center(child: Text('No product data available'))
-          : Column(
+             child: productAsync.when(
+               data: (scanState) => scanState == null
+                   ? const Center(child: Text('Product not found'))
+                   : Column(
               children: [
                 Expanded(child: _buildProductContent(context, scanState)),
                 Container(
@@ -114,6 +112,45 @@ class ProductScreen extends ConsumerWidget {
                 ),
               ],
             ),
+               loading: () => const Center(
+                 child: CupertinoActivityIndicator(radius: 20),
+               ),
+               error: (error, stack) => Center(
+                 child: Column(
+                   mainAxisAlignment: MainAxisAlignment.center,
+                   children: [
+                     const Icon(
+                       CupertinoIcons.exclamationmark_triangle,
+                       size: 48,
+                       color: CupertinoColors.systemRed,
+                     ),
+                     const SizedBox(height: 16),
+                     const Text(
+                       'Failed to load product',
+                       style: TextStyle(
+                         fontSize: 18,
+                         fontWeight: FontWeight.w600,
+                         color: CupertinoColors.label,
+                       ),
+                     ),
+                     const SizedBox(height: 8),
+                     Text(
+                       error.toString(),
+                       style: const TextStyle(
+                         fontSize: 14,
+                         color: CupertinoColors.systemGrey,
+                       ),
+                       textAlign: TextAlign.center,
+                     ),
+                     const SizedBox(height: 16),
+                     CupertinoButton(
+                       onPressed: () => ref.refresh(productByBarcodeProvider(barcode)),
+                       child: const Text('Retry'),
+                     ),
+                   ],
+                 ),
+               ),
+             ),
     );
   }
 
@@ -190,11 +227,10 @@ class ProductScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        product.productNameEn ?? product.productName,
+                        product.productName,
                         style: const TextStyle(
                           fontSize: 18,
-                          fontWeight: FontWeight.w300,
-                          letterSpacing: 0.5,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       if (product.brands != null) ...[

@@ -4,12 +4,52 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sugar_catch/features/scan/data/openfoodfacts_api.dart';
 import 'package:sugar_catch/features/scan/data/product_model.dart';
 import 'package:sugar_catch/core/services/history_service.dart';
+import 'package:sugar_catch/core/services/cache_service.dart';
 
 part 'scan_provider.g.dart';
 
 @riverpod
 OpenFoodFactsApi openFoodFactsApi(Ref ref) {
   return OpenFoodFactsApi();
+}
+
+// New provider for fetching product data by barcode
+@riverpod
+Future<ScanState?> productByBarcode(Ref ref, String barcode) async {
+  print('🔍 [PRODUCT_PROVIDER] Fetching product for barcode: $barcode');
+  
+  try {
+    // First, try to get from cache
+    final cachedProduct = CacheService.getCachedProduct(barcode);
+    final cachedSugarInfo = CacheService.getCachedSugarInfo(barcode);
+    
+    if (cachedProduct != null && cachedSugarInfo != null) {
+      print('✅ [PRODUCT_PROVIDER] Found cached data for barcode: $barcode');
+      return ScanState(product: cachedProduct, sugarInfo: cachedSugarInfo);
+    }
+    
+    // If not in cache, fetch from API
+    print('🌐 [PRODUCT_PROVIDER] Fetching from API for barcode: $barcode');
+    final api = ref.read(openFoodFactsApiProvider);
+    final product = await api.fetchProduct(barcode);
+    
+    if (product != null) {
+      final sugarInfo = await api.extractSugarInfo(product);
+      
+      // Cache the data for future use
+      await CacheService.cacheProduct(barcode, product);
+      await CacheService.cacheSugarInfo(barcode, sugarInfo);
+      
+      print('✅ [PRODUCT_PROVIDER] Successfully fetched and cached product: ${product.productName}');
+      return ScanState(product: product, sugarInfo: sugarInfo);
+    } else {
+      print('❌ [PRODUCT_PROVIDER] Product not found for barcode: $barcode');
+      return null;
+    }
+  } catch (error) {
+    print('❌ [PRODUCT_PROVIDER] Error fetching product: $error');
+    rethrow;
+  }
 }
 
 // COMPLETELY NEW APPROACH - Use StateNotifier instead of AsyncNotifier
@@ -73,6 +113,10 @@ class ScanNotifier extends _$ScanNotifier {
 
   void clearProduct() {
     state = null;
+  }
+
+  void setProductData(Product product, SugarInfo sugarInfo) {
+    state = ScanState(product: product, sugarInfo: sugarInfo);
   }
 }
 

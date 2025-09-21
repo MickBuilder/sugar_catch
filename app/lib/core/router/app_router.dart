@@ -45,9 +45,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const ScanScreen(),
       ),
       GoRoute(
-        path: '/product',
+        path: '/product/:barcode',
         name: 'product',
-        builder: (context, state) => const ProductScreen(),
+        builder: (context, state) {
+          final barcode = state.pathParameters['barcode']!;
+          return ProductScreen(barcode: barcode);
+        },
       ),
     ],
   );

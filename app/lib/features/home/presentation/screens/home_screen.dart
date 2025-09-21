@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sugar_catch/core/services/history_service.dart';
+import 'package:sugar_catch/features/home/presentation/widgets/history_item_widget.dart';
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
@@ -178,7 +179,7 @@ class HomeScreen extends HookConsumerWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemCount: recentHistory.length,
                   itemBuilder: (context, index) {
-                    return _buildHistoryItem(recentHistory[index]);
+                    return HistoryItemWidget(item: recentHistory[index]);
                   },
                 ),
         ),
@@ -228,106 +229,4 @@ class HomeScreen extends HookConsumerWidget {
     );
   }
 
-  Widget _buildHistoryItem(HistoryItem item) {
-    final timeAgo = _getTimeAgo(item.scannedAt);
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: CupertinoColors.systemBackground,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: CupertinoColors.separator, width: 0.5),
-      ),
-      child: Row(
-        children: [
-          // Product icon placeholder
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: CupertinoColors.systemGrey6,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(
-              _getProductIcon(item.product.productName),
-              color: CupertinoColors.systemGrey,
-              size: 24,
-            ),
-          ),
-          const SizedBox(width: 16),
-
-          // Product info
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.product.productNameEn ?? item.product.productName,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: CupertinoColors.label,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '${item.sugarInfo.totalSugarsInProduct.toStringAsFixed(1)}g sugar',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: CupertinoColors.systemGrey,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Time ago
-          Text(
-            timeAgo,
-            style: const TextStyle(
-              fontSize: 12,
-              color: CupertinoColors.systemGrey2,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  IconData _getProductIcon(String productName) {
-    final name = productName.toLowerCase();
-    if (name.contains('cereal') || name.contains('cereal')) {
-      return CupertinoIcons.square_grid_2x2;
-    } else if (name.contains('yogurt') || name.contains('yoghurt')) {
-      return CupertinoIcons.drop;
-    } else if (name.contains('juice')) {
-      return CupertinoIcons.drop;
-    } else if (name.contains('soda') || name.contains('cola')) {
-      return CupertinoIcons.drop;
-    } else if (name.contains('chocolate') || name.contains('candy')) {
-      return CupertinoIcons.heart;
-    } else {
-      return CupertinoIcons.square_grid_2x2;
-    }
-  }
-
-  String _getTimeAgo(DateTime scannedAt) {
-    final now = DateTime.now();
-    final difference = now.difference(scannedAt);
-
-    if (difference.inMinutes < 60) {
-      return '${difference.inMinutes}m ago';
-    } else if (difference.inHours < 24) {
-      return '${difference.inHours}h ago';
-    } else if (difference.inDays == 1) {
-      return 'Yesterday';
-    } else if (difference.inDays < 7) {
-      return '${difference.inDays}d ago';
-    } else {
-      return '${(difference.inDays / 7).floor()}w ago';
-    }
-  }
 }

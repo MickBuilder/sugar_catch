@@ -23,7 +23,148 @@ final openFoodFactsApiProvider = AutoDisposeProvider<OpenFoodFactsApi>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef OpenFoodFactsApiRef = AutoDisposeProviderRef<OpenFoodFactsApi>;
-String _$scanNotifierHash() => r'1ad32d2bf6d80dbfedff9456964365ef9db33140';
+String _$productByBarcodeHash() => r'1051b2dd47a4259ec311b8078b9797521b7c2a7d';
+
+/// Copied from Dart SDK
+class _SystemHash {
+  _SystemHash._();
+
+  static int combine(int hash, int value) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + value);
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
+    return hash ^ (hash >> 6);
+  }
+
+  static int finish(int hash) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
+    // ignore: parameter_assignments
+    hash = hash ^ (hash >> 11);
+    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
+  }
+}
+
+/// See also [productByBarcode].
+@ProviderFor(productByBarcode)
+const productByBarcodeProvider = ProductByBarcodeFamily();
+
+/// See also [productByBarcode].
+class ProductByBarcodeFamily extends Family<AsyncValue<ScanState?>> {
+  /// See also [productByBarcode].
+  const ProductByBarcodeFamily();
+
+  /// See also [productByBarcode].
+  ProductByBarcodeProvider call(String barcode) {
+    return ProductByBarcodeProvider(barcode);
+  }
+
+  @override
+  ProductByBarcodeProvider getProviderOverride(
+    covariant ProductByBarcodeProvider provider,
+  ) {
+    return call(provider.barcode);
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'productByBarcodeProvider';
+}
+
+/// See also [productByBarcode].
+class ProductByBarcodeProvider extends AutoDisposeFutureProvider<ScanState?> {
+  /// See also [productByBarcode].
+  ProductByBarcodeProvider(String barcode)
+    : this._internal(
+        (ref) => productByBarcode(ref as ProductByBarcodeRef, barcode),
+        from: productByBarcodeProvider,
+        name: r'productByBarcodeProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$productByBarcodeHash,
+        dependencies: ProductByBarcodeFamily._dependencies,
+        allTransitiveDependencies:
+            ProductByBarcodeFamily._allTransitiveDependencies,
+        barcode: barcode,
+      );
+
+  ProductByBarcodeProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.barcode,
+  }) : super.internal();
+
+  final String barcode;
+
+  @override
+  Override overrideWith(
+    FutureOr<ScanState?> Function(ProductByBarcodeRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: ProductByBarcodeProvider._internal(
+        (ref) => create(ref as ProductByBarcodeRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        barcode: barcode,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<ScanState?> createElement() {
+    return _ProductByBarcodeProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ProductByBarcodeProvider && other.barcode == barcode;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, barcode.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin ProductByBarcodeRef on AutoDisposeFutureProviderRef<ScanState?> {
+  /// The parameter `barcode` of this provider.
+  String get barcode;
+}
+
+class _ProductByBarcodeProviderElement
+    extends AutoDisposeFutureProviderElement<ScanState?>
+    with ProductByBarcodeRef {
+  _ProductByBarcodeProviderElement(super.provider);
+
+  @override
+  String get barcode => (origin as ProductByBarcodeProvider).barcode;
+}
+
+String _$scanNotifierHash() => r'8af52da639a50ebf63f9588db69fcb8ca7b6f699';
 
 /// See also [ScanNotifier].
 @ProviderFor(ScanNotifier)

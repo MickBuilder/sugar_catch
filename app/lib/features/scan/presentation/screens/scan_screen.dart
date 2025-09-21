@@ -5,7 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sugar_catch/features/scan/scan_provider.dart';
-import 'package:sugar_catch/features/scan/presentation/screens/product_screen.dart';
 
 class ScanScreen extends HookConsumerWidget {
   const ScanScreen({super.key});
@@ -314,7 +313,7 @@ class ScanScreen extends HookConsumerWidget {
       // Check again after async operation
       if (context.mounted) {
         print('🎯 [HANDLE_BARCODE] Navigating to ProductScreen...');
-        context.go('/product');
+        context.go('/product/$barcode');
         print('🎯 [HANDLE_BARCODE] Navigation completed');
       } else {
         print(
@@ -344,16 +343,15 @@ class ScanScreen extends HookConsumerWidget {
     ValueNotifier<bool> scannerPaused,
   ) async {
     try {
-      // For manual search, we'll use a mock barcode
-      // In a real app, you'd implement a search API
+      // For manual search, we'll use the search term as a mock barcode
+      // In a real app, you'd implement a search API that returns a barcode
       await ref
           .read(scanNotifierProvider.notifier)
-          .scanBarcode('manual_search');
+          .scanBarcode(searchTerm);
 
       if (context.mounted) {
-        Navigator.of(
-          context,
-        ).push(CupertinoPageRoute(builder: (context) => const ProductScreen()));
+        // Navigate to product screen with the search term as barcode
+        context.go('/product/$searchTerm');
       }
     } catch (e) {
       if (context.mounted) {
