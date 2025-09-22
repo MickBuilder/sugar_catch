@@ -33,8 +33,8 @@ class AppShell extends StatelessWidget {
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(CupertinoIcons.chart_bar),
-          activeIcon: Icon(CupertinoIcons.chart_bar_fill),
+          icon: Icon(CupertinoIcons.add_circled),
+          activeIcon: Icon(CupertinoIcons.add_circled_solid),
           label: 'Track',
         ),
         BottomNavigationBarItem(

@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sugar_catch/core/router/app_router.dart';
 import 'package:sugar_catch/core/services/cache_service.dart';
 import 'package:sugar_catch/core/services/history_service.dart';
+import 'package:sugar_catch/features/track/data/track_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,6 +13,7 @@ void main() async {
   // Initialize services
   await CacheService.init();
   await HistoryService.init();
+  await TrackService.init();
 
   runApp(const ProviderScope(child: SugarCatchApp()));
 }
