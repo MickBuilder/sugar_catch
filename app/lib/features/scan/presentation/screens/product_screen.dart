@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sugar_catch/features/scan/scan_provider.dart';
@@ -26,6 +27,8 @@ class ProductScreen extends ConsumerWidget {
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () {
+            // Haptic feedback for back navigation
+            HapticFeedback.selectionClick();
             if (context.canPop()) {
               context.pop();
             } else {
@@ -44,7 +47,11 @@ class ProductScreen extends ConsumerWidget {
         ),
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
-          onPressed: () => context.go('/scan'),
+          onPressed: () {
+            // Haptic feedback for close navigation
+            HapticFeedback.selectionClick();
+            context.go('/scan');
+          },
           child: const Icon(CupertinoIcons.xmark, color: CupertinoColors.label),
         ),
       ),
@@ -73,7 +80,11 @@ class ProductScreen extends ConsumerWidget {
                           // Home button
                           Expanded(
                             child: CupertinoButton(
-                              onPressed: () => context.go('/home'),
+                              onPressed: () {
+                                // Haptic feedback for home navigation
+                                HapticFeedback.selectionClick();
+                                context.go('/home');
+                              },
                               color: CupertinoColors.systemGrey6,
                               borderRadius: BorderRadius.circular(12),
                               child: const Text(
@@ -91,6 +102,8 @@ class ProductScreen extends ConsumerWidget {
                           Expanded(
                             child: CupertinoButton(
                               onPressed: () {
+                                // Haptic feedback for log entry
+                                HapticFeedback.mediumImpact();
                                 // TODO: Add to daily log functionality
                                 print('Added to daily log!');
                               },

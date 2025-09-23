@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -301,6 +302,10 @@ class ScanScreen extends HookConsumerWidget {
       print('🎯 [HANDLE_BARCODE] Calling scanNotifierProvider.scanBarcode...');
       await ref.read(scanNotifierProvider.notifier).scanBarcode(barcode);
       print('🎯 [HANDLE_BARCODE] scanBarcode completed successfully');
+      
+      // Haptic feedback for successful scan
+      HapticFeedback.heavyImpact();
+      print('🎯 [HANDLE_BARCODE] Haptic feedback triggered for successful scan');
 
       // Wait for the state to be properly updated and check it
       await Future.delayed(const Duration(milliseconds: 50));
@@ -331,6 +336,9 @@ class ScanScreen extends HookConsumerWidget {
 
       if (context.mounted) {
         print('🎯 [HANDLE_BARCODE] Error scanning product: $e');
+        // Haptic feedback for error
+        HapticFeedback.heavyImpact();
+        print('🎯 [HANDLE_BARCODE] Haptic feedback triggered for scan error');
         // TODO: Show Cupertino alert dialog for error
       }
     }

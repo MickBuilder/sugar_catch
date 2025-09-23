@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 class AppShell extends StatelessWidget {
@@ -80,6 +81,9 @@ class AppShell extends StatelessWidget {
     if (index == currentIndex) {
       return;
     }
+
+    // Haptic feedback for tab navigation
+    HapticFeedback.selectionClick();
 
     switch (index) {
       case 0:

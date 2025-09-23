@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sugar_catch/features/scan/data/product_model.dart';
 import 'package:sugar_catch/features/scan/data/recommendations_service.dart';
@@ -188,6 +189,8 @@ class _RecommendationsWidgetState extends State<RecommendationsWidget> {
       child: CupertinoButton(
         padding: EdgeInsets.zero,
         onPressed: () {
+          // Haptic feedback for recommendation selection
+          HapticFeedback.lightImpact();
           // Navigate to product screen for this recommendation
           context.go('/product/${recommendation.code}');
         },

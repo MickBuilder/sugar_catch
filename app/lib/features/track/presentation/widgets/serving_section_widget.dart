@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:sugar_catch/core/services/history_service.dart';
 import 'package:sugar_catch/features/track/data/track_models.dart';
 import 'package:sugar_catch/features/track/presentation/widgets/serving_size_widget.dart';
@@ -58,6 +59,8 @@ class _ServingSectionWidgetState extends State<ServingSectionWidget> {
 
   void _addToLog() {
     if (widget.selectedProduct != null) {
+      // Haptic feedback for successful log entry
+      HapticFeedback.mediumImpact();
       widget.onAddToLog(widget.selectedProduct!, _currentQuantity, _currentSugarAmount);
     }
   }

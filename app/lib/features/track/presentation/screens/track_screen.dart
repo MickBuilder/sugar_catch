@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sugar_catch/core/services/history_service.dart';
 import 'package:sugar_catch/features/scan/data/product_model.dart';
@@ -46,6 +47,8 @@ class _TrackScreenState extends ConsumerState<TrackScreen> {
                       recentHistory: recentHistory,
                       selectedProduct: _selectedProduct,
                       onProductSelected: (product) {
+                        // Haptic feedback for product selection
+                        HapticFeedback.selectionClick();
                         setState(() {
                           _selectedProduct = product;
                         });
