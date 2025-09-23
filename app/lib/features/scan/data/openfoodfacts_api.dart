@@ -104,6 +104,25 @@ class OpenFoodFactsApi {
       print('🌐 [API] Parsed ${ingredientsList.length} ingredients');
     }
 
+    // Parse categories
+    final categories = productData['categories'] as String?;
+    final categoriesHierarchy = (productData['categories_hierarchy'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final categoriesTags = (productData['categories_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+
+    // Parse ingredients tags
+    final ingredientsTags = (productData['ingredients_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+
+    print('🌐 [API] categories: $categories');
+    print('🌐 [API] categoriesHierarchy: $categoriesHierarchy');
+    print('🌐 [API] categoriesTags: $categoriesTags');
+    print('🌐 [API] ingredientsTags: $ingredientsTags');
+
     final product = Product(
       code: barcode,
       productName: productData['product_name'] as String? ?? 'Unknown Product',
@@ -117,8 +136,12 @@ class OpenFoodFactsApi {
       productQuantity: productData['product_quantity'] as String?,
       productQuantityUnit: productData['product_quantity_unit'] as String?,
       ingredientsList: ingredientsList,
+      ingredientsTags: ingredientsTags,
       imageUrl: imageUrl,
       imageFrontUrl: productData['image_front_url'] as String?,
+      categories: categories,
+      categoriesHierarchy: categoriesHierarchy,
+      categoriesTags: categoriesTags,
       nutriments: nutriments,
     );
 
@@ -141,24 +164,34 @@ class OpenFoodFactsApi {
     }
 
     print(
-      '🌐 [API] product.ingredientsList: ${product.ingredientsList?.length ?? 0} ingredients',
+      '🌐 [API] product.ingredientsTags: ${product.ingredientsTags?.length ?? 0} tags',
     );
 
     List<Ingredient> hiddenSugarIngredients = [];
 
-    if (product.ingredientsList != null) {
-      // Check each ingredient for hidden sugars
-      for (final ingredient in product.ingredientsList!) {
-        final ingredientText = ingredient.textEn?.isNotEmpty == true
-            ? ingredient.textEn!
-            : ingredient.text;
+    if (product.ingredientsTags != null) {
+      // Check each ingredient tag for hidden sugars
+      for (final ingredientTag in product.ingredientsTags!) {
+        print('🌐 [API] Checking ingredient tag: $ingredientTag');
 
-        print('🌐 [API] Checking ingredient: $ingredientText');
-
-        // Check if this ingredient is a hidden sugar
-        if (SugarAliases.isHiddenSugar(ingredientText)) {
-          print('🌐 [API] Found hidden sugar: $ingredientText');
-          hiddenSugarIngredients.add(ingredient);
+        // Check if this ingredient tag is a hidden sugar
+        if (SugarAliases.isHiddenSugar(ingredientTag)) {
+          print('🌐 [API] Found hidden sugar tag: $ingredientTag');
+          
+          // Try to find the corresponding ingredient in the ingredients list
+          if (product.ingredientsList != null) {
+            for (final ingredient in product.ingredientsList!) {
+              final ingredientText = ingredient.textEn?.isNotEmpty == true
+                  ? ingredient.textEn!
+                  : ingredient.text;
+              
+              // Check if this ingredient text matches the tag (case-insensitive)
+              if (ingredientText.toLowerCase().contains(ingredientTag.toLowerCase().replaceAll('en:', ''))) {
+                hiddenSugarIngredients.add(ingredient);
+                break; // Found the matching ingredient, move to next tag
+              }
+            }
+          }
         }
       }
     }

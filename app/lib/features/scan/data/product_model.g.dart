@@ -48,8 +48,18 @@ _$ProductImpl _$$ProductImplFromJson(Map<String, dynamic> json) =>
       ingredientsList: (json['ingredients'] as List<dynamic>?)
           ?.map((e) => Ingredient.fromJson(e as Map<String, dynamic>))
           .toList(),
+      ingredientsTags: (json['ingredients_tags'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       imageUrl: json['image_url'] as String?,
       imageFrontUrl: json['image_front_url'] as String?,
+      categories: json['categories'] as String?,
+      categoriesHierarchy: (json['categories_hierarchy'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      categoriesTags: (json['categories_tags'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       nutriments: json['nutriments'] as Map<String, dynamic>?,
     );
 
@@ -67,8 +77,12 @@ Map<String, dynamic> _$$ProductImplToJson(_$ProductImpl instance) =>
       'product_quantity': instance.productQuantity,
       'product_quantity_unit': instance.productQuantityUnit,
       'ingredients': instance.ingredientsList,
+      'ingredients_tags': instance.ingredientsTags,
       'image_url': instance.imageUrl,
       'image_front_url': instance.imageFrontUrl,
+      'categories': instance.categories,
+      'categories_hierarchy': instance.categoriesHierarchy,
+      'categories_tags': instance.categoriesTags,
       'nutriments': instance.nutriments,
     };
 

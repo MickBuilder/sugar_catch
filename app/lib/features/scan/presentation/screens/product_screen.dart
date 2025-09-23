@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sugar_catch/features/scan/scan_provider.dart';
+import 'package:sugar_catch/features/scan/presentation/widgets/recommendations_widget.dart';
 
 class ProductScreen extends ConsumerWidget {
   final String barcode;
@@ -510,6 +511,11 @@ class ProductScreen extends ConsumerWidget {
                     ),
                   ),
           ),
+
+          const SizedBox(height: 20),
+
+          // Recommendations Section
+          RecommendationsWidget(product: product),
 
           const SizedBox(height: 20),
         ],

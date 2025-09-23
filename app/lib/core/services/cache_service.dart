@@ -5,16 +5,19 @@ import 'package:sugar_catch/features/scan/data/product_model.dart';
 class CacheService {
   static const String _productBoxName = 'products';
   static const String _sugarInfoBoxName = 'sugar_info';
+  static const String _recommendationsBoxName = 'recommendations';
   static const Duration _cacheExpiry = Duration(
-    hours: 24,
-  ); // Cache for 24 hours
+    hours: 48,
+  ); // Cache for 48 hours
 
   static Box<String>? _productBox;
   static Box<String>? _sugarInfoBox;
+  static Box<String>? _recommendationsBox;
 
   static Future<void> init() async {
     _productBox = await Hive.openBox<String>(_productBoxName);
     _sugarInfoBox = await Hive.openBox<String>(_sugarInfoBoxName);
+    _recommendationsBox = await Hive.openBox<String>(_recommendationsBoxName);
   }
 
   // Cache product data as JSON
@@ -37,6 +40,23 @@ class CacheService {
       final sugarInfoJsonString = jsonEncode(sugarInfoJson);
       await _sugarInfoBox!.put(barcode, sugarInfoJsonString);
       print('💾 [CACHE] Cached sugar info for barcode: $barcode');
+    }
+  }
+
+  // Cache recommendations data as JSON with timestamp
+  static Future<void> cacheRecommendations(
+    String barcode,
+    List<Product> recommendations,
+  ) async {
+    if (_recommendationsBox != null) {
+      final recommendationsJson = recommendations.map((p) => p.toJson()).toList();
+      final cacheData = {
+        'recommendations': recommendationsJson,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+      };
+      final cacheJsonString = jsonEncode(cacheData);
+      await _recommendationsBox!.put(barcode, cacheJsonString);
+      print('💾 [CACHE] Cached ${recommendations.length} recommendations for barcode: $barcode');
     }
   }
 
@@ -82,6 +102,40 @@ class CacheService {
     return null;
   }
 
+  // Get cached recommendations data
+  static List<Product>? getCachedRecommendations(String barcode) {
+    if (_recommendationsBox != null) {
+      final recommendationsJsonString = _recommendationsBox!.get(barcode);
+      if (recommendationsJsonString != null) {
+        try {
+          final cacheData = jsonDecode(recommendationsJsonString) as Map<String, dynamic>;
+          final timestamp = cacheData['timestamp'] as int;
+          final now = DateTime.now().millisecondsSinceEpoch;
+          
+          // Check if cache is still valid (48 hours)
+          if (now - timestamp < _cacheExpiry.inMilliseconds) {
+            final recommendationsJson = cacheData['recommendations'] as List<dynamic>;
+            final recommendations = recommendationsJson
+                .map((json) => Product.fromJson(json as Map<String, dynamic>))
+                .toList();
+            print('💾 [CACHE] Retrieved ${recommendations.length} cached recommendations for barcode: $barcode');
+            return recommendations;
+          } else {
+            print('💾 [CACHE] Cached recommendations expired for barcode: $barcode');
+            // Remove expired cache
+            _recommendationsBox!.delete(barcode);
+            return null;
+          }
+        } catch (e) {
+          print('💾 [CACHE] Error parsing cached recommendations: $e');
+          return null;
+        }
+      }
+    }
+    print('💾 [CACHE] No cached recommendations found for barcode: $barcode');
+    return null;
+  }
+
   // Check if cache is valid (not expired)
   static bool isCacheValid(String barcode) {
     // For now, we'll use a simple approach - cache is valid for 24 hours
@@ -97,6 +151,9 @@ class CacheService {
     if (_sugarInfoBox != null) {
       await _sugarInfoBox!.delete(barcode);
     }
+    if (_recommendationsBox != null) {
+      await _recommendationsBox!.delete(barcode);
+    }
     print('💾 [CACHE] Cleared cache for barcode: $barcode');
   }
 
@@ -108,6 +165,9 @@ class CacheService {
     if (_sugarInfoBox != null) {
       await _sugarInfoBox!.clear();
     }
+    if (_recommendationsBox != null) {
+      await _recommendationsBox!.clear();
+    }
     print('💾 [CACHE] Cleared all cache');
   }
 
@@ -116,6 +176,7 @@ class CacheService {
     return {
       'products': _productBox?.length ?? 0,
       'sugar_info': _sugarInfoBox?.length ?? 0,
+      'recommendations': _recommendationsBox?.length ?? 0,
     };
   }
 }

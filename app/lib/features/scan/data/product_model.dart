@@ -37,8 +37,12 @@ class Product with _$Product {
     @JsonKey(name: 'product_quantity') String? productQuantity,
     @JsonKey(name: 'product_quantity_unit') String? productQuantityUnit,
     @JsonKey(name: 'ingredients') List<Ingredient>? ingredientsList,
+    @JsonKey(name: 'ingredients_tags') List<String>? ingredientsTags,
     @JsonKey(name: 'image_url') String? imageUrl,
     @JsonKey(name: 'image_front_url') String? imageFrontUrl,
+    @JsonKey(name: 'categories') String? categories,
+    @JsonKey(name: 'categories_hierarchy') List<String>? categoriesHierarchy,
+    @JsonKey(name: 'categories_tags') List<String>? categoriesTags,
     Map<String, dynamic>? nutriments,
   }) = _Product;
 
