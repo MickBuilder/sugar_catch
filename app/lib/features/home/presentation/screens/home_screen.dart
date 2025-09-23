@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sugar_catch/core/services/history_service.dart';
-import 'package:sugar_catch/features/home/presentation/widgets/history_item_widget.dart';
 import 'package:sugar_catch/features/track/track_provider.dart';
 import 'package:sugar_catch/features/track/presentation/widgets/daily_log_entry_widget.dart';
 import 'package:sugar_catch/features/track/data/track_models.dart';
@@ -12,12 +12,10 @@ class HomeScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final recentHistory = useState<List<HistoryItem>>([]);
     final weeklyData = useState<Map<String, double>>({});
 
     useEffect(() {
-      // Load recent history and weekly data
-      recentHistory.value = HistoryService.getRecentHistory();
+      // Load weekly data
       weeklyData.value = HistoryService.getWeeklySugarData();
       return null;
     }, []);
@@ -50,9 +48,6 @@ class HomeScreen extends HookConsumerWidget {
             child: _buildWeeklySnapshot(weeklyData.value),
           ),
 
-          // History - Takes remaining space and scrollable
-          // TODO: Move history to a dedicated screen or section
-          // Expanded(child: _buildRecentlyScanned(recentHistory.value)),
           
           // Daily Log - Quick overview of today's sugar intake
           Expanded(child: _buildDailyLogOverview()),
@@ -141,100 +136,6 @@ class HomeScreen extends HookConsumerWidget {
     );
   }
 
-  Widget _buildRecentlyScanned(List<HistoryItem> recentHistory) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Header
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Recently Scanned',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: CupertinoColors.label,
-                ),
-              ),
-              CupertinoButton(
-                padding: EdgeInsets.zero,
-                onPressed: () {
-                  // TODO: Navigate to full history
-                },
-                child: const Text(
-                  'View All',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: CupertinoColors.systemGreen,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-
-        // Content - Takes remaining space
-        Expanded(
-          child: recentHistory.isEmpty
-              ? _buildEmptyState()
-              : ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: recentHistory.length,
-                  itemBuilder: (context, index) {
-                    return HistoryItemWidget(item: recentHistory[index]);
-                  },
-                ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildEmptyState() {
-    return Center(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16),
-        padding: const EdgeInsets.all(40),
-        decoration: BoxDecoration(
-          color: CupertinoColors.systemBackground,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: CupertinoColors.separator, width: 0.5),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(
-              CupertinoIcons.qrcode_viewfinder,
-              size: 48,
-              color: CupertinoColors.systemGrey,
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'No scans yet',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: CupertinoColors.systemGrey,
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Start scanning products to see your history here',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: CupertinoColors.systemGrey2,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _buildDailyLogOverview() {
     return Consumer(

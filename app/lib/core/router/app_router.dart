@@ -4,7 +4,7 @@ import 'package:sugar_catch/features/home/presentation/screens/home_screen.dart'
 import 'package:sugar_catch/features/scan/presentation/screens/scan_screen.dart';
 import 'package:sugar_catch/features/scan/presentation/screens/product_screen.dart';
 import 'package:sugar_catch/features/track/presentation/screens/track_screen.dart';
-import 'package:sugar_catch/features/goals/presentation/screens/goals_screen.dart';
+import 'package:sugar_catch/features/history/presentation/screens/history_screen.dart';
 import 'package:sugar_catch/features/progress/presentation/screens/progress_screen.dart';
 import 'package:sugar_catch/core/widgets/app_shell.dart';
 
@@ -28,9 +28,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const TrackScreen(),
           ),
           GoRoute(
-            path: '/goals',
-            name: 'goals',
-            builder: (context, state) => const GoalsScreen(),
+            path: '/history',
+            name: 'history',
+            builder: (context, state) => const HistoryScreen(),
           ),
           GoRoute(
             path: '/progress',

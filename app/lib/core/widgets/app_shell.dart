@@ -44,9 +44,9 @@ class AppShell extends StatelessWidget {
           label: 'Scan',
         ),
         BottomNavigationBarItem(
-          icon: Icon(CupertinoIcons.star),
-          activeIcon: Icon(CupertinoIcons.star_fill),
-          label: 'Goals',
+          icon: Icon(CupertinoIcons.clock),
+          activeIcon: Icon(CupertinoIcons.clock_fill),
+          label: 'History',
         ),
         BottomNavigationBarItem(
           icon: Icon(CupertinoIcons.chart_bar),
@@ -67,7 +67,7 @@ class AppShell extends StatelessWidget {
         return 1;
       case '/scan':
         return 2;
-      case '/goals':
+      case '/history':
         return 3;
       case '/progress':
         return 4;
@@ -96,7 +96,7 @@ class AppShell extends StatelessWidget {
         context.go('/scan');
         break;
       case 3:
-        context.go('/goals');
+        context.go('/history');
         break;
       case 4:
         context.go('/progress');
