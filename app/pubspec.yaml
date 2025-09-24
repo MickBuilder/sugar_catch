@@ -1,5 +1,5 @@
 name: sugar_catch
-description: "Track hidden sugar in grocery foods with barcode scanning and daily consumption monitoring."
+description: "Track hidden sugar in grocery foods with barcode scanning."
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -23,6 +23,7 @@ dependencies:
   go_router: ^16.2.2
   heroicons: ^0.11.0
   fl_chart: ^1.1.1
+  in_app_review: ^2.0.11
 
 dev_dependencies:
   flutter_test:
@@ -36,3 +37,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  
+  assets:
+    - assets/images/

@@ -29,9 +29,9 @@ mixin _$Ingredient {
   String? get textEn => throw _privateConstructorUsedError;
   @JsonKey(name: 'percent_estimate')
   double? get percentEstimate => throw _privateConstructorUsedError;
-  @JsonKey(name: 'percent_max')
+  @JsonKey(name: 'percent_max', fromJson: _parseDouble)
   double? get percentMax => throw _privateConstructorUsedError;
-  @JsonKey(name: 'percent_min')
+  @JsonKey(name: 'percent_min', fromJson: _parseDouble)
   double? get percentMin => throw _privateConstructorUsedError;
   @JsonKey(name: 'vegan')
   String? get vegan => throw _privateConstructorUsedError;
@@ -62,8 +62,8 @@ abstract class $IngredientCopyWith<$Res> {
     @JsonKey(name: 'text') String text,
     @JsonKey(name: 'text_en') String? textEn,
     @JsonKey(name: 'percent_estimate') double? percentEstimate,
-    @JsonKey(name: 'percent_max') double? percentMax,
-    @JsonKey(name: 'percent_min') double? percentMin,
+    @JsonKey(name: 'percent_max', fromJson: _parseDouble) double? percentMax,
+    @JsonKey(name: 'percent_min', fromJson: _parseDouble) double? percentMin,
     @JsonKey(name: 'vegan') String? vegan,
     @JsonKey(name: 'vegetarian') String? vegetarian,
     @JsonKey(name: 'from_palm_oil') String? fromPalmOil,
@@ -153,8 +153,8 @@ abstract class _$$IngredientImplCopyWith<$Res>
     @JsonKey(name: 'text') String text,
     @JsonKey(name: 'text_en') String? textEn,
     @JsonKey(name: 'percent_estimate') double? percentEstimate,
-    @JsonKey(name: 'percent_max') double? percentMax,
-    @JsonKey(name: 'percent_min') double? percentMin,
+    @JsonKey(name: 'percent_max', fromJson: _parseDouble) double? percentMax,
+    @JsonKey(name: 'percent_min', fromJson: _parseDouble) double? percentMin,
     @JsonKey(name: 'vegan') String? vegan,
     @JsonKey(name: 'vegetarian') String? vegetarian,
     @JsonKey(name: 'from_palm_oil') String? fromPalmOil,
@@ -236,8 +236,8 @@ class _$IngredientImpl implements _Ingredient {
     @JsonKey(name: 'text') required this.text,
     @JsonKey(name: 'text_en') this.textEn,
     @JsonKey(name: 'percent_estimate') this.percentEstimate,
-    @JsonKey(name: 'percent_max') this.percentMax,
-    @JsonKey(name: 'percent_min') this.percentMin,
+    @JsonKey(name: 'percent_max', fromJson: _parseDouble) this.percentMax,
+    @JsonKey(name: 'percent_min', fromJson: _parseDouble) this.percentMin,
     @JsonKey(name: 'vegan') this.vegan,
     @JsonKey(name: 'vegetarian') this.vegetarian,
     @JsonKey(name: 'from_palm_oil') this.fromPalmOil,
@@ -259,10 +259,10 @@ class _$IngredientImpl implements _Ingredient {
   @JsonKey(name: 'percent_estimate')
   final double? percentEstimate;
   @override
-  @JsonKey(name: 'percent_max')
+  @JsonKey(name: 'percent_max', fromJson: _parseDouble)
   final double? percentMax;
   @override
-  @JsonKey(name: 'percent_min')
+  @JsonKey(name: 'percent_min', fromJson: _parseDouble)
   final double? percentMin;
   @override
   @JsonKey(name: 'vegan')
@@ -335,8 +335,10 @@ abstract class _Ingredient implements Ingredient {
     @JsonKey(name: 'text') required final String text,
     @JsonKey(name: 'text_en') final String? textEn,
     @JsonKey(name: 'percent_estimate') final double? percentEstimate,
-    @JsonKey(name: 'percent_max') final double? percentMax,
-    @JsonKey(name: 'percent_min') final double? percentMin,
+    @JsonKey(name: 'percent_max', fromJson: _parseDouble)
+    final double? percentMax,
+    @JsonKey(name: 'percent_min', fromJson: _parseDouble)
+    final double? percentMin,
     @JsonKey(name: 'vegan') final String? vegan,
     @JsonKey(name: 'vegetarian') final String? vegetarian,
     @JsonKey(name: 'from_palm_oil') final String? fromPalmOil,
@@ -358,10 +360,10 @@ abstract class _Ingredient implements Ingredient {
   @JsonKey(name: 'percent_estimate')
   double? get percentEstimate;
   @override
-  @JsonKey(name: 'percent_max')
+  @JsonKey(name: 'percent_max', fromJson: _parseDouble)
   double? get percentMax;
   @override
-  @JsonKey(name: 'percent_min')
+  @JsonKey(name: 'percent_min', fromJson: _parseDouble)
   double? get percentMin;
   @override
   @JsonKey(name: 'vegan')

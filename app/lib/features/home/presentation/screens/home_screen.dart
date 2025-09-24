@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sugar_catch/core/services/history_service.dart';
 import 'package:sugar_catch/features/track/track_provider.dart';
 import 'package:sugar_catch/features/track/presentation/widgets/daily_log_entry_widget.dart';

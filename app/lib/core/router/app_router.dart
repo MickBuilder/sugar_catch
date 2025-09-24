@@ -6,11 +6,15 @@ import 'package:sugar_catch/features/scan/presentation/screens/product_screen.da
 import 'package:sugar_catch/features/track/presentation/screens/track_screen.dart';
 import 'package:sugar_catch/features/history/presentation/screens/history_screen.dart';
 import 'package:sugar_catch/features/progress/presentation/screens/progress_screen.dart';
+import 'package:sugar_catch/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:sugar_catch/features/onboarding/onboarding_provider.dart';
 import 'package:sugar_catch/core/widgets/app_shell.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
+  final hasCompletedOnboarding = ref.watch(hasCompletedOnboardingProvider);
+  
   return GoRouter(
-    initialLocation: '/home',
+    initialLocation: hasCompletedOnboarding ? '/home' : '/onboarding',
     routes: [
       ShellRoute(
         builder: (context, state, child) {
@@ -51,6 +55,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           final barcode = state.pathParameters['barcode']!;
           return ProductScreen(barcode: barcode);
         },
+      ),
+      GoRoute(
+        path: '/onboarding',
+        name: 'onboarding',
+        builder: (context, state) => const OnboardingScreen(),
       ),
     ],
   );

@@ -5,6 +5,7 @@ import 'package:sugar_catch/core/router/app_router.dart';
 import 'package:sugar_catch/core/services/cache_service.dart';
 import 'package:sugar_catch/core/services/history_service.dart';
 import 'package:sugar_catch/features/track/data/track_service.dart';
+import 'package:sugar_catch/features/onboarding/data/onboarding_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,6 +15,10 @@ void main() async {
   await CacheService.init();
   await HistoryService.init();
   await TrackService.init();
+  await OnboardingService.init();
+
+  // Uncomment the line below to force show onboarding on app restart (for testing)
+  await OnboardingService.resetOnboardingStatus();
 
   runApp(const ProviderScope(child: SugarCatchApp()));
 }

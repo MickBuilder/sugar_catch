@@ -11,8 +11,8 @@ class Ingredient with _$Ingredient {
     @JsonKey(name: 'text') required String text,
     @JsonKey(name: 'text_en') String? textEn,
     @JsonKey(name: 'percent_estimate') double? percentEstimate,
-    @JsonKey(name: 'percent_max') double? percentMax,
-    @JsonKey(name: 'percent_min') double? percentMin,
+    @JsonKey(name: 'percent_max', fromJson: _parseDouble) double? percentMax,
+    @JsonKey(name: 'percent_min', fromJson: _parseDouble) double? percentMin,
     @JsonKey(name: 'vegan') String? vegan,
     @JsonKey(name: 'vegetarian') String? vegetarian,
     @JsonKey(name: 'from_palm_oil') String? fromPalmOil,
@@ -20,6 +20,17 @@ class Ingredient with _$Ingredient {
 
   factory Ingredient.fromJson(Map<String, dynamic> json) =>
       _$IngredientFromJson(json);
+}
+
+// Helper function to parse both string and numeric values to double
+double? _parseDouble(dynamic value) {
+  if (value == null) return null;
+  if (value is double) return value;
+  if (value is int) return value.toDouble();
+  if (value is String) {
+    return double.tryParse(value);
+  }
+  return null;
 }
 
 @freezed
