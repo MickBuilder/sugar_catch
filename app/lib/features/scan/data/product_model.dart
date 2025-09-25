@@ -54,6 +54,10 @@ class Product with _$Product {
     @JsonKey(name: 'categories') String? categories,
     @JsonKey(name: 'categories_hierarchy') List<String>? categoriesHierarchy,
     @JsonKey(name: 'categories_tags') List<String>? categoriesTags,
+    @JsonKey(name: 'additives_tags') List<String>? additivesTags,
+    @JsonKey(name: 'allergens_tags') List<String>? allergensTags,
+    @JsonKey(name: 'traces_tags') List<String>? tracesTags,
+    @JsonKey(name: 'ingredients_sweeteners_n') int? ingredientsSweetenersN,
     Map<String, dynamic>? nutriments,
   }) = _Product;
 

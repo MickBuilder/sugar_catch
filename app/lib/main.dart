@@ -18,7 +18,7 @@ void main() async {
   await OnboardingService.init();
 
   // Uncomment the line below to force show onboarding on app restart (for testing)
-  await OnboardingService.resetOnboardingStatus();
+  // await OnboardingService.resetOnboardingStatus();
 
   runApp(const ProviderScope(child: SugarCatchApp()));
 }

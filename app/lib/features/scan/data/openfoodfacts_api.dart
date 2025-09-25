@@ -118,10 +118,25 @@ class OpenFoodFactsApi {
         ?.map((e) => e.toString())
         .toList();
 
+    // Parse new fields for Oasis layout
+    final additivesTags = (productData['additives_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final allergensTags = (productData['allergens_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final tracesTags = (productData['traces_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final ingredientsSweetenersN = productData['ingredients_sweeteners_n'] as int?;
+
     print('🌐 [API] categories: $categories');
     print('🌐 [API] categoriesHierarchy: $categoriesHierarchy');
     print('🌐 [API] categoriesTags: $categoriesTags');
     print('🌐 [API] ingredientsTags: $ingredientsTags');
+    print('🌐 [API] additivesTags: $additivesTags');
+    print('🌐 [API] allergensTags: $allergensTags');
+    print('🌐 [API] tracesTags: $tracesTags');
 
     final product = Product(
       code: barcode,
@@ -142,6 +157,10 @@ class OpenFoodFactsApi {
       categories: categories,
       categoriesHierarchy: categoriesHierarchy,
       categoriesTags: categoriesTags,
+      additivesTags: additivesTags,
+      allergensTags: allergensTags,
+      tracesTags: tracesTags,
+      ingredientsSweetenersN: ingredientsSweetenersN,
       nutriments: nutriments,
     );
 

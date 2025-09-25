@@ -424,6 +424,14 @@ mixin _$Product {
   List<String>? get categoriesHierarchy => throw _privateConstructorUsedError;
   @JsonKey(name: 'categories_tags')
   List<String>? get categoriesTags => throw _privateConstructorUsedError;
+  @JsonKey(name: 'additives_tags')
+  List<String>? get additivesTags => throw _privateConstructorUsedError;
+  @JsonKey(name: 'allergens_tags')
+  List<String>? get allergensTags => throw _privateConstructorUsedError;
+  @JsonKey(name: 'traces_tags')
+  List<String>? get tracesTags => throw _privateConstructorUsedError;
+  @JsonKey(name: 'ingredients_sweeteners_n')
+  int? get ingredientsSweetenersN => throw _privateConstructorUsedError;
   Map<String, dynamic>? get nutriments => throw _privateConstructorUsedError;
 
   /// Serializes this Product to a JSON map.
@@ -459,6 +467,10 @@ abstract class $ProductCopyWith<$Res> {
     @JsonKey(name: 'categories') String? categories,
     @JsonKey(name: 'categories_hierarchy') List<String>? categoriesHierarchy,
     @JsonKey(name: 'categories_tags') List<String>? categoriesTags,
+    @JsonKey(name: 'additives_tags') List<String>? additivesTags,
+    @JsonKey(name: 'allergens_tags') List<String>? allergensTags,
+    @JsonKey(name: 'traces_tags') List<String>? tracesTags,
+    @JsonKey(name: 'ingredients_sweeteners_n') int? ingredientsSweetenersN,
     Map<String, dynamic>? nutriments,
   });
 }
@@ -496,6 +508,10 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
     Object? categories = freezed,
     Object? categoriesHierarchy = freezed,
     Object? categoriesTags = freezed,
+    Object? additivesTags = freezed,
+    Object? allergensTags = freezed,
+    Object? tracesTags = freezed,
+    Object? ingredientsSweetenersN = freezed,
     Object? nutriments = freezed,
   }) {
     return _then(
@@ -572,6 +588,22 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
                 ? _value.categoriesTags
                 : categoriesTags // ignore: cast_nullable_to_non_nullable
                       as List<String>?,
+            additivesTags: freezed == additivesTags
+                ? _value.additivesTags
+                : additivesTags // ignore: cast_nullable_to_non_nullable
+                      as List<String>?,
+            allergensTags: freezed == allergensTags
+                ? _value.allergensTags
+                : allergensTags // ignore: cast_nullable_to_non_nullable
+                      as List<String>?,
+            tracesTags: freezed == tracesTags
+                ? _value.tracesTags
+                : tracesTags // ignore: cast_nullable_to_non_nullable
+                      as List<String>?,
+            ingredientsSweetenersN: freezed == ingredientsSweetenersN
+                ? _value.ingredientsSweetenersN
+                : ingredientsSweetenersN // ignore: cast_nullable_to_non_nullable
+                      as int?,
             nutriments: freezed == nutriments
                 ? _value.nutriments
                 : nutriments // ignore: cast_nullable_to_non_nullable
@@ -609,6 +641,10 @@ abstract class _$$ProductImplCopyWith<$Res> implements $ProductCopyWith<$Res> {
     @JsonKey(name: 'categories') String? categories,
     @JsonKey(name: 'categories_hierarchy') List<String>? categoriesHierarchy,
     @JsonKey(name: 'categories_tags') List<String>? categoriesTags,
+    @JsonKey(name: 'additives_tags') List<String>? additivesTags,
+    @JsonKey(name: 'allergens_tags') List<String>? allergensTags,
+    @JsonKey(name: 'traces_tags') List<String>? tracesTags,
+    @JsonKey(name: 'ingredients_sweeteners_n') int? ingredientsSweetenersN,
     Map<String, dynamic>? nutriments,
   });
 }
@@ -645,6 +681,10 @@ class __$$ProductImplCopyWithImpl<$Res>
     Object? categories = freezed,
     Object? categoriesHierarchy = freezed,
     Object? categoriesTags = freezed,
+    Object? additivesTags = freezed,
+    Object? allergensTags = freezed,
+    Object? tracesTags = freezed,
+    Object? ingredientsSweetenersN = freezed,
     Object? nutriments = freezed,
   }) {
     return _then(
@@ -721,6 +761,22 @@ class __$$ProductImplCopyWithImpl<$Res>
             ? _value._categoriesTags
             : categoriesTags // ignore: cast_nullable_to_non_nullable
                   as List<String>?,
+        additivesTags: freezed == additivesTags
+            ? _value._additivesTags
+            : additivesTags // ignore: cast_nullable_to_non_nullable
+                  as List<String>?,
+        allergensTags: freezed == allergensTags
+            ? _value._allergensTags
+            : allergensTags // ignore: cast_nullable_to_non_nullable
+                  as List<String>?,
+        tracesTags: freezed == tracesTags
+            ? _value._tracesTags
+            : tracesTags // ignore: cast_nullable_to_non_nullable
+                  as List<String>?,
+        ingredientsSweetenersN: freezed == ingredientsSweetenersN
+            ? _value.ingredientsSweetenersN
+            : ingredientsSweetenersN // ignore: cast_nullable_to_non_nullable
+                  as int?,
         nutriments: freezed == nutriments
             ? _value._nutriments
             : nutriments // ignore: cast_nullable_to_non_nullable
@@ -753,11 +809,18 @@ class _$ProductImpl implements _Product {
     @JsonKey(name: 'categories_hierarchy')
     final List<String>? categoriesHierarchy,
     @JsonKey(name: 'categories_tags') final List<String>? categoriesTags,
+    @JsonKey(name: 'additives_tags') final List<String>? additivesTags,
+    @JsonKey(name: 'allergens_tags') final List<String>? allergensTags,
+    @JsonKey(name: 'traces_tags') final List<String>? tracesTags,
+    @JsonKey(name: 'ingredients_sweeteners_n') this.ingredientsSweetenersN,
     final Map<String, dynamic>? nutriments,
   }) : _ingredientsList = ingredientsList,
        _ingredientsTags = ingredientsTags,
        _categoriesHierarchy = categoriesHierarchy,
        _categoriesTags = categoriesTags,
+       _additivesTags = additivesTags,
+       _allergensTags = allergensTags,
+       _tracesTags = tracesTags,
        _nutriments = nutriments;
 
   factory _$ProductImpl.fromJson(Map<String, dynamic> json) =>
@@ -849,6 +912,42 @@ class _$ProductImpl implements _Product {
     return EqualUnmodifiableListView(value);
   }
 
+  final List<String>? _additivesTags;
+  @override
+  @JsonKey(name: 'additives_tags')
+  List<String>? get additivesTags {
+    final value = _additivesTags;
+    if (value == null) return null;
+    if (_additivesTags is EqualUnmodifiableListView) return _additivesTags;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<String>? _allergensTags;
+  @override
+  @JsonKey(name: 'allergens_tags')
+  List<String>? get allergensTags {
+    final value = _allergensTags;
+    if (value == null) return null;
+    if (_allergensTags is EqualUnmodifiableListView) return _allergensTags;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<String>? _tracesTags;
+  @override
+  @JsonKey(name: 'traces_tags')
+  List<String>? get tracesTags {
+    final value = _tracesTags;
+    if (value == null) return null;
+    if (_tracesTags is EqualUnmodifiableListView) return _tracesTags;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  @JsonKey(name: 'ingredients_sweeteners_n')
+  final int? ingredientsSweetenersN;
   final Map<String, dynamic>? _nutriments;
   @override
   Map<String, dynamic>? get nutriments {
@@ -861,7 +960,7 @@ class _$ProductImpl implements _Product {
 
   @override
   String toString() {
-    return 'Product(code: $code, productName: $productName, productNameEn: $productNameEn, brands: $brands, sugarsPer100g: $sugarsPer100g, sugarsServing: $sugarsServing, servingSize: $servingSize, servingQuantity: $servingQuantity, quantity: $quantity, productQuantity: $productQuantity, productQuantityUnit: $productQuantityUnit, ingredientsList: $ingredientsList, ingredientsTags: $ingredientsTags, imageUrl: $imageUrl, imageFrontUrl: $imageFrontUrl, categories: $categories, categoriesHierarchy: $categoriesHierarchy, categoriesTags: $categoriesTags, nutriments: $nutriments)';
+    return 'Product(code: $code, productName: $productName, productNameEn: $productNameEn, brands: $brands, sugarsPer100g: $sugarsPer100g, sugarsServing: $sugarsServing, servingSize: $servingSize, servingQuantity: $servingQuantity, quantity: $quantity, productQuantity: $productQuantity, productQuantityUnit: $productQuantityUnit, ingredientsList: $ingredientsList, ingredientsTags: $ingredientsTags, imageUrl: $imageUrl, imageFrontUrl: $imageFrontUrl, categories: $categories, categoriesHierarchy: $categoriesHierarchy, categoriesTags: $categoriesTags, additivesTags: $additivesTags, allergensTags: $allergensTags, tracesTags: $tracesTags, ingredientsSweetenersN: $ingredientsSweetenersN, nutriments: $nutriments)';
   }
 
   @override
@@ -912,6 +1011,20 @@ class _$ProductImpl implements _Product {
               _categoriesTags,
             ) &&
             const DeepCollectionEquality().equals(
+              other._additivesTags,
+              _additivesTags,
+            ) &&
+            const DeepCollectionEquality().equals(
+              other._allergensTags,
+              _allergensTags,
+            ) &&
+            const DeepCollectionEquality().equals(
+              other._tracesTags,
+              _tracesTags,
+            ) &&
+            (identical(other.ingredientsSweetenersN, ingredientsSweetenersN) ||
+                other.ingredientsSweetenersN == ingredientsSweetenersN) &&
+            const DeepCollectionEquality().equals(
               other._nutriments,
               _nutriments,
             ));
@@ -939,6 +1052,10 @@ class _$ProductImpl implements _Product {
     categories,
     const DeepCollectionEquality().hash(_categoriesHierarchy),
     const DeepCollectionEquality().hash(_categoriesTags),
+    const DeepCollectionEquality().hash(_additivesTags),
+    const DeepCollectionEquality().hash(_allergensTags),
+    const DeepCollectionEquality().hash(_tracesTags),
+    ingredientsSweetenersN,
     const DeepCollectionEquality().hash(_nutriments),
   ]);
 
@@ -977,6 +1094,11 @@ abstract class _Product implements Product {
     @JsonKey(name: 'categories_hierarchy')
     final List<String>? categoriesHierarchy,
     @JsonKey(name: 'categories_tags') final List<String>? categoriesTags,
+    @JsonKey(name: 'additives_tags') final List<String>? additivesTags,
+    @JsonKey(name: 'allergens_tags') final List<String>? allergensTags,
+    @JsonKey(name: 'traces_tags') final List<String>? tracesTags,
+    @JsonKey(name: 'ingredients_sweeteners_n')
+    final int? ingredientsSweetenersN,
     final Map<String, dynamic>? nutriments,
   }) = _$ProductImpl;
 
@@ -1035,6 +1157,18 @@ abstract class _Product implements Product {
   @override
   @JsonKey(name: 'categories_tags')
   List<String>? get categoriesTags;
+  @override
+  @JsonKey(name: 'additives_tags')
+  List<String>? get additivesTags;
+  @override
+  @JsonKey(name: 'allergens_tags')
+  List<String>? get allergensTags;
+  @override
+  @JsonKey(name: 'traces_tags')
+  List<String>? get tracesTags;
+  @override
+  @JsonKey(name: 'ingredients_sweeteners_n')
+  int? get ingredientsSweetenersN;
   @override
   Map<String, dynamic>? get nutriments;
 
