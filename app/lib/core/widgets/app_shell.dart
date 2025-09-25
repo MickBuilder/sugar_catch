@@ -2,24 +2,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sugar_catch/core/analytics/analytics_service.dart';
 
-class AppShell extends StatelessWidget {
+class AppShell extends ConsumerWidget {
   final Widget child;
 
   const AppShell({super.key, required this.child});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final currentLocation = GoRouterState.of(context).uri.path;
 
     return Scaffold(
       backgroundColor: CupertinoColors.systemGroupedBackground,
       body: child,
-      bottomNavigationBar: _buildBottomNavigation(context, currentLocation),
+      bottomNavigationBar: _buildBottomNavigation(context, ref, currentLocation),
     );
   }
 
-  Widget _buildBottomNavigation(BuildContext context, String currentLocation) {
+  Widget _buildBottomNavigation(BuildContext context, WidgetRef ref, String currentLocation) {
     final currentIndex = _getTabIndex(currentLocation);
 
     return CupertinoTabBar(
@@ -55,7 +57,7 @@ class AppShell extends StatelessWidget {
         ),
       ],
       currentIndex: currentIndex,
-      onTap: (index) => _onTabTapped(context, index, currentIndex),
+      onTap: (index) => _onTabTapped(context, ref, index, currentIndex),
     );
   }
 
@@ -76,7 +78,7 @@ class AppShell extends StatelessWidget {
     }
   }
 
-  void _onTabTapped(BuildContext context, int index, int currentIndex) {
+  void _onTabTapped(BuildContext context, WidgetRef ref, int index, int currentIndex) {
     // Prevent unnecessary navigation if already on the same tab
     if (index == currentIndex) {
       return;
@@ -84,6 +86,9 @@ class AppShell extends StatelessWidget {
 
     // Haptic feedback for tab navigation
     HapticFeedback.selectionClick();
+
+    // Track tab switching
+    _trackTabSwitched(ref, currentIndex, index);
 
     switch (index) {
       case 0:
@@ -101,6 +106,21 @@ class AppShell extends StatelessWidget {
       case 4:
         context.go('/progress');
         break;
+    }
+  }
+
+  // Analytics tracking method
+  Future<void> _trackTabSwitched(WidgetRef ref, int fromIndex, int toIndex) async {
+    try {
+      final analytics = await ref.read(analyticsServiceProvider.future);
+      final tabNames = ['home', 'track', 'scan', 'history', 'progress'];
+      await analytics.trackTabSwitched(
+        tabNames[fromIndex],
+        tabNames[toIndex],
+        0, // Time on previous tab - we don't track this yet
+      );
+    } catch (e) {
+      print('Analytics error: $e');
     }
   }
 }

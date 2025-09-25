@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sugar_catch/core/analytics/analytics_service.dart';
 import 'package:sugar_catch/core/services/history_service.dart';
 import 'package:sugar_catch/features/track/track_provider.dart';
 import 'package:sugar_catch/features/track/presentation/widgets/daily_log_entry_widget.dart';
@@ -16,6 +17,10 @@ class HomeScreen extends HookConsumerWidget {
     useEffect(() {
       // Load weekly data
       weeklyData.value = HistoryService.getWeeklySugarData();
+      
+      // Track screen view
+      _trackScreenViewed(ref);
+      
       return null;
     }, []);
 
@@ -30,6 +35,8 @@ class HomeScreen extends HookConsumerWidget {
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () {
+            // Track feature usage
+            _trackFeatureUsed(ref, 'notifications_bell');
             // TODO: Implement notifications
           },
           child: const Icon(
@@ -161,6 +168,8 @@ class HomeScreen extends HookConsumerWidget {
                   CupertinoButton(
                     padding: EdgeInsets.zero,
                     onPressed: () {
+                      // Track feature usage
+                      _trackFeatureUsed(ref, 'track_more_button');
                       // TODO: Navigate to full track screen
                     },
                     child: const Text(
@@ -297,4 +306,22 @@ class HomeScreen extends HookConsumerWidget {
     }
   }
 
+  // Analytics tracking methods
+  Future<void> _trackScreenViewed(WidgetRef ref) async {
+    try {
+      final analytics = await ref.read(analyticsServiceProvider.future);
+      await analytics.trackScreenViewed('home', 0, null); // Time spent will be tracked elsewhere
+    } catch (e) {
+      print('Analytics error: $e');
+    }
+  }
+
+  Future<void> _trackFeatureUsed(WidgetRef ref, String featureName) async {
+    try {
+      final analytics = await ref.read(analyticsServiceProvider.future);
+      await analytics.trackFeatureUsed(featureName);
+    } catch (e) {
+      print('Analytics error: $e');
+    }
+  }
 }

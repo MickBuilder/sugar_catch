@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sugar_catch/core/analytics/analytics_service.dart';
 import 'package:sugar_catch/features/scan/data/product_model.dart';
 import 'package:sugar_catch/features/scan/data/recommendations_service.dart';
 
-class RecommendationsWidget extends StatefulWidget {
+class RecommendationsWidget extends ConsumerStatefulWidget {
   final Product product;
 
   const RecommendationsWidget({
@@ -13,10 +15,10 @@ class RecommendationsWidget extends StatefulWidget {
   });
 
   @override
-  State<RecommendationsWidget> createState() => _RecommendationsWidgetState();
+  ConsumerState<RecommendationsWidget> createState() => _RecommendationsWidgetState();
 }
 
-class _RecommendationsWidgetState extends State<RecommendationsWidget> {
+class _RecommendationsWidgetState extends ConsumerState<RecommendationsWidget> {
   List<Product> _recommendations = [];
   bool _isLoading = true;
   String? _error;
@@ -42,6 +44,9 @@ class _RecommendationsWidgetState extends State<RecommendationsWidget> {
         _recommendations = recommendations;
         _isLoading = false;
       });
+      
+      // Track recommendations viewed
+      _trackRecommendationsViewed();
     } catch (e) {
       setState(() {
         _error = e.toString();
@@ -161,12 +166,12 @@ class _RecommendationsWidgetState extends State<RecommendationsWidget> {
       itemCount: _recommendations.length,
       itemBuilder: (context, index) {
         final recommendation = _recommendations[index];
-        return _buildRecommendationCard(context, recommendation);
+        return _buildRecommendationCard(context, recommendation, index);
       },
     );
   }
 
-  Widget _buildRecommendationCard(BuildContext context, Product recommendation) {
+  Widget _buildRecommendationCard(BuildContext context, Product recommendation, int index) {
     print('🎨 [RecommendationsWidget] Building card for: ${recommendation.productName}');
     print('🎨 [RecommendationsWidget] Brand: ${recommendation.brands}');
     print('🎨 [RecommendationsWidget] Image URL: ${recommendation.imageUrl}');
@@ -191,6 +196,8 @@ class _RecommendationsWidgetState extends State<RecommendationsWidget> {
         onPressed: () {
           // Haptic feedback for recommendation selection
           HapticFeedback.lightImpact();
+          // Track recommendation click
+          _trackRecommendationClicked(recommendation, index);
           // Navigate to product screen for this recommendation
           context.push('/product/${recommendation.code}');
         },
@@ -322,4 +329,30 @@ class _RecommendationsWidgetState extends State<RecommendationsWidget> {
     }
   }
 
+  // Analytics tracking methods
+  Future<void> _trackRecommendationsViewed() async {
+    try {
+      print('📊 [ANALYTICS] Starting recommendations viewed tracking...');
+      final analytics = await ref.read(analyticsServiceProvider.future);
+      await analytics.trackRecommendationsViewed(
+        widget.product.categories?.split(',').first.trim() ?? 'Unknown',
+        _recommendations.length,
+      );
+      print('📊 [ANALYTICS] Recommendations viewed tracked successfully');
+    } catch (e) {
+      print('📊 [ANALYTICS] Error tracking recommendations viewed: $e');
+    }
+  }
+
+  Future<void> _trackRecommendationClicked(Product recommendation, int position) async {
+    try {
+      print('📊 [ANALYTICS] Starting recommendation clicked tracking...');
+      final analytics = await ref.read(analyticsServiceProvider.future);
+      await analytics.trackRecommendationClicked(recommendation.productName, position);
+      await analytics.trackAlternativeSelected(widget.product.productName, recommendation.productName);
+      print('📊 [ANALYTICS] Recommendation clicked tracked successfully');
+    } catch (e) {
+      print('📊 [ANALYTICS] Error tracking recommendation clicked: $e');
+    }
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sugar_catch/core/analytics/analytics_service.dart';
 import 'package:sugar_catch/features/onboarding/onboarding_provider.dart';
 import 'package:sugar_catch/features/onboarding/data/onboarding_models.dart';
 
@@ -95,6 +96,7 @@ class SugarGoalsWidget extends ConsumerWidget {
                           () {
                             HapticFeedback.selectionClick();
                             notifier.updateSugarGoal(SugarGoal.detox);
+                            _trackGoalSelected(ref, SugarGoal.detox);
                             // Auto-navigate to next screen
                             Future.delayed(
                               const Duration(milliseconds: 300),
@@ -111,6 +113,7 @@ class SugarGoalsWidget extends ConsumerWidget {
                           () {
                             HapticFeedback.selectionClick();
                             notifier.updateSugarGoal(SugarGoal.lowSugar);
+                            _trackGoalSelected(ref, SugarGoal.lowSugar);
                             // Auto-navigate to next screen
                             Future.delayed(
                               const Duration(milliseconds: 300),
@@ -127,6 +130,7 @@ class SugarGoalsWidget extends ConsumerWidget {
                           () {
                             HapticFeedback.selectionClick();
                             notifier.updateSugarGoal(SugarGoal.moderate);
+                            _trackGoalSelected(ref, SugarGoal.moderate);
                             // Auto-navigate to next screen
                             Future.delayed(
                               const Duration(milliseconds: 300),
@@ -143,6 +147,7 @@ class SugarGoalsWidget extends ConsumerWidget {
                           () {
                             HapticFeedback.selectionClick();
                             notifier.updateSugarGoal(SugarGoal.trackOnly);
+                            _trackGoalSelected(ref, SugarGoal.trackOnly);
                             // Auto-navigate to next screen
                             Future.delayed(
                               const Duration(milliseconds: 300),
@@ -219,5 +224,15 @@ class SugarGoalsWidget extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  // Analytics tracking method
+  Future<void> _trackGoalSelected(WidgetRef ref, SugarGoal goal) async {
+    try {
+      final analytics = await ref.read(analyticsServiceProvider.future);
+      await analytics.trackOnboardingGoalSelected(goal.title);
+    } catch (e) {
+      print('Analytics error: $e');
+    }
   }
 }

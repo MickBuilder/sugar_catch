@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sugar_catch/core/analytics/analytics_service.dart';
 import 'package:sugar_catch/core/services/history_service.dart';
 import 'package:sugar_catch/features/scan/data/product_model.dart';
 import 'package:sugar_catch/features/track/data/track_models.dart';
@@ -18,6 +19,15 @@ class TrackScreen extends ConsumerStatefulWidget {
 
 class _TrackScreenState extends ConsumerState<TrackScreen> {
   HistoryItem? _selectedProduct;
+
+  @override
+  void initState() {
+    super.initState();
+    // Track screen view
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _trackScreenViewed();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -186,16 +196,60 @@ class _TrackScreenState extends ConsumerState<TrackScreen> {
       quantity: quantity,
     );
     
+    // Track product added to log
+    _trackProductAddedToLog(product, sugarInfo, quantity);
+    
     // Show success feedback
     _showSuccessFeedback();
   }
 
   void _removeFromLog(WidgetRef ref, String entryId) {
+    // Get the entry before removing it for analytics
+    final todaysLog = ref.read(trackNotifierProvider);
+    final entry = todaysLog.entries.firstWhere((e) => e.id == entryId);
+    
     ref.read(trackNotifierProvider.notifier).removeLogEntry(entryId);
+    
+    // Track log entry removal
+    _trackLogEntryRemoved(entry);
   }
 
   void _showSuccessFeedback() {
     // You could implement a toast or haptic feedback here
     print('✅ Added to daily log!');
+  }
+
+  // Analytics tracking methods
+  Future<void> _trackScreenViewed() async {
+    try {
+      final analytics = await ref.read(analyticsServiceProvider.future);
+      final todaysLog = ref.read(trackNotifierProvider);
+      final totalSugar = todaysLog.totalSugar;
+      final totalEntries = todaysLog.entries.length;
+      
+      await analytics.trackScreenViewed('track', 0, null); // Time spent will be tracked elsewhere
+      await analytics.trackDailyLogViewed(totalEntries, totalSugar, 0.0); // Goal progress calculation would need goal data
+    } catch (e) {
+      print('Analytics error: $e');
+    }
+  }
+
+  Future<void> _trackProductAddedToLog(Product product, SugarInfo sugarInfo, double quantity) async {
+    try {
+      final analytics = await ref.read(analyticsServiceProvider.future);
+      final sugarContent = sugarInfo.sugarsPer100g * (quantity / 100);
+      await analytics.trackProductAddedToLog(product.productName, sugarContent, quantity);
+    } catch (e) {
+      print('Analytics error: $e');
+    }
+  }
+
+  Future<void> _trackLogEntryRemoved(LogEntry entry) async {
+    try {
+      final analytics = await ref.read(analyticsServiceProvider.future);
+      await analytics.trackLogEntryRemoved(entry.product.productName, entry.totalSugarAmount);
+    } catch (e) {
+      print('Analytics error: $e');
+    }
   }
 }

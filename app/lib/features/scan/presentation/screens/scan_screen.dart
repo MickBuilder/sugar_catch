@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sugar_catch/core/analytics/analytics_service.dart';
 import 'package:sugar_catch/features/scan/scan_provider.dart';
 
 class ScanScreen extends HookConsumerWidget {
@@ -292,6 +293,16 @@ class ScanScreen extends HookConsumerWidget {
   ) async {
     print('🎯 [HANDLE_BARCODE] Starting barcode handling for: $barcode');
 
+    // Track scan initiated
+    try {
+      print('📊 [ANALYTICS] Starting scan initiated tracking...');
+      final analytics = await ref.read(analyticsServiceProvider.future);
+      await analytics.trackScanInitiated('camera');
+      print('📊 [ANALYTICS] Scan initiated tracked successfully');
+    } catch (e) {
+      print('📊 [ANALYTICS] Error tracking scan initiated: $e');
+    }
+
     try {
       // Check if context is still mounted before proceeding
       if (!context.mounted) {
@@ -306,6 +317,16 @@ class ScanScreen extends HookConsumerWidget {
       // Haptic feedback for successful scan
       HapticFeedback.heavyImpact();
       print('🎯 [HANDLE_BARCODE] Haptic feedback triggered for successful scan');
+
+      // Track successful scan
+      try {
+        print('📊 [ANALYTICS] Starting scan successful tracking...');
+        final analytics = await ref.read(analyticsServiceProvider.future);
+        await analytics.trackScanSuccessful(barcode, true, 1000); // Assuming 1 second scan duration
+        print('📊 [ANALYTICS] Scan successful tracked successfully');
+      } catch (e) {
+        print('📊 [ANALYTICS] Error tracking scan successful: $e');
+      }
 
       // Wait for the state to be properly updated and check it
       await Future.delayed(const Duration(milliseconds: 50));
@@ -328,6 +349,14 @@ class ScanScreen extends HookConsumerWidget {
     } catch (e, stackTrace) {
       print('❌ [HANDLE_BARCODE] Error occurred: $e');
       print('❌ [HANDLE_BARCODE] Stack trace: $stackTrace');
+
+      // Track scan failure
+      try {
+        final analytics = await ref.read(analyticsServiceProvider.future);
+        await analytics.trackScanFailed('scan_error', 0);
+      } catch (analyticsError) {
+        print('Analytics error: $analyticsError');
+      }
 
       // Reset scanning state on error
       print('🎯 [HANDLE_BARCODE] Resetting scanner state...');

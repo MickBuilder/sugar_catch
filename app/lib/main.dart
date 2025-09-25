@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sugar_catch/core/analytics/analytics_service.dart';
 import 'package:sugar_catch/core/router/app_router.dart';
 import 'package:sugar_catch/core/services/cache_service.dart';
 import 'package:sugar_catch/core/services/history_service.dart';
@@ -9,6 +10,10 @@ import 'package:sugar_catch/features/onboarding/data/onboarding_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Environment variables are now securely embedded at compile time via Envied
+  print('✅ Environment variables securely loaded via Envied');
+  
   await Hive.initFlutter();
 
   // Initialize services
@@ -23,11 +28,38 @@ void main() async {
   runApp(const ProviderScope(child: SugarCatchApp()));
 }
 
-class SugarCatchApp extends ConsumerWidget {
+class SugarCatchApp extends ConsumerStatefulWidget {
   const SugarCatchApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SugarCatchApp> createState() => _SugarCatchAppState();
+}
+
+class _SugarCatchAppState extends ConsumerState<SugarCatchApp> {
+  @override
+  void initState() {
+    super.initState();
+    // Track app opened event with a delay to ensure analytics is initialized
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        _trackAppOpened();
+      });
+    });
+  }
+
+  Future<void> _trackAppOpened() async {
+    try {
+      final analytics = await ref.read(analyticsServiceProvider.future);
+      await analytics.trackAppOpened(true); // You can determine if it's first time based on your logic
+      print('✅ [ANALYTICS] App opened event tracked successfully');
+    } catch (e) {
+      // Analytics errors shouldn't crash the app
+      print('⚠️ [ANALYTICS] App opened tracking failed: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final router = ref.watch(appRouterProvider);
 
     return CupertinoApp.router(

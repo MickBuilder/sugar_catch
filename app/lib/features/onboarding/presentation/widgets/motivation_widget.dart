@@ -182,6 +182,7 @@ class MotivationWidget extends ConsumerWidget {
           notifier.removeMotivation(motivation);
         } else {
           notifier.addMotivation(motivation);
+          _trackMotivationSelected(notifier, motivation);
         }
       },
       child: Container(
@@ -215,5 +216,16 @@ class MotivationWidget extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  // Analytics tracking method
+  Future<void> _trackMotivationSelected(OnboardingNotifier notifier, SugarMotivation motivation) async {
+    try {
+      // Note: We'll track this in the onboarding screen completion instead
+      // since we need access to the WidgetRef here
+      print('Motivation selected: ${motivation.title}');
+    } catch (e) {
+      print('Analytics error: $e');
+    }
   }
 }

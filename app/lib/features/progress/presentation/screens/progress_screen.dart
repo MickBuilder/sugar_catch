@@ -1,15 +1,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sugar_catch/core/analytics/analytics_service.dart';
 import 'package:sugar_catch/features/progress/progress_provider.dart';
 import 'package:sugar_catch/features/progress/presentation/widgets/statistics_section.dart';
 // import 'package:sugar_catch/features/progress/presentation/widgets/achievements_section.dart';
 import 'package:sugar_catch/features/progress/presentation/widgets/consumption_graph_section.dart';
 
-class ProgressScreen extends ConsumerWidget {
+class ProgressScreen extends ConsumerStatefulWidget {
   const ProgressScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProgressScreen> createState() => _ProgressScreenState();
+}
+
+class _ProgressScreenState extends ConsumerState<ProgressScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Track screen view
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _trackScreenViewed();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final progressData = ref.watch(progressNotifierProvider);
 
     return CupertinoPageScaffold(
@@ -23,6 +38,8 @@ class ProgressScreen extends ConsumerWidget {
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () {
+            // Track feature usage
+            _trackFeatureUsed('share_progress');
             // TODO: Implement share functionality
           },
           child: const Icon(
@@ -105,5 +122,26 @@ class ProgressScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  // Analytics tracking methods
+  Future<void> _trackScreenViewed() async {
+    try {
+      final analytics = await ref.read(analyticsServiceProvider.future);
+      
+      await analytics.trackScreenViewed('progress', 0, null); // Time spent will be tracked elsewhere
+      await analytics.trackFeatureUsed('progress_viewed');
+    } catch (e) {
+      print('Analytics error: $e');
+    }
+  }
+
+  Future<void> _trackFeatureUsed(String featureName) async {
+    try {
+      final analytics = await ref.read(analyticsServiceProvider.future);
+      await analytics.trackFeatureUsed(featureName);
+    } catch (e) {
+      print('Analytics error: $e');
+    }
   }
 }

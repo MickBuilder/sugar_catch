@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sugar_catch/core/analytics/analytics_service.dart';
+import 'package:sugar_catch/features/scan/data/product_model.dart';
 import 'package:sugar_catch/features/scan/scan_provider.dart';
 import 'package:sugar_catch/features/scan/presentation/widgets/recommendations_widget.dart';
 import 'package:sugar_catch/features/scan/presentation/widgets/product_image_widget.dart';
@@ -20,6 +22,13 @@ class ProductScreen extends ConsumerWidget {
     // Debug logging
     print('📱 [PRODUCT_SCREEN] barcode: $barcode');
     print('📱 [PRODUCT_SCREEN] productAsync: $productAsync');
+
+    // Track product view when data is available
+    productAsync.whenData((data) {
+      if (data != null) {
+        _trackProductViewed(ref, data.product, data.sugarInfo);
+      }
+    });
 
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.systemGroupedBackground,
@@ -212,4 +221,62 @@ class ProductScreen extends ConsumerWidget {
     );
   }
 
+  // Analytics tracking methods
+  Future<void> _trackProductViewed(WidgetRef ref, Product product, SugarInfo sugarInfo) async {
+    try {
+      print('📊 [ANALYTICS] Starting _trackProductViewed for: ${product.productName}');
+      final analytics = await ref.read(analyticsServiceProvider.future);
+      print('📊 [ANALYTICS] Analytics service obtained, tracking product viewed...');
+      
+      await analytics.trackProductViewed(
+        product.code,
+        product.productName,
+        product.sugarsPer100g,
+        product.categories?.split(',').first.trim() ?? 'Unknown',
+      );
+      
+      print('📊 [ANALYTICS] Product viewed tracked successfully');
+      
+      // Track product analysis completion
+      await _trackProductAnalysisCompleted(ref, product);
+    } catch (e) {
+      print('📊 [ANALYTICS] Error in _trackProductViewed: $e');
+    }
+  }
+
+  Future<void> _trackProductAnalysisCompleted(WidgetRef ref, Product product) async {
+    try {
+      print('📊 [ANALYTICS] Starting _trackProductAnalysisCompleted for: ${product.productName}');
+      final analytics = await ref.read(analyticsServiceProvider.future);
+      
+      // Count hidden sugars, sweeteners, and additives
+      final hiddenSugarsCount = product.ingredientsTags?.where((tag) => 
+        tag.toLowerCase().contains('sugar') || 
+        tag.toLowerCase().contains('syrup') ||
+        tag.toLowerCase().contains('honey') ||
+        tag.toLowerCase().contains('molasses')
+      ).length ?? 0;
+      
+      final sweetenersCount = product.additivesTags?.where((tag) => 
+        tag.toLowerCase().contains('e95') || 
+        tag.toLowerCase().contains('e96') ||
+        tag.toLowerCase().contains('e420') ||
+        tag.toLowerCase().contains('e421')
+      ).length ?? 0;
+      
+      final additivesCount = product.additivesTags?.length ?? 0;
+      
+      print('📊 [ANALYTICS] Analysis counts - Hidden sugars: $hiddenSugarsCount, Sweeteners: $sweetenersCount, Additives: $additivesCount');
+      
+      await analytics.trackProductAnalysisCompleted(
+        hiddenSugarsCount,
+        sweetenersCount,
+        additivesCount,
+      );
+      
+      print('📊 [ANALYTICS] Product analysis completed tracked successfully');
+    } catch (e) {
+      print('📊 [ANALYTICS] Error in _trackProductAnalysisCompleted: $e');
+    }
+  }
 }
