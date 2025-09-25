@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -16,7 +17,7 @@ OpenFoodFactsApi openFoodFactsApi(Ref ref) {
 // New provider for fetching product data by barcode
 @riverpod
 Future<ScanState?> productByBarcode(Ref ref, String barcode) async {
-  print('🔍 [PRODUCT_PROVIDER] Fetching product for barcode: $barcode');
+  log('🔍 [PRODUCT_PROVIDER] Fetching product for barcode: $barcode', name: 'Scan');
   
   try {
     // First, try to get from cache
@@ -24,12 +25,12 @@ Future<ScanState?> productByBarcode(Ref ref, String barcode) async {
     final cachedSugarInfo = CacheService.getCachedSugarInfo(barcode);
     
     if (cachedProduct != null && cachedSugarInfo != null) {
-      print('✅ [PRODUCT_PROVIDER] Found cached data for barcode: $barcode');
+      log('✅ [PRODUCT_PROVIDER] Found cached data for barcode: $barcode', name: 'Scan');
       return ScanState(product: cachedProduct, sugarInfo: cachedSugarInfo);
     }
     
     // If not in cache, fetch from API
-    print('🌐 [PRODUCT_PROVIDER] Fetching from API for barcode: $barcode');
+    log('🌐 [PRODUCT_PROVIDER] Fetching from API for barcode: $barcode', name: 'Scan');
     final api = ref.read(openFoodFactsApiProvider);
     final product = await api.fetchProduct(barcode);
     
@@ -40,14 +41,14 @@ Future<ScanState?> productByBarcode(Ref ref, String barcode) async {
       await CacheService.cacheProduct(barcode, product);
       await CacheService.cacheSugarInfo(barcode, sugarInfo);
       
-      print('✅ [PRODUCT_PROVIDER] Successfully fetched and cached product: ${product.productName}');
+      log('✅ [PRODUCT_PROVIDER] Successfully fetched and cached product: ${product.productName}', name: 'Scan');
       return ScanState(product: product, sugarInfo: sugarInfo);
     } else {
-      print('❌ [PRODUCT_PROVIDER] Product not found for barcode: $barcode');
+      log('❌ [PRODUCT_PROVIDER] Product not found for barcode: $barcode', name: 'Scan');
       return null;
     }
   } catch (error) {
-    print('❌ [PRODUCT_PROVIDER] Error fetching product: $error');
+    log('❌ [PRODUCT_PROVIDER] Error fetching product: $error', name: 'Scan');
     rethrow;
   }
 }
@@ -62,51 +63,48 @@ class ScanNotifier extends _$ScanNotifier {
   }
 
   Future<void> scanBarcode(String barcode) async {
-    print('🔍 [SCAN_PROVIDER] Starting barcode scan: $barcode');
-    print('🔍 [SCAN_PROVIDER] Current state: $state');
+    log('🔍 [SCAN_PROVIDER] Starting barcode scan: $barcode', name: 'Scan');
+    log('🔍 [SCAN_PROVIDER] Current state: $state', name: 'Scan');
 
     try {
-      print('🔍 [SCAN_PROVIDER] Getting API instance...');
+      log('🔍 [SCAN_PROVIDER] Getting API instance...', name: 'Scan');
       final api = ref.read(openFoodFactsApiProvider);
 
-      print('🔍 [SCAN_PROVIDER] Calling fetchProduct for barcode: $barcode');
+      log('🔍 [SCAN_PROVIDER] Calling fetchProduct for barcode: $barcode', name: 'Scan');
       final product = await api.fetchProduct(barcode);
-      print(
-        '🔍 [SCAN_PROVIDER] API response received: ${product != null ? "Product found" : "Product not found"}',
-      );
+      log(
+        '🔍 [SCAN_PROVIDER] API response received: ${product != null ? "Product found" : "Product not found"}', name: 'Scan');
 
       if (product != null) {
-        print('🔍 [SCAN_PROVIDER] Extracting sugar info...');
+        log('🔍 [SCAN_PROVIDER] Extracting sugar info...', name: 'Scan');
         final sugarInfo = await api.extractSugarInfo(product);
-        print(
-          '🔍 [SCAN_PROVIDER] Sugar info extracted: SugarsPer100g=${sugarInfo.sugarsPer100g}, TotalSugars=${sugarInfo.totalSugarsInProduct}${sugarInfo.productUnit}, HiddenIngredients=${sugarInfo.hiddenSugarIngredients.length}',
-        );
+        log(
+          '🔍 [SCAN_PROVIDER] Sugar info extracted: SugarsPer100g=${sugarInfo.sugarsPer100g}, TotalSugars=${sugarInfo.totalSugarsInProduct}${sugarInfo.productUnit}, HiddenIngredients=${sugarInfo.hiddenSugarIngredients.length}', name: 'Scan');
 
         // Add to history
         await HistoryService.addToHistory(product, sugarInfo);
 
         // Create the ScanState
         final newScanState = ScanState(product: product, sugarInfo: sugarInfo);
-        print(
-          '🔍 [SCAN_PROVIDER] Creating new ScanState: ${newScanState.product.productName}',
-        );
-        print('🔍 [SCAN_PROVIDER] ScanState object: $newScanState');
+        log(
+          '🔍 [SCAN_PROVIDER] Creating new ScanState: ${newScanState.product.productName}', name: 'Scan');
+        log('🔍 [SCAN_PROVIDER] ScanState object: $newScanState', name: 'Scan');
 
         // DIRECT STATE ASSIGNMENT - This should work!
-        print('🔍 [SCAN_PROVIDER] Setting state directly...');
+        log('🔍 [SCAN_PROVIDER] Setting state directly...', name: 'Scan');
         state = newScanState;
 
         // Verify the state was set
-        print('✅ [SCAN_PROVIDER] State set successfully');
-        print('🔍 [SCAN_PROVIDER] State after setting: $state');
-        print('🔍 [SCAN_PROVIDER] State is null: ${state == null}');
+        log('✅ [SCAN_PROVIDER] State set successfully', name: 'Scan');
+        log('🔍 [SCAN_PROVIDER] State after setting: $state', name: 'Scan');
+        log('🔍 [SCAN_PROVIDER] State is null: ${state == null}', name: 'Scan');
       } else {
-        print('❌ [SCAN_PROVIDER] Product not found, setting null state');
+        log('❌ [SCAN_PROVIDER] Product not found, setting null state', name: 'Scan');
         state = null;
       }
     } catch (error, stackTrace) {
-      print('❌ [SCAN_PROVIDER] Error occurred: $error');
-      print('❌ [SCAN_PROVIDER] Stack trace: $stackTrace');
+      log('❌ [SCAN_PROVIDER] Error occurred: $error', name: 'Scan');
+      log('❌ [SCAN_PROVIDER] Stack trace: $stackTrace', name: 'Scan');
       state = null;
     }
   }

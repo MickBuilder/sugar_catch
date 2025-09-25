@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:convert';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:sugar_catch/features/onboarding/data/onboarding_models.dart';
@@ -14,7 +15,7 @@ class OnboardingService {
     if (_onboardingBox != null) {
       final jsonString = jsonEncode(data.toJson());
       await _onboardingBox!.put('onboarding_data', jsonString);
-      print('💾 [OnboardingService] Saved onboarding data: ${data.toJson()}');
+      log('💾 [OnboardingService] Saved onboarding data: ${data.toJson}', name: 'Onboarding');
     }
   }
 
@@ -26,7 +27,7 @@ class OnboardingService {
           final json = jsonDecode(jsonString) as Map<String, dynamic>;
           return OnboardingData.fromJson(json);
         } catch (e) {
-          print('💾 [OnboardingService] Error parsing onboarding data: $e');
+          log('💾 [OnboardingService] Error parsing onboarding data: $e', name: 'Onboarding');
         }
       }
     }
@@ -38,7 +39,7 @@ class OnboardingService {
       final currentData = getOnboardingData();
       final updatedData = currentData.copyWith(hasCompletedOnboarding: true);
       await saveOnboardingData(updatedData);
-      print('💾 [OnboardingService] Marked onboarding as complete');
+      log('💾 [OnboardingService] Marked onboarding as complete', name: 'Onboarding');
     }
   }
 
@@ -49,14 +50,14 @@ class OnboardingService {
   static Future<void> clearOnboardingData() async {
     if (_onboardingBox != null) {
       await _onboardingBox!.clear();
-      print('💾 [OnboardingService] Cleared onboarding data');
+      log('💾 [OnboardingService] Cleared onboarding data', name: 'Onboarding');
     }
   }
 
   static Future<void> resetOnboardingStatus() async {
     if (_onboardingBox != null) {
       await _onboardingBox!.delete('onboarding_data');
-      print('💾 [OnboardingService] Reset onboarding status');
+      log('💾 [OnboardingService] Reset onboarding status', name: 'Onboarding');
     }
   }
 

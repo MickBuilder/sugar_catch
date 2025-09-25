@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:convert';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:sugar_catch/features/scan/data/product_model.dart';
@@ -9,7 +10,7 @@ class TrackService {
 
   static Future<void> init() async {
     _trackBox = await Hive.openBox<String>(_trackBoxName);
-    print('📊 [TRACK] TrackService initialized');
+    log('📊 [TRACK] TrackService initialized', name: 'Track');
   }
 
   // Add a product to today's log
@@ -66,7 +67,7 @@ class TrackService {
     final logJson = jsonEncode(dailyLog.toJson());
     await _trackBox!.put(todayKey, logJson);
     
-    print('📊 [TRACK] Added ${product.productName} to daily log: ${servingSize.sugarPerServing.toStringAsFixed(1)}g sugar');
+    log('📊 [TRACK] Added ${product.productName} to daily log: ${servingSize.sugarPerServing.toStringAsFixed(1)}g sugar', name: 'Track');
   }
 
   // Get today's log
@@ -117,7 +118,7 @@ class TrackService {
           final log = DailyLog.fromJson(jsonDecode(logJson));
           logs.add(log);
         } catch (e) {
-          print('📊 [TRACK] Error parsing log for $dateKey: $e');
+          log('📊 [TRACK] Error parsing log for $dateKey: $e', name: 'Track');
         }
       }
       
@@ -155,7 +156,7 @@ class TrackService {
       final updatedLogJson = jsonEncode(updatedLog.toJson());
       await _trackBox!.put(todayKey, updatedLogJson);
       
-      print('📊 [TRACK] Removed log entry: $entryId');
+      log('📊 [TRACK] Removed log entry: $entryId', name: 'Track');
     }
   }
 
@@ -169,7 +170,7 @@ class TrackService {
         final log = DailyLog.fromJson(jsonDecode(logJson));
         return log.totalSugar;
       } catch (e) {
-        print('📊 [TRACK] Error parsing log for $dateKey: $e');
+        log('📊 [TRACK] Error parsing log for $dateKey: $e', name: 'Track');
       }
     }
     

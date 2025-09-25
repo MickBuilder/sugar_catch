@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -26,7 +27,7 @@ class TrackNotifier extends _$TrackNotifier {
     required SugarInfo sugarInfo,
     required double quantity,
   }) async {
-    print('📊 [TRACK_PROVIDER] Adding to daily log: ${product.productName}');
+    log('📊 [TRACK_PROVIDER] Adding to daily log: ${product.productName}', name: 'Track');
     
     await TrackService.addToDailyLog(
       product: product,
@@ -40,7 +41,7 @@ class TrackNotifier extends _$TrackNotifier {
 
   // Remove log entry
   Future<void> removeLogEntry(String entryId) async {
-    print('📊 [TRACK_PROVIDER] Removing log entry: $entryId');
+    log('📊 [TRACK_PROVIDER] Removing log entry: $entryId', name: 'Track');
     
     await TrackService.removeLogEntry(entryId);
     

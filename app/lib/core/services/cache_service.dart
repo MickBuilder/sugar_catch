@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:convert';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:sugar_catch/features/scan/data/product_model.dart';
@@ -26,7 +27,7 @@ class CacheService {
       final productJson = product.toJson();
       final productJsonString = jsonEncode(productJson);
       await _productBox!.put(barcode, productJsonString);
-      print('💾 [CACHE] Cached product for barcode: $barcode');
+      log('💾 [CACHE] Cached product for barcode: $barcode', name: 'Cache');
     }
   }
 
@@ -39,7 +40,7 @@ class CacheService {
       final sugarInfoJson = sugarInfo.toJson();
       final sugarInfoJsonString = jsonEncode(sugarInfoJson);
       await _sugarInfoBox!.put(barcode, sugarInfoJsonString);
-      print('💾 [CACHE] Cached sugar info for barcode: $barcode');
+      log('💾 [CACHE] Cached sugar info for barcode: $barcode', name: 'Cache');
     }
   }
 
@@ -56,7 +57,7 @@ class CacheService {
       };
       final cacheJsonString = jsonEncode(cacheData);
       await _recommendationsBox!.put(barcode, cacheJsonString);
-      print('💾 [CACHE] Cached ${recommendations.length} recommendations for barcode: $barcode');
+      log('💾 [CACHE] Cached ${recommendations.length} recommendations for barcode: $barcode', name: 'Cache');
     }
   }
 
@@ -69,15 +70,15 @@ class CacheService {
           final productJson =
               jsonDecode(productJsonString) as Map<String, dynamic>;
           final product = Product.fromJson(productJson);
-          print('💾 [CACHE] Retrieved cached product for barcode: $barcode');
+          log('💾 [CACHE] Retrieved cached product for barcode: $barcode', name: 'Cache');
           return product;
         } catch (e) {
-          print('💾 [CACHE] Error parsing cached product: $e');
+          log('💾 [CACHE] Error parsing cached product: $e', name: 'Cache');
           return null;
         }
       }
     }
-    print('💾 [CACHE] No cached product found for barcode: $barcode');
+    log('💾 [CACHE] No cached product found for barcode: $barcode', name: 'Cache');
     return null;
   }
 
@@ -90,15 +91,15 @@ class CacheService {
           final sugarInfoJson =
               jsonDecode(sugarInfoJsonString) as Map<String, dynamic>;
           final sugarInfo = SugarInfo.fromJson(sugarInfoJson);
-          print('💾 [CACHE] Retrieved cached sugar info for barcode: $barcode');
+          log('💾 [CACHE] Retrieved cached sugar info for barcode: $barcode', name: 'Cache');
           return sugarInfo;
         } catch (e) {
-          print('💾 [CACHE] Error parsing cached sugar info: $e');
+          log('💾 [CACHE] Error parsing cached sugar info: $e', name: 'Cache');
           return null;
         }
       }
     }
-    print('💾 [CACHE] No cached sugar info found for barcode: $barcode');
+    log('💾 [CACHE] No cached sugar info found for barcode: $barcode', name: 'Cache');
     return null;
   }
 
@@ -118,21 +119,21 @@ class CacheService {
             final recommendations = recommendationsJson
                 .map((json) => Product.fromJson(json as Map<String, dynamic>))
                 .toList();
-            print('💾 [CACHE] Retrieved ${recommendations.length} cached recommendations for barcode: $barcode');
+            log('💾 [CACHE] Retrieved ${recommendations.length} cached recommendations for barcode: $barcode', name: 'Cache');
             return recommendations;
           } else {
-            print('💾 [CACHE] Cached recommendations expired for barcode: $barcode');
+            log('💾 [CACHE] Cached recommendations expired for barcode: $barcode', name: 'Cache');
             // Remove expired cache
             _recommendationsBox!.delete(barcode);
             return null;
           }
         } catch (e) {
-          print('💾 [CACHE] Error parsing cached recommendations: $e');
+          log('💾 [CACHE] Error parsing cached recommendations: $e', name: 'Cache');
           return null;
         }
       }
     }
-    print('💾 [CACHE] No cached recommendations found for barcode: $barcode');
+    log('💾 [CACHE] No cached recommendations found for barcode: $barcode', name: 'Cache');
     return null;
   }
 
@@ -154,7 +155,7 @@ class CacheService {
     if (_recommendationsBox != null) {
       await _recommendationsBox!.delete(barcode);
     }
-    print('💾 [CACHE] Cleared cache for barcode: $barcode');
+    log('💾 [CACHE] Cleared cache for barcode: $barcode', name: 'Cache');
   }
 
   // Clear all cache
@@ -168,7 +169,7 @@ class CacheService {
     if (_recommendationsBox != null) {
       await _recommendationsBox!.clear();
     }
-    print('💾 [CACHE] Cleared all cache');
+    log('💾 [CACHE] Cleared all cache', name: 'Cache');
   }
 
   // Get cache statistics

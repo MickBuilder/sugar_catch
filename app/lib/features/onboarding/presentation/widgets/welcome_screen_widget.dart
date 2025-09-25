@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sugar_catch/features/onboarding/onboarding_provider.dart';
 import 'package:sugar_catch/features/onboarding/presentation/widgets/onboarding_page_widget.dart';
@@ -78,7 +77,7 @@ class WelcomeScreenWidget extends ConsumerWidget {
             margin: const EdgeInsets.symmetric(horizontal: 24),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: CupertinoColors.white.withOpacity(0.1),
+              color: CupertinoColors.white.withValues(alpha: .1),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Row(

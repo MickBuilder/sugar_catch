@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -223,9 +224,9 @@ class MotivationWidget extends ConsumerWidget {
     try {
       // Note: We'll track this in the onboarding screen completion instead
       // since we need access to the WidgetRef here
-      print('Motivation selected: ${motivation.title}');
+      log('Motivation selected: ${motivation.title}', name: 'Onboarding');
     } catch (e) {
-      print('Analytics error: $e');
+      log('Analytics error: $e', name: 'Onboarding');
     }
   }
 }

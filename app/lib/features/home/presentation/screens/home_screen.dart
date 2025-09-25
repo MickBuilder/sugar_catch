@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -312,7 +313,7 @@ class HomeScreen extends HookConsumerWidget {
       final analytics = await ref.read(analyticsServiceProvider.future);
       await analytics.trackScreenViewed('home', 0, null); // Time spent will be tracked elsewhere
     } catch (e) {
-      print('Analytics error: $e');
+      log('Analytics error: $e', name: 'Home');
     }
   }
 
@@ -321,7 +322,7 @@ class HomeScreen extends HookConsumerWidget {
       final analytics = await ref.read(analyticsServiceProvider.future);
       await analytics.trackFeatureUsed(featureName);
     } catch (e) {
-      print('Analytics error: $e');
+      log('Analytics error: $e', name: 'Home');
     }
   }
 }

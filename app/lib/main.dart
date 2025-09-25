@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -12,7 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   // Environment variables are now securely embedded at compile time via Envied
-  print('✅ Environment variables securely loaded via Envied');
+  log('✅ Environment variables securely loaded via Envied', name: 'Main');
   
   await Hive.initFlutter();
 
@@ -47,16 +48,16 @@ class _SugarCatchAppState extends ConsumerState<SugarCatchApp> {
     });
   }
 
-  Future<void> _trackAppOpened() async {
-    try {
-      final analytics = await ref.read(analyticsServiceProvider.future);
-      await analytics.trackAppOpened(true); // You can determine if it's first time based on your logic
-      print('✅ [ANALYTICS] App opened event tracked successfully');
-    } catch (e) {
-      // Analytics errors shouldn't crash the app
-      print('⚠️ [ANALYTICS] App opened tracking failed: $e');
-    }
-  }
+        Future<void> _trackAppOpened() async {
+          try {
+            final analytics = await ref.read(analyticsServiceProvider.future);
+            await analytics.trackAppOpened(true); // You can determine if it's first time based on your logic
+            log('✅ [ANALYTICS] App opened event tracked successfully', name: 'Analytics');
+          } catch (e) {
+            // Analytics errors shouldn't crash the app
+            log('⚠️ [ANALYTICS] App opened tracking failed: $e', name: 'Analytics');
+          }
+        }
 
   @override
   Widget build(BuildContext context) {

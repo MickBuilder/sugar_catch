@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -120,7 +121,7 @@ class AppShell extends ConsumerWidget {
         0, // Time on previous tab - we don't track this yet
       );
     } catch (e) {
-      print('Analytics error: $e');
+      log('Analytics error: $e', name: 'App');
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -216,7 +217,7 @@ class _TrackScreenState extends ConsumerState<TrackScreen> {
 
   void _showSuccessFeedback() {
     // You could implement a toast or haptic feedback here
-    print('✅ Added to daily log!');
+    log('✅ Added to daily log!', name: 'Track');
   }
 
   // Analytics tracking methods
@@ -230,7 +231,7 @@ class _TrackScreenState extends ConsumerState<TrackScreen> {
       await analytics.trackScreenViewed('track', 0, null); // Time spent will be tracked elsewhere
       await analytics.trackDailyLogViewed(totalEntries, totalSugar, 0.0); // Goal progress calculation would need goal data
     } catch (e) {
-      print('Analytics error: $e');
+      log('Analytics error: $e', name: 'Track');
     }
   }
 
@@ -240,7 +241,7 @@ class _TrackScreenState extends ConsumerState<TrackScreen> {
       final sugarContent = sugarInfo.sugarsPer100g * (quantity / 100);
       await analytics.trackProductAddedToLog(product.productName, sugarContent, quantity);
     } catch (e) {
-      print('Analytics error: $e');
+      log('Analytics error: $e', name: 'Track');
     }
   }
 
@@ -249,7 +250,7 @@ class _TrackScreenState extends ConsumerState<TrackScreen> {
       final analytics = await ref.read(analyticsServiceProvider.future);
       await analytics.trackLogEntryRemoved(entry.product.productName, entry.totalSugarAmount);
     } catch (e) {
-      print('Analytics error: $e');
+      log('Analytics error: $e', name: 'Track');
     }
   }
 }

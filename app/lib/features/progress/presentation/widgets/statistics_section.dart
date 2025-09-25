@@ -87,7 +87,7 @@ class StatisticsSection extends StatelessWidget {
         color: CupertinoColors.systemGrey6,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: color.withOpacity(0.2),
+          color: color.withValues(alpha: .2),
           width: 1,
         ),
       ),

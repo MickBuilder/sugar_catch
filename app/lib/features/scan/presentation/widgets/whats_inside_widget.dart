@@ -85,7 +85,7 @@ class WhatsInsideWidget extends StatelessWidget {
                 dailyLimitMultiplier: multiplier.toDouble(),
                 isSugarIngredient: isSugarIngredient,
               );
-            }).toList(),
+            }),
           ] else ...[
             // No ingredients found
             _buildNoIngredientsPlaceholder(),

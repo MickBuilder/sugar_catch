@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -172,10 +173,10 @@ class _RecommendationsWidgetState extends ConsumerState<RecommendationsWidget> {
   }
 
   Widget _buildRecommendationCard(BuildContext context, Product recommendation, int index) {
-    print('🎨 [RecommendationsWidget] Building card for: ${recommendation.productName}');
-    print('🎨 [RecommendationsWidget] Brand: ${recommendation.brands}');
-    print('🎨 [RecommendationsWidget] Image URL: ${recommendation.imageUrl}');
-    print('🎨 [RecommendationsWidget] Sugar: ${recommendation.sugarsPer100g}g/100${recommendation.productQuantityUnit}');
+    log('🎨 [RecommendationsWidget] Building card for: ${recommendation.productName}', name: 'Scan');
+    log('🎨 [RecommendationsWidget] Brand: ${recommendation.brands}', name: 'Scan');
+    log('🎨 [RecommendationsWidget] Image URL: ${recommendation.imageUrl}', name: 'Scan');
+    log('🎨 [RecommendationsWidget] Sugar: ${recommendation.sugarsPer100g}g/100${recommendation.productQuantityUnit}', name: 'Scan');
     
     return Container(
       width: 140,
@@ -332,27 +333,27 @@ class _RecommendationsWidgetState extends ConsumerState<RecommendationsWidget> {
   // Analytics tracking methods
   Future<void> _trackRecommendationsViewed() async {
     try {
-      print('📊 [ANALYTICS] Starting recommendations viewed tracking...');
+      log('📊 [ANALYTICS] Starting recommendations viewed tracking...', name: 'Scan');
       final analytics = await ref.read(analyticsServiceProvider.future);
       await analytics.trackRecommendationsViewed(
         widget.product.categories?.split(',').first.trim() ?? 'Unknown',
         _recommendations.length,
       );
-      print('📊 [ANALYTICS] Recommendations viewed tracked successfully');
+      log('📊 [ANALYTICS] Recommendations viewed tracked successfully', name: 'Scan');
     } catch (e) {
-      print('📊 [ANALYTICS] Error tracking recommendations viewed: $e');
+      log('📊 [ANALYTICS] Error tracking recommendations viewed: $e', name: 'Scan');
     }
   }
 
   Future<void> _trackRecommendationClicked(Product recommendation, int position) async {
     try {
-      print('📊 [ANALYTICS] Starting recommendation clicked tracking...');
+      log('📊 [ANALYTICS] Starting recommendation clicked tracking...', name: 'Scan');
       final analytics = await ref.read(analyticsServiceProvider.future);
       await analytics.trackRecommendationClicked(recommendation.productName, position);
       await analytics.trackAlternativeSelected(widget.product.productName, recommendation.productName);
-      print('📊 [ANALYTICS] Recommendation clicked tracked successfully');
+      log('📊 [ANALYTICS] Recommendation clicked tracked successfully', name: 'Scan');
     } catch (e) {
-      print('📊 [ANALYTICS] Error tracking recommendation clicked: $e');
+      log('📊 [ANALYTICS] Error tracking recommendation clicked: $e', name: 'Scan');
     }
   }
 }

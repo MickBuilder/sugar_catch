@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:convert';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:sugar_catch/features/scan/data/product_model.dart';
@@ -23,7 +24,7 @@ class HistoryService {
       
       if (existingKey != null) {
         // Product exists, update with new scan data
-        print('📚 [HISTORY] Product already exists, updating scan data: ${product.productName}');
+        log('📚 [HISTORY] Product already exists, updating scan data: ${product.productName}', name: 'Service');
         
         // Get existing item
         final existingItem = _getHistoryItem(existingKey);
@@ -55,7 +56,7 @@ class HistoryService {
           final timestamp = now.millisecondsSinceEpoch.toString();
           await _historyBox!.put(timestamp, historyJsonString);
           
-          print('📚 [HISTORY] Updated scan data for: ${product.productName} (${updatedItem.scanCount} total scans)');
+          log('📚 [HISTORY] Updated scan data for: ${product.productName} (${updatedItem.scanCount} total scans', name: 'Service');
         }
       } else {
         // Product doesn't exist, add new entry
@@ -76,7 +77,7 @@ class HistoryService {
         final timestamp = now.millisecondsSinceEpoch.toString();
         await _historyBox!.put(timestamp, historyJsonString);
 
-        print('📚 [HISTORY] Added new product to history: ${product.productName}');
+        log('📚 [HISTORY] Added new product to history: ${product.productName}', name: 'Service');
       }
 
       // Clean up old items if we exceed the limit
@@ -103,7 +104,7 @@ class HistoryService {
           final historyItem = HistoryItem.fromJson(historyJson);
           historyItems.add(historyItem);
         } catch (e) {
-          print('📚 [HISTORY] Error parsing history item: $e');
+          log('📚 [HISTORY] Error parsing history item: $e', name: 'Service');
         }
       }
     }
@@ -143,7 +144,7 @@ class HistoryService {
                 historyItem.sugarInfo.totalSugarsInProduct;
           }
         } catch (e) {
-          print('📚 [HISTORY] Error parsing history item for weekly data: $e');
+          log('📚 [HISTORY] Error parsing history item for weekly data: $e', name: 'Service');
         }
       }
     }
@@ -155,7 +156,7 @@ class HistoryService {
   static Future<void> clearHistory() async {
     if (_historyBox != null) {
       await _historyBox!.clear();
-      print('📚 [HISTORY] Cleared all history');
+      log('📚 [HISTORY] Cleared all history', name: 'Service');
     }
   }
 
@@ -177,7 +178,7 @@ class HistoryService {
         await _historyBox!.delete(key);
       }
 
-      print('📚 [HISTORY] Cleaned up ${keysToDelete.length} old items');
+      log('📚 [HISTORY] Cleaned up ${keysToDelete.length} old items', name: 'Service');
     }
   }
 
@@ -202,7 +203,7 @@ class HistoryService {
             return key;
           }
         } catch (e) {
-          print('📚 [HISTORY] Error parsing history item for duplicate check: $e');
+          log('📚 [HISTORY] Error parsing history item for duplicate check: $e', name: 'Service');
         }
       }
     }
@@ -220,7 +221,7 @@ class HistoryService {
         final historyJson = jsonDecode(historyJsonString) as Map<String, dynamic>;
         return HistoryItem.fromJson(historyJson);
       } catch (e) {
-        print('📚 [HISTORY] Error parsing history item: $e');
+        log('📚 [HISTORY] Error parsing history item: $e', name: 'Service');
       }
     }
     

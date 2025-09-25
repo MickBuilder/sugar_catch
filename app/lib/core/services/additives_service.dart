@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -12,7 +13,7 @@ class AdditivesService {
   /// Fetches additives data from OpenFoodFacts API and caches it
   static Future<Map<String, String>> _fetchAdditivesData() async {
     try {
-      print('🌐 [AdditivesService] Fetching additives data from API...');
+      log('🌐 [AdditivesService] Fetching additives data from API...', name: 'Service');
       final response = await http.get(Uri.parse(_additivesApiUrl));
       
       if (response.statusCode == 200) {
@@ -29,14 +30,14 @@ class AdditivesService {
         _additivesCache = additivesMap;
         _lastFetch = DateTime.now();
         
-        print('🌐 [AdditivesService] Fetched ${additivesMap.length} additives');
+        log('🌐 [AdditivesService] Fetched ${additivesMap.length} additives', name: 'Service');
         return additivesMap;
       } else {
-        print('❌ [AdditivesService] Failed to fetch additives: ${response.statusCode}');
+        log('❌ [AdditivesService] Failed to fetch additives: ${response.statusCode}', name: 'Service');
         return _additivesCache ?? {};
       }
     } catch (e) {
-      print('❌ [AdditivesService] Error fetching additives: $e');
+      log('❌ [AdditivesService] Error fetching additives: $e', name: 'Service');
       return _additivesCache ?? {};
     }
   }
@@ -99,6 +100,6 @@ class AdditivesService {
   static void clearCache() {
     _additivesCache = null;
     _lastFetch = null;
-    print('🧹 [AdditivesService] Cache cleared');
+    log('🧹 [AdditivesService] Cache cleared', name: 'Service');
   }
 }

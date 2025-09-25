@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sugar_catch/core/analytics/analytics_service.dart';
@@ -62,7 +63,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: CupertinoColors.black.withOpacity(0.05),
+                    color: CupertinoColors.black.withValues(alpha: .05),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
                   ),
@@ -102,7 +103,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: CupertinoColors.black.withOpacity(0.05),
+                    color: CupertinoColors.black.withValues(alpha: .05),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
                   ),
@@ -132,7 +133,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
       await analytics.trackScreenViewed('progress', 0, null); // Time spent will be tracked elsewhere
       await analytics.trackFeatureUsed('progress_viewed');
     } catch (e) {
-      print('Analytics error: $e');
+      log('Analytics error: $e', name: 'Progress');
     }
   }
 
@@ -141,7 +142,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
       final analytics = await ref.read(analyticsServiceProvider.future);
       await analytics.trackFeatureUsed(featureName);
     } catch (e) {
-      print('Analytics error: $e');
+      log('Analytics error: $e', name: 'Progress');
     }
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sugar_catch/features/onboarding/onboarding_provider.dart';
 import 'package:sugar_catch/features/onboarding/presentation/widgets/onboarding_page_widget.dart';

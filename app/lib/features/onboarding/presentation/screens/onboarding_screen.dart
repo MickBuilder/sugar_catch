@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -90,7 +91,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       await analytics.trackOnboardingScreenViewed(screenIndex, _screenNames[screenIndex]);
       _screenStartTime = DateTime.now();
     } catch (e) {
-      print('Analytics error: $e');
+      log('Analytics error: $e', name: 'Onboarding');
     }
   }
 
@@ -102,7 +103,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           : 0;
       await analytics.trackOnboardingScreenCompleted(screenIndex, timeSpent);
     } catch (e) {
-      print('Analytics error: $e');
+      log('Analytics error: $e', name: 'Onboarding');
     }
   }
 
@@ -120,7 +121,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         onboardingData.motivations.map((m) => m.title).toList(),
       );
     } catch (e) {
-      print('Analytics error: $e');
+      log('Analytics error: $e', name: 'Onboarding');
     }
   }
 

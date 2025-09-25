@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'analytics_client.dart';
 
@@ -10,12 +11,12 @@ class MixpanelAnalyticsClient implements AnalyticsClient {
   @override
   Future<void> trackOnboardingScreenViewed(int screenIndex, String screenName) async {
     // Send to Mixpanel in both debug and release modes for testing
-    print('📊 [MIXPANEL] Sending onboarding_screen_viewed event to Mixpanel');
+    log('📊 [MIXPANEL] Sending onboarding_screen_viewed event to Mixpanel', name: 'Mixpanel');
     await _mixpanel.track('onboarding_screen_viewed', properties: {
       'screen_index': screenIndex,
       'screen_name': screenName,
     });
-    print('📊 [MIXPANEL] onboarding_screen_viewed event sent successfully');
+    log('📊 [MIXPANEL] onboarding_screen_viewed event sent successfully', name: 'Mixpanel');
   }
 
   @override
@@ -92,11 +93,11 @@ class MixpanelAnalyticsClient implements AnalyticsClient {
   @override
   Future<void> trackScanInitiated(String source) async {
     // Send to Mixpanel in both debug and release modes for testing
-    print('📊 [MIXPANEL] Sending scan_initiated event to Mixpanel');
+    log('📊 [MIXPANEL] Sending scan_initiated event to Mixpanel', name: 'Mixpanel');
     await _mixpanel.track('scan_initiated', properties: {
       'source': source,
     });
-    print('📊 [MIXPANEL] scan_initiated event sent successfully');
+    log('📊 [MIXPANEL] scan_initiated event sent successfully', name: 'Mixpanel');
   }
 
   @override
@@ -136,14 +137,14 @@ class MixpanelAnalyticsClient implements AnalyticsClient {
   @override
   Future<void> trackProductViewed(String barcode, String productName, double sugarPer100g, String category) async {
     // Send to Mixpanel in both debug and release modes for testing
-    print('📊 [MIXPANEL] Sending product_viewed event to Mixpanel');
+    log('📊 [MIXPANEL] Sending product_viewed event to Mixpanel', name: 'Mixpanel');
     await _mixpanel.track('product_viewed', properties: {
       'barcode': barcode,
       'product_name': productName,
       'sugar_per_100g': sugarPer100g,
       'category': category,
     });
-    print('📊 [MIXPANEL] product_viewed event sent successfully');
+    log('📊 [MIXPANEL] product_viewed event sent successfully', name: 'Mixpanel');
   }
 
   @override

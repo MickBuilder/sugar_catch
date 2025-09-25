@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:sugar_catch/features/scan/data/product_model.dart';
@@ -8,68 +9,68 @@ class OpenFoodFactsApi {
   static const String baseUrl = 'https://world.openfoodfacts.org';
 
   Future<Product?> fetchProduct(String barcode) async {
-    print('🌐 [API] Starting fetchProduct for barcode: $barcode');
+    log('🌐 [API] Starting fetchProduct for barcode: $barcode', name: 'Scan');
 
     // Check cache first
     final cachedProduct = CacheService.getCachedProduct(barcode);
     if (cachedProduct != null && CacheService.isCacheValid(barcode)) {
-      print('💾 [API] Using cached product for barcode: $barcode');
+      log('💾 [API] Using cached product for barcode: $barcode', name: 'Scan');
       return cachedProduct;
     }
 
     try {
       final url = '$baseUrl/api/v0/product/$barcode.json';
-      print('🌐 [API] Making HTTP request to: $url');
+      log('🌐 [API] Making HTTP request to: $url', name: 'Scan');
 
       final response = await http.get(
         Uri.parse(url),
         headers: {'User-Agent': 'SugarCatch/1.0.0'},
       );
 
-      print('🌐 [API] HTTP response status: ${response.statusCode}');
-      print('🌐 [API] Response body length: ${response.body.length}');
+      log('🌐 [API] HTTP response status: ${response.statusCode}', name: 'Scan');
+      log('🌐 [API] Response body length: ${response.body.length}', name: 'Scan');
 
       if (response.statusCode == 200) {
-        print('🌐 [API] Parsing JSON response...');
+        log('🌐 [API] Parsing JSON response...', name: 'Scan');
         final data = json.decode(response.body);
-        print('🌐 [API] API status: ${data['status']}');
+        log('🌐 [API] API status: ${data['status']}', name: 'Scan');
 
         if (data['status'] == 1 && data['product'] != null) {
-          print('🌐 [API] Product found, parsing product data...');
+          log('🌐 [API] Product found, parsing product data...', name: 'Scan');
           final product = _parseProduct(data['product'], barcode);
-          print('🌐 [API] Product created: ${product.productName}');
+          log('🌐 [API] Product created: ${product.productName}', name: 'Scan');
 
           // Cache the product
           await CacheService.cacheProduct(barcode, product);
 
           return product;
         } else {
-          print('🌐 [API] Product not found (status != 1 or product is null)');
+          log('🌐 [API] Product not found (status != 1 or product is null)', name: 'API');
         }
       } else {
-        print('🌐 [API] HTTP error: ${response.statusCode}');
+        log('🌐 [API] HTTP error: ${response.statusCode}', name: 'API');
       }
       return null;
     } catch (e, stackTrace) {
-      print('❌ [API] Exception in fetchProduct: $e');
-      print('❌ [API] Stack trace: $stackTrace');
+      log('❌ [API] Exception in fetchProduct: $e', name: 'API');
+      log('❌ [API] Stack trace: $stackTrace', name: 'API');
       return null;
     }
   }
 
   Product _parseProduct(Map<String, dynamic> productData, String barcode) {
-    print('🌐 [API] _parseProduct called with barcode: $barcode');
-    print('🌐 [API] productData keys: ${productData.keys.toList()}');
+    log('🌐 [API] _parseProduct called with barcode: $barcode', name: 'Scan');
+    log('🌐 [API] productData keys: ${productData.keys.toList()}', name: 'Scan');
 
     final nutriments = productData['nutriments'] as Map<String, dynamic>? ?? {};
 
-    print('🌐 [API] nutriments: $nutriments');
+    log('🌐 [API] nutriments: $nutriments', name: 'Scan');
 
     final sugarsPer100g = _parseDouble(nutriments['sugars_100g']) ?? 0.0;
     final sugarsServing = _parseDouble(nutriments['sugars_serving']);
 
-    print('🌐 [API] sugarsPer100g: $sugarsPer100g');
-    print('🌐 [API] sugarsServing: $sugarsServing');
+    log('🌐 [API] sugarsPer100g: $sugarsPer100g', name: 'Scan');
+    log('🌐 [API] sugarsServing: $sugarsServing', name: 'Scan');
 
     // Extract image URL from selected_images
     String? imageUrl;
@@ -89,7 +90,7 @@ class OpenFoodFactsApi {
       }
     }
 
-    print('🌐 [API] imageUrl: $imageUrl');
+    log('🌐 [API] imageUrl: $imageUrl', name: 'Scan');
 
     // Parse ingredients array
     List<Ingredient>? ingredientsList;
@@ -101,7 +102,7 @@ class OpenFoodFactsApi {
                 Ingredient.fromJson(ingredient as Map<String, dynamic>),
           )
           .toList();
-      print('🌐 [API] Parsed ${ingredientsList.length} ingredients');
+      log('🌐 [API] Parsed ${ingredientsList.length} ingredients', name: 'Scan');
     }
 
     // Parse categories
@@ -130,13 +131,13 @@ class OpenFoodFactsApi {
         .toList();
     final ingredientsSweetenersN = productData['ingredients_sweeteners_n'] as int?;
 
-    print('🌐 [API] categories: $categories');
-    print('🌐 [API] categoriesHierarchy: $categoriesHierarchy');
-    print('🌐 [API] categoriesTags: $categoriesTags');
-    print('🌐 [API] ingredientsTags: $ingredientsTags');
-    print('🌐 [API] additivesTags: $additivesTags');
-    print('🌐 [API] allergensTags: $allergensTags');
-    print('🌐 [API] tracesTags: $tracesTags');
+    log('🌐 [API] categories: $categories', name: 'Scan');
+    log('🌐 [API] categoriesHierarchy: $categoriesHierarchy', name: 'Scan');
+    log('🌐 [API] categoriesTags: $categoriesTags', name: 'Scan');
+    log('🌐 [API] ingredientsTags: $ingredientsTags', name: 'Scan');
+    log('🌐 [API] additivesTags: $additivesTags', name: 'Scan');
+    log('🌐 [API] allergensTags: $allergensTags', name: 'Scan');
+    log('🌐 [API] tracesTags: $tracesTags', name: 'Scan');
 
     final product = Product(
       code: barcode,
@@ -164,38 +165,38 @@ class OpenFoodFactsApi {
       nutriments: nutriments,
     );
 
-    print('🌐 [API] Created Product: ${product.toString()}');
+    log('🌐 [API] Created Product: ${product.toString()}', name: 'Scan');
     return product;
   }
 
   Future<SugarInfo> extractSugarInfo(Product product) async {
-    print(
+    log(
       '🌐 [API] extractSugarInfo called for product: ${product.productName}',
-    );
+     name: 'Scan');
 
     // Check cache first
     final cachedSugarInfo = CacheService.getCachedSugarInfo(product.code);
     if (cachedSugarInfo != null && CacheService.isCacheValid(product.code)) {
-      print(
+      log(
         '💾 [API] Using cached sugar info for product: ${product.productName}',
-      );
+       name: 'Scan');
       return cachedSugarInfo;
     }
 
-    print(
+    log(
       '🌐 [API] product.ingredientsTags: ${product.ingredientsTags?.length ?? 0} tags',
-    );
+     name: 'Scan');
 
     List<Ingredient> hiddenSugarIngredients = [];
 
     if (product.ingredientsTags != null) {
       // Check each ingredient tag for hidden sugars
       for (final ingredientTag in product.ingredientsTags!) {
-        print('🌐 [API] Checking ingredient tag: $ingredientTag');
+        log('🌐 [API] Checking ingredient tag: $ingredientTag', name: 'Scan');
 
         // Check if this ingredient tag is a hidden sugar
         if (SugarAliases.isHiddenSugar(ingredientTag)) {
-          print('🌐 [API] Found hidden sugar tag: $ingredientTag');
+          log('🌐 [API] Found hidden sugar tag: $ingredientTag', name: 'Scan');
           
           // Try to find the corresponding ingredient in the ingredients list
           if (product.ingredientsList != null) {
@@ -215,9 +216,9 @@ class OpenFoodFactsApi {
       }
     }
 
-    print(
+    log(
       '🌐 [API] found ${hiddenSugarIngredients.length} hidden sugar ingredients',
-    );
+     name: 'Scan');
 
     // Calculate total sugar amount in the product
     double totalSugarsInProduct = 0.0;
@@ -230,8 +231,8 @@ class OpenFoodFactsApi {
         // Calculate total sugar: sugars per 100g * (total amount / 100)
         // Example: 12.5g per 100ml, product is 500ml → 12.5g * (500/100) = 12.5g * 5 = 62.5g
         totalSugarsInProduct = product.sugarsPer100g * (totalAmount / 100);
-        print(
-          '🌐 [API] Calculated total sugars: ${totalSugarsInProduct.toStringAsFixed(2)}g (${product.sugarsPer100g}g per 100${productUnit} * ${totalAmount}${productUnit} = ${product.sugarsPer100g}g * ${(totalAmount / 100).toStringAsFixed(1)})',
+        log(
+          '🌐 [API] Calculated total sugars: ${totalSugarsInProduct.toStringAsFixed(2)}g (${product.sugarsPer100g}g per 100$productUnit * $totalAmount$productUnit = ${product.sugarsPer100g}g * ${(totalAmount / 100).toStringAsFixed(1)})', name: 'Scan'
         );
       }
     }
@@ -246,7 +247,7 @@ class OpenFoodFactsApi {
     // Cache the sugar info
     await CacheService.cacheSugarInfo(product.code, sugarInfo);
 
-    print('🌐 [API] Created SugarInfo: ${sugarInfo.toString()}');
+    log('🌐 [API] Created SugarInfo: ${sugarInfo.toString}', name: 'Scan');
     return sugarInfo;
   }
 

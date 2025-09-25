@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:sugar_catch/features/progress/data/progress_models.dart';
 import 'package:sugar_catch/features/track/data/track_service.dart';
@@ -9,7 +10,7 @@ class ProgressService {
 
   static Future<void> init() async {
     _progressBox = await Hive.openBox<String>(_progressBoxName);
-    print('📊 [PROGRESS] ProgressService initialized');
+    log('📊 [PROGRESS] ProgressService initialized', name: 'Progress');
   }
 
   // Get progress statistics

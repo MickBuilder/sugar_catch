@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,7 +35,7 @@ class ScanScreen extends HookConsumerWidget {
           scannerController.dispose();
         } catch (e) {
           // Scanner controller already disposed
-          print('ScannerController already disposed: $e');
+          log('ScannerController already disposed: $e', name: 'Scan');
         }
       };
     }, []);
@@ -83,18 +84,15 @@ class ScanScreen extends HookConsumerWidget {
                         MobileScanner(
                           controller: scannerController,
                           onDetect: (capture) async {
-                            print(
-                              '📱 [SCAN_SCREEN] Barcode detected, checking state...',
-                            );
-                            print(
-                              '📱 [SCAN_SCREEN] isProcessing: ${isProcessing.value}, scannerPaused: ${scannerPaused.value}',
-                            );
+                            log(
+                              '📱 [SCAN_SCREEN] Barcode detected, checking state...', name: 'Scan');
+                            log(
+                              '📱 [SCAN_SCREEN] isProcessing: ${isProcessing.value}, scannerPaused: ${scannerPaused.value}', name: 'Scan');
 
                             // Prevent multiple processing
                             if (isProcessing.value || scannerPaused.value) {
-                              print(
-                                '📱 [SCAN_SCREEN] Already processing or paused, ignoring detection',
-                              );
+                              log(
+                                '📱 [SCAN_SCREEN] Already processing or paused, ignoring detection',name: 'Scan');
                               return;
                             }
 
@@ -102,30 +100,29 @@ class ScanScreen extends HookConsumerWidget {
                             if (barcodes.isNotEmpty) {
                               final String? code = barcodes.first.rawValue;
                               if (code != null) {
-                                print(
-                                  '📱 [SCAN_SCREEN] Valid barcode detected: $code',
-                                );
+                                log(
+                                  '📱 [SCAN_SCREEN] Valid barcode detected: $code',name: 'Scan');
                                 isProcessing.value = true;
 
                                 // Pause scanning immediately to prevent multiple scans
                                 scannerPaused.value = true;
-                                print('📱 [SCAN_SCREEN] Pausing scanner...');
+                                log('📱 [SCAN_SCREEN] Pausing scanner...', name: 'Scan');
                                 await scannerController.stop();
 
                                 try {
                                   // Store context mounted state before async operations
                                   if (!context.mounted) {
-                                    print(
+                                    log(
                                       '📱 [SCAN_SCREEN] Context not mounted, aborting',
-                                    );
+                                    name: 'Scan');
                                     return;
                                   }
 
                                   // Fetch product info and navigate to product screen
                                   if (context.mounted) {
-                                    print(
+                                    log(
                                       '📱 [SCAN_SCREEN] Calling _handleBarcodeDetected...',
-                                    );
+                                     name: 'Scan');
                                     await _handleBarcodeDetected(
                                       context,
                                       ref,
@@ -136,18 +133,18 @@ class ScanScreen extends HookConsumerWidget {
                                   }
                                 } finally {
                                   // Reset the processing flag
-                                  print(
+                                  log(
                                     '📱 [SCAN_SCREEN] Resetting processing flag',
-                                  );
+                                  name: 'Scan');
                                   isProcessing.value = false;
                                 }
                               } else {
-                                print(
+                                log(
                                   '📱 [SCAN_SCREEN] Barcode detected but rawValue is null',
-                                );
+                                 name: 'Scan');
                               }
                             } else {
-                              print('📱 [SCAN_SCREEN] No barcodes in capture');
+                              log('📱 [SCAN_SCREEN] No barcodes in capture', name: 'Scan');
                             }
                           },
                         ),
@@ -291,83 +288,83 @@ class ScanScreen extends HookConsumerWidget {
     MobileScannerController scannerController,
     ValueNotifier<bool> scannerPaused,
   ) async {
-    print('🎯 [HANDLE_BARCODE] Starting barcode handling for: $barcode');
+    log('🎯 [HANDLE_BARCODE] Starting barcode handling for: $barcode', name: 'Scan');
 
     // Track scan initiated
     try {
-      print('📊 [ANALYTICS] Starting scan initiated tracking...');
+      log('📊 [ANALYTICS] Starting scan initiated tracking...', name: 'Scan');
       final analytics = await ref.read(analyticsServiceProvider.future);
       await analytics.trackScanInitiated('camera');
-      print('📊 [ANALYTICS] Scan initiated tracked successfully');
+      log('📊 [ANALYTICS] Scan initiated tracked successfully', name: 'Scan');
     } catch (e) {
-      print('📊 [ANALYTICS] Error tracking scan initiated: $e');
+      log('📊 [ANALYTICS] Error tracking scan initiated: $e', name: 'Scan');
     }
 
     try {
       // Check if context is still mounted before proceeding
       if (!context.mounted) {
-        print('🎯 [HANDLE_BARCODE] Context not mounted, aborting');
+        log('🎯 [HANDLE_BARCODE] Context not mounted, aborting', name: 'Scan');
         return;
       }
 
-      print('🎯 [HANDLE_BARCODE] Calling scanNotifierProvider.scanBarcode...');
+      log('🎯 [HANDLE_BARCODE] Calling scanNotifierProvider.scanBarcode...', name: 'Scan');
       await ref.read(scanNotifierProvider.notifier).scanBarcode(barcode);
-      print('🎯 [HANDLE_BARCODE] scanBarcode completed successfully');
+      log('🎯 [HANDLE_BARCODE] scanBarcode completed successfully', name: 'Scan');
       
       // Haptic feedback for successful scan
       HapticFeedback.heavyImpact();
-      print('🎯 [HANDLE_BARCODE] Haptic feedback triggered for successful scan');
+      log('🎯 [HANDLE_BARCODE] Haptic feedback triggered for successful scan', name: 'Scan');
 
       // Track successful scan
       try {
-        print('📊 [ANALYTICS] Starting scan successful tracking...');
+        log('📊 [ANALYTICS] Starting scan successful tracking...', name: 'Scan');
         final analytics = await ref.read(analyticsServiceProvider.future);
         await analytics.trackScanSuccessful(barcode, true, 1000); // Assuming 1 second scan duration
-        print('📊 [ANALYTICS] Scan successful tracked successfully');
+        log('📊 [ANALYTICS] Scan successful tracked successfully', name: 'Scan');
       } catch (e) {
-        print('📊 [ANALYTICS] Error tracking scan successful: $e');
+        log('📊 [ANALYTICS] Error tracking scan successful: $e', name: 'Scan');
       }
 
       // Wait for the state to be properly updated and check it
       await Future.delayed(const Duration(milliseconds: 50));
       final currentState = ref.read(scanNotifierProvider);
-      print(
+      log(
         '🎯 [HANDLE_BARCODE] Current state after scan: ${currentState.runtimeType}',
-      );
-      print('🎯 [HANDLE_BARCODE] Current state value: $currentState');
+      name: 'Scan');
+      log('🎯 [HANDLE_BARCODE] Current state value: $currentState', name: 'Scan');
 
       // Check again after async operation
       if (context.mounted) {
-        print('🎯 [HANDLE_BARCODE] Navigating to ProductScreen...');
+        log('🎯 [HANDLE_BARCODE] Navigating to ProductScreen...', name: 'Scan');
         context.push('/product/$barcode');
-        print('🎯 [HANDLE_BARCODE] Navigation completed');
+        log('🎯 [HANDLE_BARCODE] Navigation completed', name: 'Scan');
       } else {
-        print(
+        log(
           '🎯 [HANDLE_BARCODE] Context not mounted after scanBarcode, skipping navigation',
-        );
+         name: 'Scan');
       }
     } catch (e, stackTrace) {
-      print('❌ [HANDLE_BARCODE] Error occurred: $e');
-      print('❌ [HANDLE_BARCODE] Stack trace: $stackTrace');
+      log('❌ [HANDLE_BARCODE] Error occurred: $e', name: 'Scan');
+      log('❌ [HANDLE_BARCODE] Stack trace: $stackTrace', name: 'Scan');
 
       // Track scan failure
       try {
         final analytics = await ref.read(analyticsServiceProvider.future);
         await analytics.trackScanFailed('scan_error', 0);
       } catch (analyticsError) {
-        print('Analytics error: $analyticsError');
+        log('Analytics error: $analyticsError', name: 'Scan');
       }
 
       // Reset scanning state on error
-      print('🎯 [HANDLE_BARCODE] Resetting scanner state...');
+      log('🎯 [HANDLE_BARCODE] Resetting scanner state...', name: 'Scan');
       scannerPaused.value = false;
       await scannerController.start();
 
       if (context.mounted) {
-        print('🎯 [HANDLE_BARCODE] Error scanning product: $e');
+        log('🎯 [HANDLE_BARCODE] Error scanning product: $e', name: 'Scan');
         // Haptic feedback for error
         HapticFeedback.heavyImpact();
-        print('🎯 [HANDLE_BARCODE] Haptic feedback triggered for scan error');
+        log('🎯 [HANDLE_BARCODE] Haptic feedback triggered for scan error', name: 'Scan');
         // TODO: Show Cupertino alert dialog for error
       }
     }
@@ -392,7 +389,7 @@ class ScanScreen extends HookConsumerWidget {
       }
     } catch (e) {
       if (context.mounted) {
-        print('🎯 [HANDLE_MANUAL_SEARCH] Error searching product: $e');
+        log('🎯 [HANDLE_MANUAL_SEARCH] Error searching product: $e', name: 'Scan');
         // TODO: Show Cupertino alert dialog for error
       }
     }

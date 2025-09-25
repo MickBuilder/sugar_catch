@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -232,7 +233,7 @@ class SugarGoalsWidget extends ConsumerWidget {
       final analytics = await ref.read(analyticsServiceProvider.future);
       await analytics.trackOnboardingGoalSelected(goal.title);
     } catch (e) {
-      print('Analytics error: $e');
+      log('Analytics error: $e', name: 'Onboarding');
     }
   }
 }

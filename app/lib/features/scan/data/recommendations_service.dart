@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:sugar_catch/features/scan/data/product_model.dart';
@@ -11,30 +12,30 @@ class RecommendationsService {
   /// Get low-sugar alternatives for a product
   /// Only shows recommendations if the current product has high sugar content
   static Future<List<Product>> getLowSugarAlternatives(Product product) async {
-    print('🔍 [RecommendationsService] Getting recommendations for: ${product.productName}');
-    print('🔍 [RecommendationsService] Sugar content: ${product.sugarsPer100g}g/100${product.productQuantityUnit ?? 'g'}');
+    log('🔍 [RecommendationsService] Getting recommendations for: ${product.productName}', name: 'Scan');
+    log('🔍 [RecommendationsService] Sugar content: ${product.sugarsPer100g}g/100${product.productQuantityUnit ?? 'g'}', name: 'Scan');
     
     // Check if we have cached recommendations
     final cachedRecommendations = CacheService.getCachedRecommendations(product.code);
     if (cachedRecommendations != null) {
-      print('🔍 [RecommendationsService] Using cached recommendations: ${cachedRecommendations.length} products');
+      log('🔍 [RecommendationsService] Using cached recommendations: ${cachedRecommendations.length} products', name: 'Scan');
       return cachedRecommendations;
     }
     
     // Check if product has high sugar content
     if (!_shouldShowRecommendations(product)) {
-      print('🔍 [RecommendationsService] Product has low sugar content, no recommendations needed');
+      log('🔍 [RecommendationsService] Product has low sugar content, no recommendations needed', name: 'Scan');
       return [];
     }
 
     // Get categories for search (multiple categories for better results)
     final categories = _getSearchCategories(product);
     if (categories.isEmpty) {
-      print('⚠️ [RecommendationsService] No categories found, cannot search for alternatives');
+      log('⚠️ [RecommendationsService] No categories found, cannot search for alternatives', name: 'Scan');
       return [];
     }
 
-    print('🔍 [RecommendationsService] Searching for alternatives in categories: $categories');
+    log('🔍 [RecommendationsService] Searching for alternatives in categories: $categories', name: 'Scan');
     
     // Search for similar products with low sugar content (below threshold)
     final alternatives = await _searchLowSugarAlternatives(categories, product.productQuantityUnit ?? 'g');
@@ -42,7 +43,7 @@ class RecommendationsService {
     // Filter and sort results
     final filteredAlternatives = _filterAndSortAlternatives(alternatives);
     
-    print('🔍 [RecommendationsService] Found ${filteredAlternatives.length} low-sugar alternatives');
+    log('🔍 [RecommendationsService] Found ${filteredAlternatives.length} low-sugar alternatives', name: 'Scan');
     
     // Cache the recommendations
     if (filteredAlternatives.isNotEmpty) {
@@ -66,8 +67,8 @@ class RecommendationsService {
 
   /// Get categories from hierarchy only (most specific categories)
   static List<String> _getSearchCategories(Product product) {
-    print('🔍 [RecommendationsService] Getting search categories for: ${product.productName}');
-    print('🔍 [RecommendationsService] categoriesHierarchy: ${product.categoriesHierarchy}');
+    log('🔍 [RecommendationsService] Getting search categories for: ${product.productName}', name: 'Scan');
+    log('🔍 [RecommendationsService] categoriesHierarchy: ${product.categoriesHierarchy}', name: 'Scan');
     
     final categories = <String>[];
     
@@ -82,11 +83,11 @@ class RecommendationsService {
           categories.add(cleanCategory);
         }
       }
-      print('🔍 [RecommendationsService] Using hierarchy categories: $categories');
+      log('🔍 [RecommendationsService] Using hierarchy categories: $categories', name: 'Scan');
       return categories;
     }
     
-    print('⚠️ [RecommendationsService] No categories hierarchy found');
+    log('⚠️ [RecommendationsService] No categories hierarchy found', name: 'Scan');
     return [];
   }
 
@@ -94,19 +95,19 @@ class RecommendationsService {
   static Future<List<Product>> _searchLowSugarAlternatives(List<String> categories, String unit) async {
     try {
       final searchUrl = _buildAdvancedSearchUrl(categories, unit);
-      print('🌐 [RecommendationsService] Advanced search URL: $searchUrl');
+      log('🌐 [RecommendationsService] Advanced search URL: $searchUrl', name: 'Scan');
       
       final response = await http.get(Uri.parse(searchUrl));
-      print('🌐 [RecommendationsService] API response status: ${response.statusCode}');
+      log('🌐 [RecommendationsService] API response status: ${response.statusCode}', name: 'Scan');
       
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final products = data['products'] as List<dynamic>? ?? [];
-        print('🌐 [RecommendationsService] Found ${products.length} products from API');
+        log('🌐 [RecommendationsService] Found ${products.length} products from API', name: 'Scan');
         
         // Debug: Print first product structure
         if (products.isNotEmpty) {
-          print('🌐 [RecommendationsService] First product keys: ${(products.first as Map<String, dynamic>).keys.toList()}');
+          log('🌐 [RecommendationsService] First product keys: ${(products.first as Map<String, dynamic>).keys.toList()}', name: 'Scan');
         }
         
         // Convert to Product objects (API already filtered by sugar content)
@@ -114,14 +115,14 @@ class RecommendationsService {
             .map((productData) => _convertToProduct(productData))
             .toList();
         
-        print('🌐 [RecommendationsService] ${recommendations.length} low-sugar alternatives found');
+        log('🌐 [RecommendationsService] ${recommendations.length} low-sugar alternatives found', name: 'Scan');
         return recommendations;
       } else {
-        print('❌ [RecommendationsService] API error: ${response.statusCode}');
+        log('❌ [RecommendationsService] API error: ${response.statusCode}', name: 'Scan');
         return [];
       }
     } catch (e) {
-      print('❌ [RecommendationsService] Error searching alternatives: $e');
+      log('❌ [RecommendationsService] Error searching alternatives: $e', name: 'Scan');
       return [];
     }
   }
@@ -146,14 +147,14 @@ class RecommendationsService {
   /// Convert OpenFoodFacts API product to Product
   static Product _convertToProduct(Map<String, dynamic> productData) {
     // For search API, the product data is directly in the response, not nested under 'product'
-    print('🔍 [RecommendationsService] Converting product data: ${productData.keys.toList()}');
+    log('🔍 [RecommendationsService] Converting product data: ${productData.keys.toList()}', name: 'Scan');
     
     // Extract basic information
     final name = productData['product_name'] ?? productData['product_name_en'] ?? 'Unknown Product';
     final brand = productData['brands'] ?? 'Unknown Brand';
     final barcode = productData['code'] ?? '';
     
-    print('🔍 [RecommendationsService] Product: $name, Brand: $brand, Barcode: $barcode');
+    log('🔍 [RecommendationsService] Product: $name, Brand: $brand, Barcode: $barcode', name: 'Scan');
     
     // Extract image URL with multiple fallbacks
     String imageUrl = '';
@@ -175,16 +176,16 @@ class RecommendationsService {
       imageUrl = productData['image_url'] as String? ?? '';
     }
     
-    print('🔍 [RecommendationsService] Image URL: $imageUrl');
+    log('🔍 [RecommendationsService] Image URL: $imageUrl', name: 'Scan');
     
     // Extract nutrition information
     final nutriments = productData['nutriments'] as Map<String, dynamic>? ?? {};
     final sugarsPer100gRaw = nutriments['sugars_100g'];
-    print('🔍 [RecommendationsService] Raw sugar value: $sugarsPer100gRaw (type: ${sugarsPer100gRaw.runtimeType})');
+    log('🔍 [RecommendationsService] Raw sugar value: $sugarsPer100gRaw (type: ${sugarsPer100gRaw.runtimeType}', name: 'Scan');
     final sugarsPer100g = _parseDouble(sugarsPer100gRaw) ?? 0.0;
     final productQuantityUnit = productData['product_quantity_unit'] ?? 'g';
     
-    print('🔍 [RecommendationsService] Sugar: ${sugarsPer100g}g/100${productQuantityUnit}');
+    log('🔍 [RecommendationsService] Sugar: ${sugarsPer100g}g/100$productQuantityUnit', name: 'Scan');
     
     // Extract categories and ingredients tags
     final categoriesHierarchy = (productData['categories_hierarchy'] as List<dynamic>?)
@@ -197,8 +198,8 @@ class RecommendationsService {
         ?.map((e) => e.toString())
         .toList();
     
-    print('🔍 [RecommendationsService] Categories: $categoriesTags');
-    print('🔍 [RecommendationsService] Ingredients tags: ${ingredientsTags?.length ?? 0} tags');
+    log('🔍 [RecommendationsService] Categories: $categoriesTags', name: 'Scan');
+    log('🔍 [RecommendationsService] Ingredients tags: ${ingredientsTags?.length ?? 0} tags', name: 'Scan');
     
     return Product(
       code: barcode,

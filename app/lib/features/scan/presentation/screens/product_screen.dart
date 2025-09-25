@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -20,8 +21,8 @@ class ProductScreen extends ConsumerWidget {
     final productAsync = ref.watch(productByBarcodeProvider(barcode));
 
     // Debug logging
-    print('📱 [PRODUCT_SCREEN] barcode: $barcode');
-    print('📱 [PRODUCT_SCREEN] productAsync: $productAsync');
+    log('📱 [PRODUCT_SCREEN] barcode: $barcode', name: 'Scan');
+    log('📱 [PRODUCT_SCREEN] productAsync: $productAsync', name: 'Scan');
 
     // Track product view when data is available
     productAsync.whenData((data) {
@@ -43,11 +44,11 @@ class ProductScreen extends ConsumerWidget {
             
             // Check if we can pop (go back to previous page)
             if (context.canPop()) {
-              print('🔙 [PRODUCT_SCREEN] Going back to previous page');
+              log('🔙 [PRODUCT_SCREEN] Going back to previous page', name: 'Scan');
               context.pop();
             } else {
               // If no previous page, go to home
-              print('🏠 [PRODUCT_SCREEN] No previous page, going to home');
+              log('🏠 [PRODUCT_SCREEN] No previous page, going to home', name: 'Scan');
               context.go('/home');
             }
           },
@@ -121,7 +122,7 @@ class ProductScreen extends ConsumerWidget {
                                   // Haptic feedback for log entry
                                   HapticFeedback.mediumImpact();
                                   // TODO: Add to daily log functionality
-                                  print('Added to daily log!');
+                                  log('Added to daily log!', name: 'Scan');
                                 },
                                 color: CupertinoColors.systemGreen,
                                 borderRadius: BorderRadius.circular(12),
@@ -224,9 +225,9 @@ class ProductScreen extends ConsumerWidget {
   // Analytics tracking methods
   Future<void> _trackProductViewed(WidgetRef ref, Product product, SugarInfo sugarInfo) async {
     try {
-      print('📊 [ANALYTICS] Starting _trackProductViewed for: ${product.productName}');
+      log('📊 [ANALYTICS] Starting _trackProductViewed for: ${product.productName}', name: 'Scan');
       final analytics = await ref.read(analyticsServiceProvider.future);
-      print('📊 [ANALYTICS] Analytics service obtained, tracking product viewed...');
+      log('📊 [ANALYTICS] Analytics service obtained, tracking product viewed...', name: 'Scan');
       
       await analytics.trackProductViewed(
         product.code,
@@ -235,18 +236,18 @@ class ProductScreen extends ConsumerWidget {
         product.categories?.split(',').first.trim() ?? 'Unknown',
       );
       
-      print('📊 [ANALYTICS] Product viewed tracked successfully');
+      log('📊 [ANALYTICS] Product viewed tracked successfully', name: 'Scan');
       
       // Track product analysis completion
       await _trackProductAnalysisCompleted(ref, product);
     } catch (e) {
-      print('📊 [ANALYTICS] Error in _trackProductViewed: $e');
+      log('📊 [ANALYTICS] Error in _trackProductViewed: $e', name: 'Scan');
     }
   }
 
   Future<void> _trackProductAnalysisCompleted(WidgetRef ref, Product product) async {
     try {
-      print('📊 [ANALYTICS] Starting _trackProductAnalysisCompleted for: ${product.productName}');
+      log('📊 [ANALYTICS] Starting _trackProductAnalysisCompleted for: ${product.productName}', name: 'Scan');
       final analytics = await ref.read(analyticsServiceProvider.future);
       
       // Count hidden sugars, sweeteners, and additives
@@ -266,7 +267,7 @@ class ProductScreen extends ConsumerWidget {
       
       final additivesCount = product.additivesTags?.length ?? 0;
       
-      print('📊 [ANALYTICS] Analysis counts - Hidden sugars: $hiddenSugarsCount, Sweeteners: $sweetenersCount, Additives: $additivesCount');
+      log('📊 [ANALYTICS] Analysis counts - Hidden sugars: $hiddenSugarsCount, Sweeteners: $sweetenersCount, Additives: $additivesCount', name: 'Scan');
       
       await analytics.trackProductAnalysisCompleted(
         hiddenSugarsCount,
@@ -274,9 +275,9 @@ class ProductScreen extends ConsumerWidget {
         additivesCount,
       );
       
-      print('📊 [ANALYTICS] Product analysis completed tracked successfully');
+      log('📊 [ANALYTICS] Product analysis completed tracked successfully', name: 'Scan');
     } catch (e) {
-      print('📊 [ANALYTICS] Error in _trackProductAnalysisCompleted: $e');
+      log('📊 [ANALYTICS] Error in _trackProductAnalysisCompleted: $e', name: 'Scan');
     }
   }
 }

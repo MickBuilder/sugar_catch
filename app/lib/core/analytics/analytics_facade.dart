@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
@@ -234,9 +235,9 @@ class AnalyticsFacade implements AnalyticsClient {
 final mixpanelAnalyticsClientProvider = FutureProvider<MixpanelAnalyticsClient>((ref) async {
   // Initialize Mixpanel with project token from Envied (secure)
   final token = Env.mixpanelProjectToken;
-  print('📊 [ANALYTICS] Initializing Mixpanel with token: ${token.substring(0, 8)}...');
+  log('📊 [ANALYTICS] Initializing Mixpanel with token: ${token.substring(0, 8)}...', name: 'Analytics');
   final mixpanel = await Mixpanel.init(token, trackAutomaticEvents: true);
-  print('✅ [ANALYTICS] Mixpanel initialized successfully');
+  log('✅ [ANALYTICS] Mixpanel initialized successfully', name: 'Analytics');
   return MixpanelAnalyticsClient(mixpanel);
 });
 
@@ -245,14 +246,14 @@ final analyticsFacadeProvider = FutureProvider<AnalyticsFacade>((ref) async {
   try {
     final mixpanelClient = await ref.watch(mixpanelAnalyticsClientProvider.future);
     
-    print('📊 [ANALYTICS] Creating analytics facade with ${kDebugMode ? '2' : '1'} clients');
+    log('📊 [ANALYTICS] Creating analytics facade with ${kDebugMode ? '2' : '1'} clients', name: 'Analytics');
     
     return AnalyticsFacade([
       mixpanelClient,
       if (kDebugMode) const LoggerAnalyticsClient(),
     ]);
   } catch (e) {
-    print('⚠️ [ANALYTICS] Failed to create analytics facade: $e');
+    log('⚠️ [ANALYTICS] Failed to create analytics facade: $e', name: 'Analytics');
     // Return a facade with just the logger client as fallback
     return AnalyticsFacade([
       if (kDebugMode) const LoggerAnalyticsClient(),
