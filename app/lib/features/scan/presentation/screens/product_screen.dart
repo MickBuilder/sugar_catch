@@ -31,9 +31,14 @@ class ProductScreen extends ConsumerWidget {
           onPressed: () {
             // Haptic feedback for back navigation
             HapticFeedback.selectionClick();
+            
+            // Check if we can pop (go back to previous page)
             if (context.canPop()) {
+              print('🔙 [PRODUCT_SCREEN] Going back to previous page');
               context.pop();
             } else {
+              // If no previous page, go to home
+              print('🏠 [PRODUCT_SCREEN] No previous page, going to home');
               context.go('/home');
             }
           },

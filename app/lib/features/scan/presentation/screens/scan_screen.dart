@@ -318,7 +318,7 @@ class ScanScreen extends HookConsumerWidget {
       // Check again after async operation
       if (context.mounted) {
         print('🎯 [HANDLE_BARCODE] Navigating to ProductScreen...');
-        context.go('/product/$barcode');
+        context.push('/product/$barcode');
         print('🎯 [HANDLE_BARCODE] Navigation completed');
       } else {
         print(
@@ -359,7 +359,7 @@ class ScanScreen extends HookConsumerWidget {
 
       if (context.mounted) {
         // Navigate to product screen with the search term as barcode
-        context.go('/product/$searchTerm');
+        context.push('/product/$searchTerm');
       }
     } catch (e) {
       if (context.mounted) {

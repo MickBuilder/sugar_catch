@@ -192,7 +192,7 @@ class _RecommendationsWidgetState extends State<RecommendationsWidget> {
           // Haptic feedback for recommendation selection
           HapticFeedback.lightImpact();
           // Navigate to product screen for this recommendation
-          context.go('/product/${recommendation.code}');
+          context.push('/product/${recommendation.code}');
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -105,7 +105,7 @@ class OpenFoodFactsApi {
     }
 
     // Parse categories
-    final categories = productData['categories'] as String?;
+    final categories = productData['categories']?.toString();
     final categoriesHierarchy = (productData['categories_hierarchy'] as List<dynamic>?)
         ?.map((e) => e.toString())
         .toList();
@@ -140,20 +140,20 @@ class OpenFoodFactsApi {
 
     final product = Product(
       code: barcode,
-      productName: productData['product_name'] as String? ?? 'Unknown Product',
-      productNameEn: productData['product_name_en'] as String?,
-      brands: productData['brands'] as String?,
+      productName: productData['product_name']?.toString() ?? 'Unknown Product',
+      productNameEn: productData['product_name_en']?.toString(),
+      brands: productData['brands']?.toString(),
       sugarsPer100g: sugarsPer100g,
       sugarsServing: sugarsServing,
-      servingSize: productData['serving_size'] as String?,
-      servingQuantity: productData['serving_quantity'] as String?,
-      quantity: productData['quantity'] as String?,
-      productQuantity: productData['product_quantity'] as String?,
-      productQuantityUnit: productData['product_quantity_unit'] as String?,
+      servingSize: productData['serving_size']?.toString(),
+      servingQuantity: productData['serving_quantity']?.toString(),
+      quantity: productData['quantity']?.toString(),
+      productQuantity: productData['product_quantity']?.toString(),
+      productQuantityUnit: productData['product_quantity_unit']?.toString(),
       ingredientsList: ingredientsList,
       ingredientsTags: ingredientsTags,
       imageUrl: imageUrl,
-      imageFrontUrl: productData['image_front_url'] as String?,
+      imageFrontUrl: productData['image_front_url']?.toString(),
       categories: categories,
       categoriesHierarchy: categoriesHierarchy,
       categoriesTags: categoriesTags,
