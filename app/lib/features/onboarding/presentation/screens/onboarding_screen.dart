@@ -136,7 +136,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             Expanded(
               child: PageView.builder(
                 controller: _pageController,
-                // physics: const NeverScrollableScrollPhysics(), // Disable swipe navigation
+                physics: const NeverScrollableScrollPhysics(), // Disable swipe navigation
                 onPageChanged: (index) {
                   setState(() {
                     _currentPage = index;

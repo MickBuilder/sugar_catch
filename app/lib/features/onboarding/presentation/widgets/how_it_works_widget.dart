@@ -132,7 +132,7 @@ class _HowItWorksWidgetState extends ConsumerState<HowItWorksWidget>
             child: Text(
               'Simply scan any product barcode to instantly see its hidden sugar content and get healthier alternatives.',
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 16,
                 color: CupertinoColors.systemGrey, // Dark grey text
                 height: 1.4,
               ),

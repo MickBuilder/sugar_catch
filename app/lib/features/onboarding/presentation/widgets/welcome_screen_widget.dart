@@ -19,21 +19,32 @@ class WelcomeScreenWidget extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Character illustration placeholder
+          // App icon at the top
           Container(
-            width: 120,
-            height: 120,
+            width: 80,
+            height: 80,
             decoration: BoxDecoration(
               color: CupertinoColors.white,
-              borderRadius: BorderRadius.circular(60),
+              borderRadius: BorderRadius.circular(40),
+              boxShadow: [
+                BoxShadow(
+                  color: CupertinoColors.black.withValues(alpha: 0.1),
+                  blurRadius: 15,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
-            child: const Icon(
-              CupertinoIcons.cart,
-              size: 50,
-              color: CupertinoColors.systemGrey,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(40),
+              child: Image.asset(
+                'assets/images/icon.png',
+                width: 80,
+                height: 80,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
 
           // Title
           Text(
@@ -44,120 +55,46 @@ class WelcomeScreenWidget extends ConsumerWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 12),
-
-          // Subtitle
-          Text(
-            currentScreen.subtitle,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
-            textAlign: TextAlign.center,
-          ),
           const SizedBox(height: 16),
 
           // Description
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Text(
-              currentScreen.description,
+              'Unlock the truth about your food.',
               style: const TextStyle(
-                fontSize: 14,
-
-                height: 1.4,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: CupertinoColors.systemGrey,
+                height: 1.3,
               ),
               textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: 24),
+          const Spacer(),
 
-          // Visual: Split-screen showing "0g sugar" vs actual content
+          // Main illustration - Phone mockup with AR overlay
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 24),
-            padding: const EdgeInsets.all(16),
+            width: 280,
+            height: 400,
             decoration: BoxDecoration(
-              color: CupertinoColors.white.withValues(alpha: .1),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              children: [
-                // "0g sugar" label
-                Expanded(
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: CupertinoColors.systemGreen,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Text(
-                          '0g sugar',
-                          style: TextStyle(
-            
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'What you see',
-                        style: TextStyle(
-          
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 16),
-                // VS
-                const Text(
-                  'VS',
-                  style: TextStyle(
-    
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                // Actual content
-                Expanded(
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: CupertinoColors.systemRed,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Text(
-                          '12g sugar',
-                          style: TextStyle(
-            
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'What you get',
-                        style: TextStyle(
-          
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: CupertinoColors.black.withValues(alpha: 0.15),
+                  blurRadius: 30,
+                  offset: const Offset(0, 15),
                 ),
               ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: Image.asset(
+                'assets/images/welcome_screen.png',
+                width: 280,
+                height: 400,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ],

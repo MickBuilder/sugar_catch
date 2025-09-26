@@ -38,7 +38,7 @@ class HiddenSugarProblemWidget extends ConsumerWidget {
             child: Text(
               currentScreen.description,
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 16,
                 color: CupertinoColors.systemGrey,
                 height: 1.4,
               ),
