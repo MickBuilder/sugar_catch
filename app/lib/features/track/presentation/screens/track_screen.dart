@@ -2,14 +2,14 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sugar_catch/core/analytics/analytics_service.dart';
-import 'package:sugar_catch/core/services/history_service.dart';
-import 'package:sugar_catch/features/scan/data/product_model.dart';
-import 'package:sugar_catch/features/track/data/track_models.dart';
-import 'package:sugar_catch/features/track/track_provider.dart';
-import 'package:sugar_catch/features/track/presentation/widgets/product_picker_widget.dart';
-import 'package:sugar_catch/features/track/presentation/widgets/serving_section_widget.dart';
-import 'package:sugar_catch/features/track/presentation/widgets/daily_log_entry_widget.dart';
+import 'package:sweetr/core/analytics/analytics_service.dart';
+import 'package:sweetr/core/services/history_service.dart';
+import 'package:sweetr/features/scan/data/product_model.dart';
+import 'package:sweetr/features/track/data/track_models.dart';
+import 'package:sweetr/features/track/track_provider.dart';
+import 'package:sweetr/features/track/presentation/widgets/product_picker_widget.dart';
+import 'package:sweetr/features/track/presentation/widgets/serving_section_widget.dart';
+import 'package:sweetr/features/track/presentation/widgets/daily_log_entry_widget.dart';
 
 class TrackScreen extends ConsumerStatefulWidget {
   const TrackScreen({super.key});

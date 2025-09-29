@@ -1,9 +1,9 @@
 import 'dart:developer';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:sugar_catch/features/scan/data/product_model.dart';
-import 'package:sugar_catch/core/constants/sugar_aliases.dart';
-import 'package:sugar_catch/core/services/cache_service.dart';
+import 'package:sweetr/features/scan/data/product_model.dart';
+import 'package:sweetr/core/constants/sugar_aliases.dart';
+import 'package:sweetr/core/services/cache_service.dart';
 
 class OpenFoodFactsApi {
   static const String baseUrl = 'https://world.openfoodfacts.org';

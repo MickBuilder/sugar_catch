@@ -299,7 +299,7 @@ class _AverageDailySugarProviderElement
   int get days => (origin as AverageDailySugarProvider).days;
 }
 
-String _$trackNotifierHash() => r'8a597cb11f4353d1d0882c8f14bf5714bcfd4543';
+String _$trackNotifierHash() => r'6a8fcce89ed6561784a3196d9b8982f2efa458b9';
 
 /// See also [TrackNotifier].
 @ProviderFor(TrackNotifier)

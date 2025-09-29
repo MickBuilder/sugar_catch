@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sugar_catch/features/scan/data/product_model.dart';
+import 'package:sweetr/features/scan/data/product_model.dart';
 
 class SugarIngredientCard extends StatelessWidget {
   final Ingredient ingredient;

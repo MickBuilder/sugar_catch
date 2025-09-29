@@ -3,15 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sugar_catch/core/analytics/analytics_service.dart';
-import 'package:sugar_catch/features/onboarding/onboarding_provider.dart';
-import 'package:sugar_catch/features/onboarding/presentation/widgets/welcome_screen_widget.dart';
-import 'package:sugar_catch/features/onboarding/presentation/widgets/hidden_sugar_problem_widget.dart';
-import 'package:sugar_catch/features/onboarding/presentation/widgets/how_it_works_widget.dart';
-import 'package:sugar_catch/features/onboarding/presentation/widgets/sugar_goals_widget.dart';
-import 'package:sugar_catch/features/onboarding/presentation/widgets/motivation_widget.dart';
-import 'package:sugar_catch/features/onboarding/presentation/widgets/testimonials_widget.dart';
-import 'package:sugar_catch/features/onboarding/presentation/widgets/complete_widget.dart';
+import 'package:sweetr/core/analytics/analytics_service.dart';
+import 'package:sweetr/features/onboarding/onboarding_provider.dart';
+import 'package:sweetr/features/onboarding/presentation/widgets/welcome_screen_widget.dart';
+import 'package:sweetr/features/onboarding/presentation/widgets/hidden_sugar_problem_widget.dart';
+import 'package:sweetr/features/onboarding/presentation/widgets/how_it_works_widget.dart';
+import 'package:sweetr/features/onboarding/presentation/widgets/sugar_goals_widget.dart';
+import 'package:sweetr/features/onboarding/presentation/widgets/motivation_widget.dart';
+import 'package:sweetr/features/onboarding/presentation/widgets/testimonials_widget.dart';
+import 'package:sweetr/features/onboarding/presentation/widgets/complete_widget.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});

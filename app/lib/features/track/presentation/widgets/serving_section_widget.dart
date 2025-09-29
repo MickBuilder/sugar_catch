@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:sugar_catch/core/services/history_service.dart';
-import 'package:sugar_catch/features/track/data/track_models.dart';
-import 'package:sugar_catch/features/track/presentation/widgets/serving_size_widget.dart';
+import 'package:sweetr/core/services/history_service.dart';
+import 'package:sweetr/features/track/data/track_models.dart';
+import 'package:sweetr/features/track/presentation/widgets/serving_size_widget.dart';
 
 class ServingSectionWidget extends StatefulWidget {
   final HistoryItem? selectedProduct;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sugar_catch/features/scan/data/product_model.dart';
-import 'package:sugar_catch/features/scan/presentation/widgets/sugar_level_bar_widget.dart';
-import 'package:sugar_catch/features/scan/presentation/widgets/summary_metrics_row.dart';
+import 'package:sweetr/features/scan/data/product_model.dart';
+import 'package:sweetr/features/scan/presentation/widgets/sugar_level_bar_widget.dart';
+import 'package:sweetr/features/scan/presentation/widgets/summary_metrics_row.dart';
 
 class ProductHeaderWidget extends StatelessWidget {
   final Product product;

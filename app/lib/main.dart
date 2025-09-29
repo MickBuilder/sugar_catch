@@ -2,13 +2,13 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sugar_catch/core/analytics/analytics_service.dart';
-import 'package:sugar_catch/core/router/app_router.dart';
-import 'package:sugar_catch/core/services/cache_service.dart';
-import 'package:sugar_catch/core/services/history_service.dart';
-import 'package:sugar_catch/features/track/data/track_service.dart';
-import 'package:sugar_catch/features/onboarding/data/onboarding_service.dart';
-import 'package:sugar_catch/core/providers/premium_provider.dart';
+import 'package:sweetr/core/analytics/analytics_service.dart';
+import 'package:sweetr/core/router/app_router.dart';
+import 'package:sweetr/core/services/cache_service.dart';
+import 'package:sweetr/core/services/history_service.dart';
+import 'package:sweetr/features/track/data/track_service.dart';
+import 'package:sweetr/features/onboarding/data/onboarding_service.dart';
+import 'package:sweetr/core/providers/premium_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,19 +25,19 @@ void main() async {
   await OnboardingService.init();
 
   // Uncomment the line below to force show onboarding on app restart (for testing)
-  await OnboardingService.resetOnboardingStatus();
+  // await OnboardingService.resetOnboardingStatus();
 
-  runApp(const ProviderScope(child: SugarCatchApp()));
+  runApp(const ProviderScope(child: SweetrApp()));
 }
 
-class SugarCatchApp extends ConsumerStatefulWidget {
-  const SugarCatchApp({super.key});
+class SweetrApp extends ConsumerStatefulWidget {
+  const SweetrApp({super.key});
 
   @override
-  ConsumerState<SugarCatchApp> createState() => _SugarCatchAppState();
+  ConsumerState<SweetrApp> createState() => _SweetrAppState();
 }
 
-class _SugarCatchAppState extends ConsumerState<SugarCatchApp> {
+class _SweetrAppState extends ConsumerState<SweetrApp> {
   @override
   void initState() {
     super.initState();

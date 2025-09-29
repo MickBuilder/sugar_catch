@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:sugar_catch/core/providers/premium_provider.dart';
-import 'package:sugar_catch/core/services/revenuecat_service.dart';
+import 'package:sweetr/core/providers/premium_provider.dart';
+import 'package:sweetr/core/services/revenuecat_service.dart';
 
 class PaywallScreen extends ConsumerStatefulWidget {
   const PaywallScreen({super.key});

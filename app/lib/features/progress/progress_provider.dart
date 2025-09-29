@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sugar_catch/features/progress/data/progress_models.dart';
-import 'package:sugar_catch/features/progress/data/progress_service.dart';
+import 'package:sweetr/features/progress/data/progress_models.dart';
+import 'package:sweetr/features/progress/data/progress_service.dart';
 
 part 'progress_provider.g.dart';
 

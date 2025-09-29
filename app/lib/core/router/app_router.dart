@@ -1,16 +1,16 @@
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sugar_catch/features/home/presentation/screens/home_screen.dart';
-import 'package:sugar_catch/features/scan/presentation/screens/scan_screen.dart';
-import 'package:sugar_catch/features/scan/presentation/screens/product_screen.dart';
-import 'package:sugar_catch/features/track/presentation/screens/track_screen.dart';
-import 'package:sugar_catch/features/history/presentation/screens/history_screen.dart';
-import 'package:sugar_catch/features/progress/presentation/screens/progress_screen.dart';
-import 'package:sugar_catch/features/onboarding/presentation/screens/onboarding_screen.dart';
-import 'package:sugar_catch/features/onboarding/onboarding_provider.dart';
-import 'package:sugar_catch/features/premium/presentation/screens/paywall_screen.dart';
-import 'package:sugar_catch/core/providers/premium_provider.dart';
-import 'package:sugar_catch/core/widgets/app_shell.dart';
+import 'package:sweetr/features/home/presentation/screens/home_screen.dart';
+import 'package:sweetr/features/scan/presentation/screens/scan_screen.dart';
+import 'package:sweetr/features/scan/presentation/screens/product_screen.dart';
+import 'package:sweetr/features/track/presentation/screens/track_screen.dart';
+import 'package:sweetr/features/history/presentation/screens/history_screen.dart';
+import 'package:sweetr/features/progress/presentation/screens/progress_screen.dart';
+import 'package:sweetr/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:sweetr/features/onboarding/onboarding_provider.dart';
+import 'package:sweetr/features/premium/presentation/screens/paywall_screen.dart';
+import 'package:sweetr/core/providers/premium_provider.dart';
+import 'package:sweetr/core/widgets/app_shell.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final hasCompletedOnboarding = ref.watch(hasCompletedOnboardingProvider);

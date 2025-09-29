@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'package:hive_ce_flutter/hive_flutter.dart';
-import 'package:sugar_catch/features/progress/data/progress_models.dart';
-import 'package:sugar_catch/features/track/data/track_service.dart';
-import 'package:sugar_catch/core/services/history_service.dart';
+import 'package:sweetr/features/progress/data/progress_models.dart';
+import 'package:sweetr/features/track/data/track_service.dart';
+import 'package:sweetr/core/services/history_service.dart';
 
 class ProgressService {
   static Box<String>? _progressBox;

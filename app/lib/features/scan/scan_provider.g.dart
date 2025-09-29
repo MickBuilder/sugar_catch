@@ -23,7 +23,7 @@ final openFoodFactsApiProvider = AutoDisposeProvider<OpenFoodFactsApi>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef OpenFoodFactsApiRef = AutoDisposeProviderRef<OpenFoodFactsApi>;
-String _$productByBarcodeHash() => r'1051b2dd47a4259ec311b8078b9797521b7c2a7d';
+String _$productByBarcodeHash() => r'1f503ff69f137392842d75242f00220e37af53a3';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -164,7 +164,7 @@ class _ProductByBarcodeProviderElement
   String get barcode => (origin as ProductByBarcodeProvider).barcode;
 }
 
-String _$scanNotifierHash() => r'8af52da639a50ebf63f9588db69fcb8ca7b6f699';
+String _$scanNotifierHash() => r'3ba66d7766b8ad491ac7fa26c422a391b47b97f6';
 
 /// See also [ScanNotifier].
 @ProviderFor(ScanNotifier)

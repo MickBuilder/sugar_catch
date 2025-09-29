@@ -2,9 +2,9 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sugar_catch/core/analytics/analytics_service.dart';
-import 'package:sugar_catch/features/onboarding/onboarding_provider.dart';
-import 'package:sugar_catch/features/onboarding/data/onboarding_models.dart';
+import 'package:sweetr/core/analytics/analytics_service.dart';
+import 'package:sweetr/features/onboarding/onboarding_provider.dart';
+import 'package:sweetr/features/onboarding/data/onboarding_models.dart';
 
 class SugarGoalsWidget extends ConsumerWidget {
   final VoidCallback? onNext;

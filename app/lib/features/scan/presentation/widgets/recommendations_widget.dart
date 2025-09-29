@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sugar_catch/core/analytics/analytics_service.dart';
-import 'package:sugar_catch/features/scan/data/product_model.dart';
-import 'package:sugar_catch/features/scan/data/recommendations_service.dart';
+import 'package:sweetr/core/analytics/analytics_service.dart';
+import 'package:sweetr/features/scan/data/product_model.dart';
+import 'package:sweetr/features/scan/data/recommendations_service.dart';
 
 class RecommendationsWidget extends ConsumerStatefulWidget {
   final Product product;

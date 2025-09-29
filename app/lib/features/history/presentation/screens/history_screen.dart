@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sugar_catch/core/services/history_service.dart';
-import 'package:sugar_catch/features/history/presentation/widgets/history_item_widget.dart';
-import 'package:sugar_catch/features/track/track_provider.dart';
+import 'package:sweetr/core/services/history_service.dart';
+import 'package:sweetr/features/history/presentation/widgets/history_item_widget.dart';
+import 'package:sweetr/features/track/track_provider.dart';
 
 class HistoryScreen extends ConsumerWidget {
   const HistoryScreen({super.key});

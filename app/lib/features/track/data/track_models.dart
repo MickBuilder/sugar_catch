@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:sugar_catch/features/scan/data/product_model.dart';
+import 'package:sweetr/features/scan/data/product_model.dart';
 
 part 'track_models.freezed.dart';
 part 'track_models.g.dart';

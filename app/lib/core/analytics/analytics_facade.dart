@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
-import 'package:sugar_catch/core/config/env.dart';
+import 'package:sweetr/core/config/env.dart';
 import 'analytics_client.dart';
 import 'logger_analytics_client.dart';
 import 'mixpanel_analytics_client.dart';

@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'dart:convert';
 import 'package:hive_ce_flutter/hive_flutter.dart';
-import 'package:sugar_catch/features/scan/data/product_model.dart';
+import 'package:sweetr/features/scan/data/product_model.dart';
 
 class HistoryService {
   static const String _historyBoxName = 'scan_history';

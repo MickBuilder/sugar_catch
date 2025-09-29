@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sugar_catch/core/services/history_service.dart';
+import 'package:sweetr/core/services/history_service.dart';
 
 class HistoryItemWidget extends ConsumerWidget {
   final HistoryItem item;

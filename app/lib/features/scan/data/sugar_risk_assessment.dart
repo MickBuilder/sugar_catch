@@ -1,4 +1,4 @@
-import 'package:sugar_catch/features/scan/data/product_model.dart';
+import 'package:sweetr/features/scan/data/product_model.dart';
 
 class SugarRiskAssessment {
   static const double dailySugarLimit = 25.0; // WHO recommendation (25g per day)

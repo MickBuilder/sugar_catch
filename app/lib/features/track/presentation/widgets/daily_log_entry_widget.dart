@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:sugar_catch/features/track/data/track_models.dart';
+import 'package:sweetr/features/track/data/track_models.dart';
 
 class DailyLogEntryWidget extends StatelessWidget {
   final LogEntry entry;

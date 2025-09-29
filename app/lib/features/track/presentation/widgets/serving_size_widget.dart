@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:sugar_catch/features/scan/data/product_model.dart';
-import 'package:sugar_catch/features/track/data/track_models.dart';
+import 'package:sweetr/features/scan/data/product_model.dart';
+import 'package:sweetr/features/track/data/track_models.dart';
 
 class ServingSizeWidget extends StatefulWidget {
   final Product product;

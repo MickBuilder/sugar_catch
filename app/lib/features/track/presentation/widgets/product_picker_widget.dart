@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:sugar_catch/core/services/history_service.dart';
+import 'package:sweetr/core/services/history_service.dart';
 
 class ProductPickerWidget extends StatelessWidget {
   final List<HistoryItem> recentHistory;

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sugar_catch/features/onboarding/data/onboarding_models.dart';
-import 'package:sugar_catch/features/onboarding/data/onboarding_service.dart';
+import 'package:sweetr/features/onboarding/data/onboarding_models.dart';
+import 'package:sweetr/features/onboarding/data/onboarding_service.dart';
 
 final onboardingDataProvider = StateNotifierProvider<OnboardingNotifier, OnboardingData>((ref) {
   return OnboardingNotifier();

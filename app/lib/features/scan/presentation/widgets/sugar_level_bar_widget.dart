@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sugar_catch/core/utils/sugar_level_utils.dart';
+import 'package:sweetr/core/utils/sugar_level_utils.dart';
 
 class SugarLevelBarWidget extends StatelessWidget {
   final double sugarPer100g;

@@ -6,8 +6,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sugar_catch/core/analytics/analytics_service.dart';
-import 'package:sugar_catch/features/scan/scan_provider.dart';
+import 'package:sweetr/core/analytics/analytics_service.dart';
+import 'package:sweetr/features/scan/scan_provider.dart';
 
 class ScanScreen extends HookConsumerWidget {
   const ScanScreen({super.key});

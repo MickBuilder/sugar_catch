@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:sugar_catch/features/progress/data/progress_models.dart';
+import 'package:sweetr/features/progress/data/progress_models.dart';
 
 class ConsumptionGraphSection extends StatefulWidget {
   final List<ConsumptionDataPoint> consumptionData;

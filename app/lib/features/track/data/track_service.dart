@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'dart:convert';
 import 'package:hive_ce_flutter/hive_flutter.dart';
-import 'package:sugar_catch/features/scan/data/product_model.dart';
-import 'package:sugar_catch/features/track/data/track_models.dart';
+import 'package:sweetr/features/scan/data/product_model.dart';
+import 'package:sweetr/features/track/data/track_models.dart';
 
 class TrackService {
   static Box<String>? _trackBox;

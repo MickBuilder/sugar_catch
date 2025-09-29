@@ -1,11 +1,11 @@
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sugar_catch/core/analytics/analytics_service.dart';
-import 'package:sugar_catch/features/progress/progress_provider.dart';
-import 'package:sugar_catch/features/progress/presentation/widgets/statistics_section.dart';
-// import 'package:sugar_catch/features/progress/presentation/widgets/achievements_section.dart';
-import 'package:sugar_catch/features/progress/presentation/widgets/consumption_graph_section.dart';
+import 'package:sweetr/core/analytics/analytics_service.dart';
+import 'package:sweetr/features/progress/progress_provider.dart';
+import 'package:sweetr/features/progress/presentation/widgets/statistics_section.dart';
+// import 'package:sweetr/features/progress/presentation/widgets/achievements_section.dart';
+import 'package:sweetr/features/progress/presentation/widgets/consumption_graph_section.dart';
 
 class ProgressScreen extends ConsumerStatefulWidget {
   const ProgressScreen({super.key});

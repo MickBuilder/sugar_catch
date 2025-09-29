@@ -3,13 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sugar_catch/core/analytics/analytics_service.dart';
-import 'package:sugar_catch/features/scan/data/product_model.dart';
-import 'package:sugar_catch/features/scan/scan_provider.dart';
-import 'package:sugar_catch/features/scan/presentation/widgets/recommendations_widget.dart';
-import 'package:sugar_catch/features/scan/presentation/widgets/product_image_widget.dart';
-import 'package:sugar_catch/features/scan/presentation/widgets/product_header_widget.dart';
-import 'package:sugar_catch/features/scan/presentation/widgets/whats_inside_widget.dart';
+import 'package:sweetr/core/analytics/analytics_service.dart';
+import 'package:sweetr/features/scan/data/product_model.dart';
+import 'package:sweetr/features/scan/scan_provider.dart';
+import 'package:sweetr/features/scan/presentation/widgets/recommendations_widget.dart';
+import 'package:sweetr/features/scan/presentation/widgets/product_image_widget.dart';
+import 'package:sweetr/features/scan/presentation/widgets/product_header_widget.dart';
+import 'package:sweetr/features/scan/presentation/widgets/whats_inside_widget.dart';
 
 class ProductScreen extends ConsumerWidget {
   final String barcode;

@@ -2,11 +2,11 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sugar_catch/core/analytics/analytics_service.dart';
-import 'package:sugar_catch/core/services/history_service.dart';
-import 'package:sugar_catch/features/track/track_provider.dart';
-import 'package:sugar_catch/features/track/presentation/widgets/daily_log_entry_widget.dart';
-import 'package:sugar_catch/features/track/data/track_models.dart';
+import 'package:sweetr/core/analytics/analytics_service.dart';
+import 'package:sweetr/core/services/history_service.dart';
+import 'package:sweetr/features/track/track_provider.dart';
+import 'package:sweetr/features/track/presentation/widgets/daily_log_entry_widget.dart';
+import 'package:sweetr/features/track/data/track_models.dart';
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});

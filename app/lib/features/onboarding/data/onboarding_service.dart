@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'dart:convert';
 import 'package:hive_ce_flutter/hive_flutter.dart';
-import 'package:sugar_catch/features/onboarding/data/onboarding_models.dart';
+import 'package:sweetr/features/onboarding/data/onboarding_models.dart';
 
 class OnboardingService {
   static const String _onboardingBoxName = 'onboarding';

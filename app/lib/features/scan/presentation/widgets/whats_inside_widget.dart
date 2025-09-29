@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sugar_catch/core/services/additives_service.dart';
-import 'package:sugar_catch/features/scan/data/product_model.dart';
-import 'package:sugar_catch/features/scan/data/sugar_risk_assessment.dart';
-import 'package:sugar_catch/features/scan/presentation/widgets/sugar_ingredient_card.dart';
+import 'package:sweetr/core/services/additives_service.dart';
+import 'package:sweetr/features/scan/data/product_model.dart';
+import 'package:sweetr/features/scan/data/sugar_risk_assessment.dart';
+import 'package:sweetr/features/scan/presentation/widgets/sugar_ingredient_card.dart';
 
 class WhatsInsideWidget extends StatelessWidget {
   final Product product;

@@ -2,10 +2,10 @@ import 'dart:developer';
 import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sugar_catch/features/scan/data/product_model.dart';
-import 'package:sugar_catch/features/track/data/track_models.dart';
-import 'package:sugar_catch/features/track/data/track_service.dart';
-import 'package:sugar_catch/core/services/history_service.dart';
+import 'package:sweetr/features/scan/data/product_model.dart';
+import 'package:sweetr/features/track/data/track_models.dart';
+import 'package:sweetr/features/track/data/track_service.dart';
+import 'package:sweetr/core/services/history_service.dart';
 
 part 'track_provider.g.dart';
 
