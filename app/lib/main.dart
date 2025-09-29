@@ -8,6 +8,7 @@ import 'package:sugar_catch/core/services/cache_service.dart';
 import 'package:sugar_catch/core/services/history_service.dart';
 import 'package:sugar_catch/features/track/data/track_service.dart';
 import 'package:sugar_catch/features/onboarding/data/onboarding_service.dart';
+import 'package:sugar_catch/core/providers/premium_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +41,11 @@ class _SugarCatchAppState extends ConsumerState<SugarCatchApp> {
   @override
   void initState() {
     super.initState();
+    // Initialize premium provider
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(premiumProvider.notifier).initialize();
+    });
+    
     // Track app opened event with a delay to ensure analytics is initialized
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(const Duration(milliseconds: 500), () {

@@ -8,13 +8,26 @@ import 'package:sugar_catch/features/history/presentation/screens/history_screen
 import 'package:sugar_catch/features/progress/presentation/screens/progress_screen.dart';
 import 'package:sugar_catch/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:sugar_catch/features/onboarding/onboarding_provider.dart';
+import 'package:sugar_catch/features/premium/presentation/screens/paywall_screen.dart';
+import 'package:sugar_catch/core/providers/premium_provider.dart';
 import 'package:sugar_catch/core/widgets/app_shell.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final hasCompletedOnboarding = ref.watch(hasCompletedOnboardingProvider);
+  final hasAccess = ref.watch(premiumAccessProvider);
+  
+  // Determine initial location based on onboarding and premium status
+  String initialLocation;
+  if (!hasCompletedOnboarding) {
+    initialLocation = '/onboarding';
+  } else if (!hasAccess) {
+    initialLocation = '/paywall';
+  } else {
+    initialLocation = '/home';
+  }
   
   return GoRouter(
-    initialLocation: hasCompletedOnboarding ? '/home' : '/onboarding',
+    initialLocation: initialLocation,
     routes: [
       ShellRoute(
         builder: (context, state, child) {
@@ -60,6 +73,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/onboarding',
         name: 'onboarding',
         builder: (context, state) => const OnboardingScreen(),
+      ),
+      GoRoute(
+        path: '/paywall',
+        name: 'paywall',
+        builder: (context, state) => const PaywallScreen(),
       ),
     ],
   );

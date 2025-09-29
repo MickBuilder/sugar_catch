@@ -80,7 +80,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     
     await ref.read(onboardingDataProvider.notifier).completeOnboarding();
     if (mounted) {
-      context.go('/');
+      // Go to paywall after onboarding completion
+      context.go('/paywall');
     }
   }
 
