@@ -70,7 +70,7 @@ class _SugarCatchAppState extends ConsumerState<SugarCatchApp> {
     final router = ref.watch(appRouterProvider);
 
     return CupertinoApp.router(
-      title: 'Sugar Catch',
+      title: 'Sweetr',
       debugShowCheckedModeBanner: false,
       theme: const CupertinoThemeData(
         primaryColor: CupertinoColors.systemGreen,

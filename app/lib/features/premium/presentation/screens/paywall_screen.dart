@@ -227,7 +227,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         
         // Title
         const Text(
-          'Get Sugar Catch Pro',
+          'Get Sweetr Premium',
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,

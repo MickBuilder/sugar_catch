@@ -24,7 +24,7 @@ class OpenFoodFactsApi {
 
       final response = await http.get(
         Uri.parse(url),
-        headers: {'User-Agent': 'SugarCatch/1.0.0'},
+        headers: {'User-Agent': 'Sweetr/1.0.0'},
       );
 
       log('🌐 [API] HTTP response status: ${response.statusCode}', name: 'Scan');

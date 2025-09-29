@@ -1,4 +1,4 @@
-# Sugar Catch
+# Sweetr
 
 A mobile app to track hidden sugar in grocery foods and monitor daily consumption.
 
@@ -12,7 +12,7 @@ A mobile app to track hidden sugar in grocery foods and monitor daily consumptio
 
 ## About
 
-Many grocery products contain hidden added sugars, even in items that appear healthy like oat meal or yogurt. Sugar Catch helps you make informed decisions by revealing the true sugar content of foods and tracking your daily intake.
+Many grocery products contain hidden added sugars, even in items that appear healthy like oat meal or yogurt. Sweetr helps you make informed decisions by revealing the true sugar content of foods and tracking your daily intake.
 
 ## Getting Started
 

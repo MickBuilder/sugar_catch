@@ -90,7 +90,7 @@ class OnboardingService {
     return const [
       OnboardingScreen(
         index: 0,
-        title: 'Welcome to Sugar Catch!',
+        title: 'Welcome to Sweetr!',
         subtitle: 'Think your yogurt has zero sugar? Think again.',
         description: 'Up to 80% of "healthy" foods contain hidden sugars that sabotage your health goals.',
         ctaText: 'Show me the truth',

@@ -55,7 +55,7 @@ class _TestimonialsWidgetState extends ConsumerState<TestimonialsWidget> {
 
           // Subtitle
           Text(
-            'Sugar Catch is supported by and made for people like you',
+            'Sweetr is supported by and made for people like you',
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
@@ -67,7 +67,7 @@ class _TestimonialsWidgetState extends ConsumerState<TestimonialsWidget> {
 
           // Community Section
           const Text(
-            'Sugar Catch is backed by people like you',
+            'Sweetr is backed by people like you',
             style: TextStyle(
               fontSize: 16,
               color: CupertinoColors.black,
