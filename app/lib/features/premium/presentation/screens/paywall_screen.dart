@@ -1,11 +1,19 @@
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:sweetr/core/providers/premium_provider.dart';
 import 'package:sweetr/core/services/revenuecat_service.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+// Helper function to show paywall as bottom sheet
+Future<void> showPaywallBottomSheet(BuildContext context) {
+  return showCupertinoModalPopup<void>(
+    context: context,
+    builder: (context) => const PaywallScreen(),
+  );
+}
 
 class PaywallScreen extends ConsumerStatefulWidget {
   const PaywallScreen({super.key});
@@ -112,10 +120,34 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     );
   }
 
+  Future<void> _openPrivacyPolicy() async {
+    const url = 'https://pacific-professor-cc7.notion.site/Sweetr-Terms-of-Use-Privacy-Policy-27fdd39132a280d69bcfd8116e4a4c7d';
+    final uri = Uri.parse(url);
+    
+    try {
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        log('❌ [Paywall] Could not launch privacy policy URL: $url', name: 'Paywall');
+        _showErrorDialog('Could not open privacy policy. Please try again.');
+      }
+    } catch (e) {
+      log('❌ [Paywall] Error opening privacy policy: $e', name: 'Paywall');
+      _showErrorDialog('Could not open privacy policy. Please try again.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      backgroundColor: CupertinoColors.systemGroupedBackground,
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      decoration: const BoxDecoration(
+        color: CupertinoColors.systemGroupedBackground,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
       child: SafeArea(
         child: Column(
           children: [
@@ -124,7 +156,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
             // Content
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   children: [
                     // Header with app icon and title
@@ -174,19 +206,19 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         children: [
           CupertinoButton(
             onPressed: () {
-              // Navigate back to onboarding completion screen
-              context.go('/onboarding');
+              // Dismiss the bottom sheet
+              Navigator.of(context).pop();
             },
             child: Container(
-              width: 32,
-              height: 32,
+              width: 25,
+              height: 25,
               decoration: BoxDecoration(
                 color: CupertinoColors.systemGrey5,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: const Icon(
                 CupertinoIcons.xmark,
-                size: 18,
+                size: 14,
                 color: CupertinoColors.systemGrey,
               ),
             ),
@@ -241,9 +273,9 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
 
   Widget _buildFeaturesList() {
     final features = [
-      {'icon': '🔍', 'title': 'Unlimited scanning', 'description': 'Scan as many products as you want'},
-      {'icon': '📊', 'title': 'Advanced analytics', 'description': 'Detailed insights and trends'},
-      {'icon': '📤', 'title': 'Export your data', 'description': 'Download your sugar tracking data'},
+      {'icon': '🔍', 'title': 'Uncover hidden sugars', 'description': 'Reveal the shocking truth about sugar in "healthy" products'},
+      {'icon': '📈', 'title': 'Achieve your sugar detox faster', 'description': 'Track progress and stay motivated with detailed insights'},
+      {'icon': '💡', 'title': 'Make smarter food choices', 'description': 'Get instant recommendations for healthier alternatives'},
     ];
 
     return Column(
@@ -494,7 +526,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
 
   Widget _buildDisclaimerText() {
     return const Text(
-      'No payment today, cancel anytime',
+      'No Commitment, Cancel Anytime',
       style: TextStyle(
         fontSize: 14,
         color: CupertinoColors.systemGrey,
@@ -540,9 +572,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
           ),
         ),
         CupertinoButton(
-          onPressed: () {
-            // TODO: Open terms of service
-          },
+          onPressed: _openPrivacyPolicy,
           child: const Text(
             'Terms',
             style: TextStyle(
@@ -552,9 +582,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
           ),
         ),
         CupertinoButton(
-          onPressed: () {
-            // TODO: Open privacy policy
-          },
+          onPressed: _openPrivacyPolicy,
           child: const Text(
             'Privacy',
             style: TextStyle(

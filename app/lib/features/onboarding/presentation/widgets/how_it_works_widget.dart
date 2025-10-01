@@ -95,12 +95,11 @@ class _HowItWorksWidgetState extends ConsumerState<HowItWorksWidget>
       onNext: widget.onNext,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
         children: [
           // Large image placeholder at the top
           Container(
             width: double.infinity,
-            height: 280,
+            height: 200,
             margin: const EdgeInsets.only(bottom: 32),
             decoration: BoxDecoration(
               color: const Color(0xFFE0E0E0), // Light grey background
@@ -140,7 +139,9 @@ class _HowItWorksWidgetState extends ConsumerState<HowItWorksWidget>
             ),
           ),
          
-         Spacer(),
+          Flexible(
+            child: Container(), // This acts like a spacer but works in scrollable context
+          ),
 
           Column(
             children: [
@@ -173,8 +174,8 @@ class _HowItWorksWidgetState extends ConsumerState<HowItWorksWidget>
     return Row(
       children: [
         Container(
-          width: 48,
-          height: 48,
+          width: 40,
+          height: 40,
           decoration: BoxDecoration(
             color: const Color(0xFFE0F2E0), // Light green background
             borderRadius: BorderRadius.circular(12),
@@ -186,7 +187,7 @@ class _HowItWorksWidgetState extends ConsumerState<HowItWorksWidget>
           child: Icon(
             icon,
             color: const Color(0xFF4CAF50), // Medium green icon
-            size: 24,
+            size: 20,
           ),
         ),
         const SizedBox(width: 16),

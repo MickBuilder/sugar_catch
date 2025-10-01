@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sweetr/features/onboarding/data/onboarding_models.dart';
 import 'package:sweetr/features/onboarding/data/onboarding_service.dart';
 

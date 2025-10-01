@@ -44,7 +44,10 @@ class HiddenSugarProblemWidget extends ConsumerWidget {
               ),
             ),
           ),
-          Spacer(),
+          
+          Flexible(
+            child: Container(), // This acts like a spacer but works in scrollable context
+          ),
 
           // Display the actual image
           ClipRRect(

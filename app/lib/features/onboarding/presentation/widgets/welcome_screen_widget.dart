@@ -71,7 +71,10 @@ class WelcomeScreenWidget extends ConsumerWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          const Spacer(),
+          
+          Flexible(
+            child: Container(), // This acts like a spacer but works in scrollable context
+          ),
 
           // Main illustration - Phone mockup with AR overlay
           Container(

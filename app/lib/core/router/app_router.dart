@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sweetr/features/home/presentation/screens/home_screen.dart';
@@ -12,6 +13,31 @@ import 'package:sweetr/features/premium/presentation/screens/paywall_screen.dart
 import 'package:sweetr/core/providers/premium_provider.dart';
 import 'package:sweetr/core/widgets/app_shell.dart';
 
+// Wrapper widget that checks premium access and shows paywall as bottom sheet
+class PremiumAccessWrapper extends ConsumerWidget {
+  final Widget child;
+  
+  const PremiumAccessWrapper({super.key, required this.child});
+  
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final hasAccess = ref.watch(premiumAccessProvider);
+    
+    // If user doesn't have access, show paywall as bottom sheet
+    if (!hasAccess) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await showPaywallBottomSheet(context);
+        // When paywall is dismissed, redirect back to onboarding completion
+        if (context.mounted) {
+          context.go('/onboarding');
+        }
+      });
+    }
+    
+    return child;
+  }
+}
+
 final appRouterProvider = Provider<GoRouter>((ref) {
   final hasCompletedOnboarding = ref.watch(hasCompletedOnboardingProvider);
   final hasAccess = ref.watch(premiumAccessProvider);
@@ -21,7 +47,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   if (!hasCompletedOnboarding) {
     initialLocation = '/onboarding';
   } else if (!hasAccess) {
-    initialLocation = '/paywall';
+    initialLocation = '/onboarding';
   } else {
     initialLocation = '/home';
   }
@@ -31,7 +57,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     routes: [
       ShellRoute(
         builder: (context, state, child) {
-          return AppShell(child: child);
+          return AppShell(
+            child: PremiumAccessWrapper(child: child),
+          );
         },
         routes: [
           GoRoute(

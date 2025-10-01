@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sweetr/core/analytics/analytics_service.dart';
 import 'package:sweetr/features/onboarding/onboarding_provider.dart';
 import 'package:sweetr/features/onboarding/presentation/widgets/welcome_screen_widget.dart';
@@ -12,6 +11,7 @@ import 'package:sweetr/features/onboarding/presentation/widgets/sugar_goals_widg
 import 'package:sweetr/features/onboarding/presentation/widgets/motivation_widget.dart';
 import 'package:sweetr/features/onboarding/presentation/widgets/testimonials_widget.dart';
 import 'package:sweetr/features/onboarding/presentation/widgets/complete_widget.dart';
+import 'package:sweetr/features/premium/presentation/screens/paywall_screen.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -80,8 +80,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     
     await ref.read(onboardingDataProvider.notifier).completeOnboarding();
     if (mounted) {
-      // Go to paywall after onboarding completion
-      context.go('/paywall');
+      // Show paywall as bottom sheet after onboarding completion
+      await showPaywallBottomSheet(context);
     }
   }
 
