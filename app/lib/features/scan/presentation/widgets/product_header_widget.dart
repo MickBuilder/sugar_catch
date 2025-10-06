@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sweetr/core/utils/sugar_level_utils.dart';
 import 'package:sweetr/features/scan/data/product_model.dart';
 import 'package:sweetr/features/scan/presentation/widgets/sugar_level_bar_widget.dart';
 import 'package:sweetr/features/scan/presentation/widgets/summary_metrics_row.dart';
@@ -92,6 +93,11 @@ class ProductHeaderWidget extends StatelessWidget {
             ],
           ),
 
+          const SizedBox(height: 16),
+
+          // Total Sugar Display
+          _buildTotalSugarDisplay(),
+
           const SizedBox(height: 20),
 
           // Summary Metrics - EXACT Oasis Layout
@@ -118,5 +124,88 @@ class ProductHeaderWidget extends StatelessWidget {
       return categories.first.trim();
     }
     return 'Food Product';
+  }
+
+  // Build total sugar display
+  Widget _buildTotalSugarDisplay() {
+    final totalSugar = sugarInfo.totalSugarsInProduct;
+    final color = SugarLevelUtils.getDailySugarColor(totalSugar);
+    final exceedsDailyLimit = totalSugar > 25.0; // WHO daily limit
+    
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: color.withValues(alpha: 0.2),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        children: [
+          // Main sugar info row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: color,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Text(
+                    'In total',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                '${totalSugar.toStringAsFixed(1)}g',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+              ),
+            ],
+          ),
+          
+          // Warning message if exceeds daily limit
+          if (exceedsDailyLimit) ...[
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Icon(
+                  Icons.warning_amber_rounded,
+                  size: 14,
+                  color: color,
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    'Warning: This product exceeds the daily sugar limit. Consider consuming it over multiple days.',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                      color: color,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ],
+      ),
+    );
   }
 }

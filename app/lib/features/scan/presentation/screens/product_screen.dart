@@ -55,7 +55,7 @@ class ProductScreen extends ConsumerWidget {
           child: const Icon(CupertinoIcons.back, color: CupertinoColors.label),
         ),
         middle: const Text(
-          'Nutrition Facts',
+          'Sugar Facts',
           style: TextStyle(
             color: CupertinoColors.label,
             fontWeight: FontWeight.bold,

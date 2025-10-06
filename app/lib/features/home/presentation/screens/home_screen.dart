@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sweetr/core/analytics/analytics_service.dart';
 import 'package:sweetr/core/services/history_service.dart';
+import 'package:sweetr/core/utils/sugar_level_utils.dart';
 import 'package:sweetr/features/track/track_provider.dart';
 import 'package:sweetr/features/track/presentation/widgets/daily_log_entry_widget.dart';
 import 'package:sweetr/features/track/data/track_models.dart';
@@ -269,7 +270,7 @@ class HomeScreen extends HookConsumerWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: _getSugarColor(todaysLog.totalSugar),
+                  color: SugarLevelUtils.getDailySugarColor(todaysLog.totalSugar),
                 ),
               ),
             ],
@@ -297,15 +298,6 @@ class HomeScreen extends HookConsumerWidget {
     );
   }
 
-  Color _getSugarColor(double totalSugar) {
-    if (totalSugar <= 15) {
-      return CupertinoColors.systemGreen;
-    } else if (totalSugar <= 30) {
-      return CupertinoColors.systemOrange;
-    } else {
-      return CupertinoColors.systemRed;
-    }
-  }
 
   // Analytics tracking methods
   Future<void> _trackScreenViewed(WidgetRef ref) async {

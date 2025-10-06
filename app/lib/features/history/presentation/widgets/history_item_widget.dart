@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sweetr/core/services/history_service.dart';
+import 'package:sweetr/core/utils/sugar_level_utils.dart';
 
 class HistoryItemWidget extends ConsumerWidget {
   final HistoryItem item;
@@ -178,16 +179,6 @@ class HistoryItemWidget extends ConsumerWidget {
   }
 
   Color _getSugarAlertColor(double totalSugar) {
-    if (totalSugar <= 5) {
-      return CupertinoColors.systemGreen;
-    } else if (totalSugar <= 15) {
-      return CupertinoColors.systemYellow;
-    } else if (totalSugar <= 30) {
-      return CupertinoColors.systemOrange;
-    } else if (totalSugar <= 50) {
-      return CupertinoColors.systemRed;
-    } else {
-      return CupertinoColors.systemPurple;
-    }
+    return SugarLevelUtils.getDailySugarColor(totalSugar);
   }
 }

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:sweetr/core/utils/sugar_level_utils.dart';
 import 'package:sweetr/features/scan/data/product_model.dart';
 
 class SugarRiskAssessment {
@@ -56,18 +58,12 @@ class SugarRiskAssessment {
   }
   
   /// Get sugar level description
-  static String getSugarLevel(double sugarPer100g) {
-    if (sugarPer100g <= 5.0) return 'Low sugar';
-    if (sugarPer100g <= 15.0) return 'Moderate sugar';
-    if (sugarPer100g <= 25.0) return 'High sugar';
-    return 'Very high sugar';
+  static String getSugarLevel(double sugarPer100g, String unit) {
+    return SugarLevelUtils.getSugarLevelText(sugarPer100g, unit);
   }
   
-  /// Get sugar level color
-  static String getSugarLevelColor(double sugarPer100g) {
-    if (sugarPer100g <= 5.0) return 'green';
-    if (sugarPer100g <= 15.0) return 'yellow';
-    if (sugarPer100g <= 25.0) return 'orange';
-    return 'red';
+  /// Get sugar level color (returns Color object instead of string)
+  static Color getSugarLevelColor(double sugarPer100g, String unit) {
+    return SugarLevelUtils.getSugarLevelColor(sugarPer100g, unit);
   }
 }

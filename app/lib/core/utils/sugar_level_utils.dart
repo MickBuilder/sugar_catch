@@ -14,49 +14,48 @@ class SugarLevelUtils {
 
   /// Get sugar level color based on amount and unit
   static Color getSugarLevelColor(double sugarPer100g, String productUnit) {
-    if (productUnit.toLowerCase() == 'ml') {
-      if (sugarPer100g <= _mlLowThreshold) {
-        return Colors.green[700]!; // Dark green
-      } else if (sugarPer100g <= _mlModerateThreshold) {
-        return Colors.green[500]!; // Light green
-      } else if (sugarPer100g <= _mlHighThreshold) {
-        return Colors.orange[600]!; // Orange
-      } else if (sugarPer100g <= _mlVeryHighThreshold) {
-        return Colors.red[600]!; // Red
-      } else {
-        return Colors.red[800]!; // Dark red
-      }
+    final unit = productUnit.toLowerCase();
+    // Logical color progression: Green → Yellow → Orange → Red → Dark Red
+    List<Color> colors = [
+      const Color(0xFF2E7D32),   // Low sugar - Dark green (good)
+      const Color(0xFF8BC34A),   // Low impact - Light green (okay)
+      const Color(0xFFFF9800),  // A bit too sweet - Orange (caution)
+      const Color(0xFFF44336),  // Too sweet - Red (bad)
+      const Color(0xFFB71C1C),  // Much too sweet - Dark red (very bad)
+    ];
+    List<double> thresholds;
+    if (unit == 'ml') {
+      thresholds = [_mlLowThreshold, _mlModerateThreshold, _mlHighThreshold, _mlVeryHighThreshold];
     } else {
-      // For g: 0, 9, 18, 31, 45
-      if (sugarPer100g <= _gLowThreshold) {
-        return Colors.green[700]!; // Dark green
-      } else if (sugarPer100g <= _gModerateThreshold) {
-        return Colors.green[500]!; // Light green
-      } else if (sugarPer100g <= _gHighThreshold) {
-        return Colors.orange[600]!; // Orange
-      } else if (sugarPer100g <= _gVeryHighThreshold) {
-        return Colors.red[600]!; // Red
-      } else {
-        return Colors.red[800]!; // Dark red
+      thresholds = [_gLowThreshold, _gModerateThreshold, _gHighThreshold, _gVeryHighThreshold];
+    }
+    for (int i = 0; i < thresholds.length; i++) {
+      if (sugarPer100g <= thresholds[i]) {
+        return colors[i];
       }
     }
+    return colors.last;
   }
 
   /// Get sugar level text description
   static String getSugarLevelText(double sugarPer100g, String productUnit) {
-    if (productUnit.toLowerCase() == 'ml') {
-      if (sugarPer100g <= _mlLowThreshold) return 'Very Low';
-      if (sugarPer100g <= _mlModerateThreshold) return 'Low';
-      if (sugarPer100g <= _mlHighThreshold) return 'Moderate';
-      if (sugarPer100g <= _mlVeryHighThreshold) return 'High';
-      return 'Very High';
+    final unit = productUnit.toLowerCase();
+    List<double> thresholds;
+    // Use Yuka-style labels for better user understanding
+    List<String> labels = ['Low sugar', 'Low impact', 'A bit too sweet', 'Too sweet', 'Much too sweet'];
+
+    if (unit == 'ml') {
+      thresholds = [_mlLowThreshold, _mlModerateThreshold, _mlHighThreshold, _mlVeryHighThreshold];
     } else {
-      if (sugarPer100g <= _gLowThreshold) return 'Very Low';
-      if (sugarPer100g <= _gModerateThreshold) return 'Low';
-      if (sugarPer100g <= _gHighThreshold) return 'Moderate';
-      if (sugarPer100g <= _gVeryHighThreshold) return 'High';
-      return 'Very High';
+      thresholds = [_gLowThreshold, _gModerateThreshold, _gHighThreshold, _gVeryHighThreshold];
     }
+
+    for (int i = 0; i < thresholds.length; i++) {
+      if (sugarPer100g <= thresholds[i]) {
+        return labels[i];
+      }
+    }
+    return labels.last;
   }
 
   /// Get maximum value for progress calculation
@@ -68,5 +67,55 @@ class SugarLevelUtils {
   static double getProgressValue(double sugarPer100g, String productUnit) {
     final maxValue = getMaxValue(productUnit);
     return (sugarPer100g / maxValue).clamp(0.0, 1.0);
+  }
+
+  // Daily sugar thresholds (based on WHO recommendation of 25g/day)
+  static const double _dailyLowThreshold = 15.0;    // Under 15g/day
+  static const double _dailyModerateThreshold = 30.0; // 15-30g/day
+  static const double _dailyHighThreshold = 50.0;    // 30-50g/day
+  static const double _dailyVeryHighThreshold = 75.0; // 50-75g/day
+
+  /// Get color for daily sugar totals
+  static Color getDailySugarColor(double totalSugar) {
+    List<Color> colors = [
+      const Color(0xFF2E7D32),   // Low sugar - Dark green (good)
+      const Color(0xFF8BC34A),   // Low impact - Light green (okay)
+      const Color(0xFFFF9800),  // A bit too sweet - Orange (caution)
+      const Color(0xFFF44336),  // Too sweet - Red (bad)
+      const Color(0xFFB71C1C),  // Much too sweet - Dark red (very bad)
+    ];
+    
+    List<double> thresholds = [
+      _dailyLowThreshold,
+      _dailyModerateThreshold,
+      _dailyHighThreshold,
+      _dailyVeryHighThreshold,
+    ];
+    
+    for (int i = 0; i < thresholds.length; i++) {
+      if (totalSugar <= thresholds[i]) {
+        return colors[i];
+      }
+    }
+    return colors.last;
+  }
+
+  /// Get text description for daily sugar totals
+  static String getDailySugarText(double totalSugar) {
+    List<String> labels = ['Low sugar', 'Low impact', 'A bit too sweet', 'Too sweet', 'Much too sweet'];
+    
+    List<double> thresholds = [
+      _dailyLowThreshold,
+      _dailyModerateThreshold,
+      _dailyHighThreshold,
+      _dailyVeryHighThreshold,
+    ];
+    
+    for (int i = 0; i < thresholds.length; i++) {
+      if (totalSugar <= thresholds[i]) {
+        return labels[i];
+      }
+    }
+    return labels.last;
   }
 }

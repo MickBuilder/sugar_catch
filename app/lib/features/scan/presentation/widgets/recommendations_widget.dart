@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sweetr/core/analytics/analytics_service.dart';
+import 'package:sweetr/core/utils/sugar_level_utils.dart';
 import 'package:sweetr/features/scan/data/product_model.dart';
 import 'package:sweetr/features/scan/data/recommendations_service.dart';
 
@@ -279,7 +280,7 @@ class _RecommendationsWidgetState extends ConsumerState<RecommendationsWidget> {
                           width: 8,
                           height: 8,
                           decoration: BoxDecoration(
-                            color: _getSugarColor(recommendation.sugarsPer100g, recommendation.productQuantityUnit ?? 'g'),
+                            color: SugarLevelUtils.getSugarLevelColor(recommendation.sugarsPer100g, recommendation.productQuantityUnit ?? 'g'),
                             shape: BoxShape.circle,
                           ),
                         ),
@@ -290,7 +291,7 @@ class _RecommendationsWidgetState extends ConsumerState<RecommendationsWidget> {
                             '${recommendation.sugarsPer100g.toStringAsFixed(1)}g sugar/100${recommendation.productQuantityUnit ?? 'g'}',
                             style: TextStyle(
                               fontSize: 10,
-                              color: _getSugarColor(recommendation.sugarsPer100g, recommendation.productQuantityUnit ?? 'g'),
+                              color: SugarLevelUtils.getSugarLevelColor(recommendation.sugarsPer100g, recommendation.productQuantityUnit ?? 'g'),
                               fontWeight: FontWeight.w500,
                             ),
                             maxLines: 1,
@@ -309,26 +310,6 @@ class _RecommendationsWidgetState extends ConsumerState<RecommendationsWidget> {
     );
   }
 
-  /// Get color based on sugar content
-  Color _getSugarColor(double sugarPer100g, String unit) {
-    if (unit.toLowerCase() == 'ml') {
-      // For beverages (ml)
-      if (sugarPer100g <= 1.5) return CupertinoColors.systemGreen;
-      if (sugarPer100g <= 3.0) return CupertinoColors.systemGreen;
-      if (sugarPer100g <= 5.0) return CupertinoColors.systemOrange;
-      if (sugarPer100g <= 7.0) return CupertinoColors.systemOrange;
-      if (sugarPer100g <= 10.0) return CupertinoColors.systemRed;
-      return CupertinoColors.systemRed;
-    } else {
-      // For solid foods (g)
-      if (sugarPer100g <= 5.0) return CupertinoColors.systemGreen;
-      if (sugarPer100g <= 10.0) return CupertinoColors.systemGreen;
-      if (sugarPer100g <= 15.0) return CupertinoColors.systemOrange;
-      if (sugarPer100g <= 20.0) return CupertinoColors.systemOrange;
-      if (sugarPer100g <= 25.0) return CupertinoColors.systemRed;
-      return CupertinoColors.systemRed;
-    }
-  }
 
   // Analytics tracking methods
   Future<void> _trackRecommendationsViewed() async {

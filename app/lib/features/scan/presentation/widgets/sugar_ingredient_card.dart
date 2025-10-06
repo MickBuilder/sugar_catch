@@ -15,9 +15,11 @@ class SugarIngredientCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderColor = isSugarIngredient ? Colors.red[300]! : Colors.grey[300]!;
+    final borderColor = isSugarIngredient
+        ? Colors.red[300]!
+        : Colors.grey[300]!;
     final badgeColor = isSugarIngredient ? Colors.red[600]! : Colors.grey[600]!;
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -44,7 +46,10 @@ class SugarIngredientCard extends StatelessWidget {
               ),
               if (isSugarIngredient && dailyLimitMultiplier > 1) ...[
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: badgeColor,
                     borderRadius: BorderRadius.circular(12),
@@ -104,54 +109,54 @@ class SugarIngredientCard extends StatelessWidget {
 
   String _getIngredientDescription(String ingredientName) {
     final name = ingredientName.toLowerCase();
-    
+
     if (isSugarIngredient) {
       // Sugar descriptions
-    if (name.contains('cane sugar') || name.contains('sugar cane')) {
-      return 'Cane sugar is a refined sweetener extracted from sugar cane. It provides empty calories with no nutritional value and can contribute to weight gain, diabetes, and tooth decay when consumed in excess.';
-    }
-    if (name.contains('high fructose corn syrup') || name.contains('hfcs')) {
-      return 'High fructose corn syrup is a highly processed sweetener made from corn starch. It has been linked to obesity, diabetes, and liver damage due to its high fructose content and how it\'s metabolized by the body.';
-    }
-    if (name.contains('honey')) {
-      return 'Honey is a natural sweetener produced by bees. While it contains some antioxidants and trace minerals, it\'s still high in sugar and should be consumed in moderation. It can raise blood sugar levels similar to regular sugar.';
-    }
-    if (name.contains('molasses')) {
-      return 'Molasses is a byproduct of sugar refining that contains some minerals like iron and calcium. However, it\'s still primarily sugar and should be consumed sparingly as part of a balanced diet.';
-    }
-    if (name.contains('brown rice syrup')) {
-      return 'Brown rice syrup is made by breaking down brown rice starch into sugars. While it may seem healthier than regular sugar, it\'s still a concentrated sweetener that can spike blood sugar levels.';
-    }
-    if (name.contains('agave')) {
-      return 'Agave syrup is derived from the agave plant and is often marketed as a natural alternative to sugar. However, it\'s very high in fructose and can be more harmful to liver health than regular sugar.';
-    }
-    if (name.contains('maple syrup')) {
-      return 'Maple syrup is made from the sap of maple trees and contains some antioxidants and minerals. While it\'s a more natural option, it\'s still high in sugar and should be used in moderation.';
-    }
-    if (name.contains('coconut sugar')) {
-      return 'Coconut sugar is made from the sap of coconut palm trees. It has a lower glycemic index than regular sugar and contains some nutrients, but it\'s still primarily sugar and should be consumed sparingly.';
-    }
-    if (name.contains('dextrose')) {
-      return 'Dextrose is a simple sugar derived from corn that\'s chemically identical to glucose. It\'s rapidly absorbed into the bloodstream and can cause blood sugar spikes, making it problematic for people with diabetes.';
-    }
-    if (name.contains('fructose')) {
-      return 'Fructose is a natural sugar found in fruits, but when isolated and added to foods, it can contribute to insulin resistance, fatty liver disease, and metabolic syndrome when consumed in excess.';
-    }
-    if (name.contains('glucose')) {
-      return 'Glucose is a simple sugar that\'s the primary energy source for cells. While essential for life, added glucose in processed foods can cause rapid blood sugar spikes and contribute to insulin resistance.';
-    }
-    if (name.contains('sucrose')) {
-      return 'Sucrose is table sugar, composed of glucose and fructose. It provides empty calories with no nutritional value and can contribute to weight gain, diabetes, and tooth decay when consumed in excess.';
-    }
-    if (name.contains('lactose')) {
-      return 'Lactose is the natural sugar found in milk and dairy products. While it\'s a natural component of dairy, some people are intolerant to lactose and may experience digestive issues when consuming it.';
-    }
-    if (name.contains('maltose')) {
-      return 'Maltose is a sugar formed from two glucose molecules, commonly found in malted foods and some processed products. It can cause rapid blood sugar spikes similar to other simple sugars.';
-    }
-    
-    // Generic description for other sugars
-    return 'This is a form of added sugar that provides empty calories with no nutritional value. Regular consumption of added sugars can contribute to weight gain, diabetes, heart disease, and tooth decay. It\'s recommended to limit added sugar intake to less than 10% of daily calories.';
+      if (name.contains('cane sugar') || name.contains('sugar cane')) {
+        return 'Cane sugar is a refined sweetener extracted from sugar cane. It provides empty calories with no nutritional value and can contribute to weight gain, diabetes, and tooth decay when consumed in excess.';
+      }
+      if (name.contains('high fructose corn syrup') || name.contains('hfcs')) {
+        return 'High fructose corn syrup is a highly processed sweetener made from corn starch. It has been linked to obesity, diabetes, and liver damage due to its high fructose content and how it\'s metabolized by the body.';
+      }
+      if (name.contains('honey')) {
+        return 'Honey is a natural sweetener produced by bees. While it contains some antioxidants and trace minerals, it\'s still high in sugar and should be consumed in moderation. It can raise blood sugar levels similar to regular sugar.';
+      }
+      if (name.contains('molasses')) {
+        return 'Molasses is a byproduct of sugar refining that contains some minerals like iron and calcium. However, it\'s still primarily sugar and should be consumed sparingly as part of a balanced diet.';
+      }
+      if (name.contains('brown rice syrup')) {
+        return 'Brown rice syrup is made by breaking down brown rice starch into sugars. While it may seem healthier than regular sugar, it\'s still a concentrated sweetener that can spike blood sugar levels.';
+      }
+      if (name.contains('agave')) {
+        return 'Agave syrup is derived from the agave plant and is often marketed as a natural alternative to sugar. However, it\'s very high in fructose and can be more harmful to liver health than regular sugar.';
+      }
+      if (name.contains('maple syrup')) {
+        return 'Maple syrup is made from the sap of maple trees and contains some antioxidants and minerals. While it\'s a more natural option, it\'s still high in sugar and should be used in moderation.';
+      }
+      if (name.contains('coconut sugar')) {
+        return 'Coconut sugar is made from the sap of coconut palm trees. It has a lower glycemic index than regular sugar and contains some nutrients, but it\'s still primarily sugar and should be consumed sparingly.';
+      }
+      if (name.contains('dextrose')) {
+        return 'Dextrose is a simple sugar derived from corn that\'s chemically identical to glucose. It\'s rapidly absorbed into the bloodstream and can cause blood sugar spikes, making it problematic for people with diabetes.';
+      }
+      if (name.contains('fructose')) {
+        return 'Fructose is a natural sugar found in fruits, but when isolated and added to foods, it can contribute to insulin resistance, fatty liver disease, and metabolic syndrome when consumed in excess.';
+      }
+      if (name.contains('glucose')) {
+        return 'Glucose is a simple sugar that\'s the primary energy source for cells. While essential for life, added glucose in processed foods can cause rapid blood sugar spikes and contribute to insulin resistance.';
+      }
+      if (name.contains('sucrose')) {
+        return 'Sucrose is table sugar, composed of glucose and fructose. It provides empty calories with no nutritional value and can contribute to weight gain, diabetes, and tooth decay when consumed in excess.';
+      }
+      if (name.contains('lactose')) {
+        return 'Lactose is the natural sugar found in milk and dairy products. While it\'s a natural component of dairy, some people are intolerant to lactose and may experience digestive issues when consuming it.';
+      }
+      if (name.contains('maltose')) {
+        return 'Maltose is a sugar formed from two glucose molecules, commonly found in malted foods and some processed products. It can cause rapid blood sugar spikes similar to other simple sugars.';
+      }
+
+      // Generic description for other sugars
+      return 'This is a form of added sugar that provides empty calories with no nutritional value. Regular consumption of added sugars can contribute to weight gain, diabetes, heart disease, and tooth decay. It\'s recommended to limit added sugar intake to less than 10% of daily calories.';
     } else {
       // Non-sugar ingredient descriptions
       if (name.contains('water')) {
@@ -195,7 +200,7 @@ class SugarIngredientCard extends StatelessWidget {
       } else if (name.contains('vitamin') || name.contains('mineral')) {
         return 'Vitamins and minerals are essential nutrients that support various bodily functions. They may be added to foods to enhance nutritional value.';
       }
-      
+
       return 'This ingredient is part of the product formulation. For specific health information, consult with a healthcare professional or nutritionist.';
     }
   }
