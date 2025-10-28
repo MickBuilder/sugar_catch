@@ -1,12 +1,12 @@
-# **Sweetr - Hidden Sugar Scanner**
+# **Clean Foods - Hidden Sugar Scanner**
 
-**Struggling with hidden sugars sabotaging your health goals? Sweetr is your personal sugar detective that reveals the shocking truth about "healthy" foods. Join 50,000+ users who've transformed their health by tracking hidden sugars.**
+**Struggling with hidden sugars sabotaging your health goals? Clean Foods is your personal sugar detective that reveals the shocking truth about "healthy" foods. Join 50,000+ users who've transformed their health by tracking hidden sugars.**
 
 ## **The Hidden Sugar Problem**
 
 Think your yogurt has zero sugar? Think again. Up to 80% of "healthy" foods contain hidden sugars that sabotage your health goals. The average person consumes 17 teaspoons of hidden sugar daily - even in oatmeal, granola bars, and salad dressings.
 
-## **How Sweetr Works**
+## **How Clean Foods Works**
 
 ### **1. Instant Barcode Scanning**
 Simply scan any product barcode to instantly reveal its hidden sugar content. Our powerful OpenFoodFacts database covers millions of products worldwide.
@@ -28,7 +28,7 @@ Get instant recommendations for low-sugar alternatives when you scan high-sugar 
 ### **5. Comprehensive Analysis**
 See exactly what's inside your food with detailed ingredient breakdowns, sweetener detection, and health impact assessments.
 
-## **Why Sweetr?**
+## **Why Clean Foods?**
 
 **Scientific Approach**: Based on WHO recommendations (25g daily limit) with personalized goal setting
 **Comprehensive Database**: Powered by OpenFoodFacts with millions of products
@@ -66,17 +66,17 @@ Users report:
 
 ## **Start Your Sugar-Free Journey**
 
-Download Sweetr now and discover the shocking truth about hidden sugars in your food. Your health transformation starts with awareness.
+Download Clean Foods now and discover the shocking truth about hidden sugars in your food. Your health transformation starts with awareness.
 
 ---
 
 ## **SUBSCRIPTION INFORMATION**
 
-Full access to unlimited scanning, advanced analytics, and all premium features is available through Sweetr Premium subscription (Monthly/Yearly). 
+Full access to unlimited scanning, advanced analytics, and all premium features is available through Clean Foods Premium subscription (Monthly/Yearly). 
 
 **7-day free trial** - No payment today, cancel anytime.
 
-If you choose a Sweetr Premium subscription, payment will be charged to your iTunes Account at confirmation of purchase. The subscription will automatically renew unless turned off in your iTunes Account Settings at least 24 hours before the current period ends. You can manage your subscription and turn off auto-renew in your iTunes Account Settings.
+If you choose a Clean Foods Premium subscription, payment will be charged to your iTunes Account at confirmation of purchase. The subscription will automatically renew unless turned off in your iTunes Account Settings at least 24 hours before the current period ends. You can manage your subscription and turn off auto-renew in your iTunes Account Settings.
 
 ---
 

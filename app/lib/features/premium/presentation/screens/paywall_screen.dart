@@ -259,7 +259,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         
         // Title
         const Text(
-          'Get Sweetr Premium',
+          'Get Clean Foods Premium',
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,

@@ -1,6 +1,6 @@
 # Support
 
-We're here to help you get the most out of Sweetr
+We're here to help you get the most out of Clean Foods
 
 Last updated: 27 June, 2025
 
@@ -23,7 +23,7 @@ If something isn't working as expected, please include the following when you re
 
 ## Request a Feature
 
-We're building Sweetr with our community. Tell us what would make the app more useful for you.
+We're building Clean Foods with our community. Tell us what would make the app more useful for you.
 
 * Describe the feature and the problem it solves
 * Share examples of apps that do this well (optional)
@@ -90,4 +90,4 @@ The app requires an internet connection to scan products and access nutritional 
 
 ## Thank You
 
-Your feedback helps us make Sweetr better every day. Thank you for your trust and support in helping you uncover hidden sugars and make healthier food choices!
+Your feedback helps us make Clean Foods better every day. Thank you for your trust and support in helping you uncover hidden sugars and make healthier food choices!

@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.mikebapps" "\0"
-            VALUE "FileDescription", "Sweetr" "\0"
+            VALUE "FileDescription", "Clean Foods" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "Sweetr" "\0"
+            VALUE "InternalName", "Clean Foods" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2025 com.mikebapps. All rights reserved." "\0"
-            VALUE "OriginalFilename", "Sweetr.exe" "\0"
-            VALUE "ProductName", "Sweetr" "\0"
+            VALUE "OriginalFilename", "CleanFoods.exe" "\0"
+            VALUE "ProductName", "Clean Foods" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

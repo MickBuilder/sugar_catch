@@ -55,7 +55,7 @@ class _TestimonialsWidgetState extends ConsumerState<TestimonialsWidget> {
 
           // Subtitle
           Text(
-            'Sweetr is supported by and made for people like you',
+            'Clean Foods is supported by and made for people like you',
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
@@ -67,7 +67,7 @@ class _TestimonialsWidgetState extends ConsumerState<TestimonialsWidget> {
 
           // Community Section
           const Text(
-            'Sweetr is backed by people like you',
+            'Clean Foods is backed by people like you',
             style: TextStyle(
               fontSize: 16,
               color: CupertinoColors.black,

@@ -70,7 +70,7 @@ class _SweetrAppState extends ConsumerState<SweetrApp> {
     final router = ref.watch(appRouterProvider);
 
     return CupertinoApp.router(
-      title: 'Sweetr',
+      title: 'Clean Foods',
       debugShowCheckedModeBanner: false,
       theme: const CupertinoThemeData(
         primaryColor: CupertinoColors.systemGreen,

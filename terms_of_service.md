@@ -1,6 +1,6 @@
-# Sweetr Terms of Use & Privacy Policy
+# Clean Foods Terms of Use & Privacy Policy
 
-Welcome to Sweetr. Before you can use our application, it is mandatory to agree to these Extended Terms of Use and Privacy Policy. The following terms apply to all users of our application.
+Welcome to Clean Foods. Before you can use our application, it is mandatory to agree to these Extended Terms of Use and Privacy Policy. The following terms apply to all users of our application.
 
 By accessing or using our services, you are confirming that you have read and understood these terms and agree to be legally bound by them. If you do not agree to these terms, you should not use our application or services.
 
@@ -16,7 +16,7 @@ By accessing or using our services, you are confirming that you have read and un
 
 ## Subscription Details
 
-Sweetr operates on a subscription basis with billing occurring on a monthly or yearly cycle.
+Clean Foods operates on a subscription basis with billing occurring on a monthly or yearly cycle.
 
 * **All Users:** We offer a 7-day free trial period during which all users can use our services without charge.
 
@@ -24,9 +24,9 @@ After the 7-day trial period, your chosen payment method will be automatically b
 
 ## Health and Nutrition Disclaimer
 
-**No Medical Advice:** Sweetr is designed to help you track hidden sugars in food products and make more informed dietary choices. However, our recommendations are for informational purposes only and should not be considered medical, nutritional, or healthcare advice.
+**No Medical Advice:** Clean Foods is designed to help you track hidden sugars in food products and make more informed dietary choices. However, our recommendations are for informational purposes only and should not be considered medical, nutritional, or healthcare advice.
 
-**User Responsibility:** By using Sweetr, you acknowledge that:
+**User Responsibility:** By using Clean Foods, you acknowledge that:
 
 * You are fully responsible for verifying the nutritional information provided by the app
 * You will not rely solely on the app for decisions regarding your health or dietary choices
@@ -37,24 +37,24 @@ After the 7-day trial period, your chosen payment method will be automatically b
 
 ## Liability Disclaimer
 
-**No Health Guarantees:** Sweetr and its developers assume no liability for any health-related issues, dietary problems, or adverse effects resulting from your use of the app or following its recommendations.
+**No Health Guarantees:** Clean Foods and its developers assume no liability for any health-related issues, dietary problems, or adverse effects resulting from your use of the app or following its recommendations.
 
-**AS IS Basis:** The app is provided on an "AS IS" and "as available" basis, with no warranties—either express or implied—for any services. To the maximum extent permitted by law, Sweetr disclaims all implied warranties, including, without limitation, warranties related to merchantability, fitness for a particular purpose, and non-infringement.
+**AS IS Basis:** The app is provided on an "AS IS" and "as available" basis, with no warranties—either express or implied—for any services. To the maximum extent permitted by law, Clean Foods disclaims all implied warranties, including, without limitation, warranties related to merchantability, fitness for a particular purpose, and non-infringement.
 
-**Limitation of Liability:** Under no circumstances shall Sweetr be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to your use or inability to use our services.
+**Limitation of Liability:** Under no circumstances shall Clean Foods be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to your use or inability to use our services.
 
 ## Indemnification
 
-You agree to indemnify, defend, and hold harmless Sweetr, its affiliates, officers, employees, and agents from any claims, liabilities, damages, losses, and expenses (including reasonable attorneys' fees) arising out of or in any way connected with your access to or use of our services, or your breach of these Terms.
+You agree to indemnify, defend, and hold harmless Clean Foods, its affiliates, officers, employees, and agents from any claims, liabilities, damages, losses, and expenses (including reasonable attorneys' fees) arising out of or in any way connected with your access to or use of our services, or your breach of these Terms.
 
 ## Termination and Modification
 
 * **Termination:** We reserve the right to suspend or terminate your access to our services at any time without prior notice, especially if you violate these Terms.
-* **Modification of Terms:** Sweetr reserves the right to update or modify these Terms at any time. Any changes will be posted on our website, and your continued use of our services after such modifications will constitute your acceptance of the new terms.
+* **Modification of Terms:** Clean Foods reserves the right to update or modify these Terms at any time. Any changes will be posted on our website, and your continued use of our services after such modifications will constitute your acceptance of the new terms.
 
 ## Privacy Policy
 
-At Sweetr, we value and respect your privacy. We are committed to safeguarding your personal information and ensuring it is collected, stored, and used in accordance with applicable data protection laws.
+At Clean Foods, we value and respect your privacy. We are committed to safeguarding your personal information and ensuring it is collected, stored, and used in accordance with applicable data protection laws.
 
 ### Information Collection
 
