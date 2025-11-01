@@ -2,16 +2,26 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sweetr/core/analytics/analytics_service.dart';
-import 'package:sweetr/features/onboarding/onboarding_provider.dart';
-import 'package:sweetr/features/onboarding/presentation/widgets/welcome_screen_widget.dart';
-import 'package:sweetr/features/onboarding/presentation/widgets/hidden_sugar_problem_widget.dart';
-import 'package:sweetr/features/onboarding/presentation/widgets/how_it_works_widget.dart';
-import 'package:sweetr/features/onboarding/presentation/widgets/sugar_goals_widget.dart';
-import 'package:sweetr/features/onboarding/presentation/widgets/motivation_widget.dart';
-import 'package:sweetr/features/onboarding/presentation/widgets/testimonials_widget.dart';
-import 'package:sweetr/features/onboarding/presentation/widgets/complete_widget.dart';
-import 'package:sweetr/features/premium/presentation/screens/paywall_screen.dart';
+import 'package:cleanfood/core/analytics/analytics_service.dart';
+import 'package:cleanfood/features/onboarding/onboarding_provider.dart';
+import 'package:cleanfood/features/onboarding/presentation/widgets/welcome_screen_widget.dart';
+import 'package:cleanfood/features/onboarding/presentation/widgets/gender_question_widget.dart';
+import 'package:cleanfood/features/onboarding/presentation/widgets/discovery_question_widget.dart';
+import 'package:cleanfood/features/onboarding/presentation/widgets/healthy_taste_question_widget.dart';
+import 'package:cleanfood/features/onboarding/presentation/widgets/comfort_eating_question_widget.dart';
+import 'package:cleanfood/features/onboarding/presentation/widgets/frequency_question_widget.dart';
+import 'package:cleanfood/features/onboarding/presentation/widgets/stress_eating_question_widget.dart';
+import 'package:cleanfood/features/onboarding/presentation/widgets/age_question_widget.dart';
+import 'package:cleanfood/features/onboarding/presentation/widgets/boredom_eating_question_widget.dart';
+import 'package:cleanfood/features/onboarding/presentation/widgets/personalizing_widget.dart';
+import 'package:cleanfood/features/onboarding/presentation/widgets/education_weight_widget.dart';
+import 'package:cleanfood/features/onboarding/presentation/widgets/education_disease_widget.dart';
+import 'package:cleanfood/features/onboarding/presentation/widgets/education_anxiety_widget.dart';
+import 'package:cleanfood/features/onboarding/presentation/widgets/education_support_widget.dart';
+import 'package:cleanfood/features/onboarding/presentation/widgets/feature_scanning_widget.dart';
+import 'package:cleanfood/features/onboarding/presentation/widgets/feature_additives_widget.dart';
+import 'package:cleanfood/features/onboarding/presentation/widgets/testimonials_widget.dart';
+import 'package:cleanfood/features/premium/presentation/screens/paywall_screen.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -26,12 +36,22 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   DateTime? _screenStartTime;
   final List<String> _screenNames = [
     'welcome',
-    'hidden_sugar_problem', 
-    'how_it_works',
-    'sugar_goals',
-    'motivation',
-    'testimonials',
-    'complete'
+    'gender',
+    'discovery',
+    'healthy_taste',
+    'comfort_eating',
+    'frequency',
+    'stress_eating',
+    'age',
+    'boredom_eating',
+    'personalizing',
+    'education_weight',
+    'education_disease',
+    'education_anxiety',
+    'education_support',
+    'feature_scanning',
+    'feature_additives',
+    'testimonials'
   ];
 
   @override
@@ -52,7 +72,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     // Track screen completion
     _trackScreenCompleted(_currentPage);
     
-    if (_currentPage < 6) {
+    if (_currentPage < 16) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -118,8 +138,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       
       await analytics.trackOnboardingCompleted(
         totalTime,
-        onboardingData.sugarGoal.title,
-        onboardingData.motivations.map((m) => m.title).toList(),
+        onboardingData.gender ?? 'unknown',
+        [onboardingData.discoverySource ?? 'unknown'],
       );
     } catch (e) {
       log('Analytics error: $e', name: 'Onboarding');
@@ -144,29 +164,67 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   });
                   _trackScreenViewed(index);
                 },
-                itemCount: 7, // Fixed count to match our 7 screens
+                itemCount: 17, // Total number of screens
                 itemBuilder: (context, index) {
                   switch (index) {
                     case 0:
                       return WelcomeScreenWidget(onNext: _nextPage);
                     case 1:
-                      return HiddenSugarProblemWidget(onNext: _nextPage);
+                      return GenderQuestionWidget(
+                        onNext: _nextPage,
+                        onPrevious: _previousPage,
+                      );
                     case 2:
-                      return HowItWorksWidget(onNext: _nextPage);
+                      return DiscoveryQuestionWidget(
+                        onNext: _nextPage,
+                        onPrevious: _previousPage,
+                      );
                     case 3:
-                      return SugarGoalsWidget(
+                      return HealthyTasteQuestionWidget(
                         onNext: _nextPage,
                         onPrevious: _previousPage,
                       );
                     case 4:
-                      return MotivationWidget(
+                      return ComfortEatingQuestionWidget(
                         onNext: _nextPage,
                         onPrevious: _previousPage,
                       );
                     case 5:
-                      return TestimonialsWidget(onNext: _nextPage);
+                      return FrequencyQuestionWidget(
+                        onNext: _nextPage,
+                        onPrevious: _previousPage,
+                      );
                     case 6:
-                      return CompleteWidget(onNext: _nextPage);
+                      return StressEatingQuestionWidget(
+                        onNext: _nextPage,
+                        onPrevious: _previousPage,
+                      );
+                    case 7:
+                      return AgeQuestionWidget(
+                        onNext: _nextPage,
+                        onPrevious: _previousPage,
+                      );
+                    case 8:
+                      return BoredomEatingQuestionWidget(
+                        onNext: _nextPage,
+                        onPrevious: _previousPage,
+                      );
+                    case 9:
+                      return PersonalizingWidget(onNext: _nextPage);
+                    case 10:
+                      return EducationWeightWidget(onNext: _nextPage);
+                    case 11:
+                      return EducationDiseaseWidget(onNext: _nextPage);
+                    case 12:
+                      return EducationAnxietyWidget(onNext: _nextPage);
+                    case 13:
+                      return EducationSupportWidget(onNext: _nextPage);
+                    case 14:
+                      return FeatureScanningWidget(onNext: _nextPage);
+                    case 15:
+                      return FeatureAdditivesWidget(onNext: _nextPage);
+                    case 16:
+                      return TestimonialsWidget(onNext: _nextPage);
                     default:
                       return WelcomeScreenWidget(onNext: _nextPage);
                   }

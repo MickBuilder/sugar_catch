@@ -1,9 +1,9 @@
 import 'dart:developer';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:sweetr/features/scan/data/product_model.dart';
-import 'package:sweetr/core/constants/sugar_aliases.dart';
-import 'package:sweetr/core/services/cache_service.dart';
+import 'package:cleanfood/features/scan/data/product_model.dart';
+import 'package:cleanfood/core/constants/sugar_aliases.dart';
+import 'package:cleanfood/core/services/cache_service.dart';
 
 class OpenFoodFactsApi {
   static const String baseUrl = 'https://world.openfoodfacts.org';
@@ -139,30 +139,151 @@ class OpenFoodFactsApi {
     log('🌐 [API] allergensTags: $allergensTags', name: 'Scan');
     log('🌐 [API] tracesTags: $tracesTags', name: 'Scan');
 
+    // Parse all additional fields
+    final brandsTags = (productData['brands_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final ingredientsAnalysisTags = (productData['ingredients_analysis_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final additivesOriginalTags = (productData['additives_original_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final labelsTags = (productData['labels_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final labelsHierarchy = (productData['labels_hierarchy'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final processingTags = (productData['processing_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final packagingTags = (productData['packaging_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final countriesTags = (productData['countries_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final originsTags = (productData['origins_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final storesTags = (productData['stores_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final purchasePlacesTags = (productData['purchase_places_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final embCodesTags = (productData['emb_codes_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final popularityTags = (productData['popularity_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final statesTags = (productData['states_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final unknownNutrientsTags = (productData['unknown_nutrients_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+    final foodGroupsTags = (productData['food_groups_tags'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
+
+    // Parse nutrient levels (map of nutrient -> level)
+    final nutrientLevelsRaw = productData['nutrient_levels'] as Map<String, dynamic>?;
+    Map<String, String>? nutrientLevels;
+    if (nutrientLevelsRaw != null) {
+      nutrientLevels = nutrientLevelsRaw.map((key, value) => 
+        MapEntry(key, value.toString()));
+    }
+
+
     final product = Product(
       code: barcode,
       productName: productData['product_name']?.toString() ?? 'Unknown Product',
       productNameEn: productData['product_name_en']?.toString(),
+      genericName: productData['generic_name']?.toString(),
       brands: productData['brands']?.toString(),
-      sugarsPer100g: sugarsPer100g,
-      sugarsServing: sugarsServing,
-      servingSize: productData['serving_size']?.toString(),
-      servingQuantity: productData['serving_quantity']?.toString(),
+      brandsTags: brandsTags,
       quantity: productData['quantity']?.toString(),
       productQuantity: productData['product_quantity']?.toString(),
       productQuantityUnit: productData['product_quantity_unit']?.toString(),
-      ingredientsList: ingredientsList,
-      ingredientsTags: ingredientsTags,
+      servingSize: productData['serving_size']?.toString(),
+      servingQuantity: productData['serving_quantity']?.toString(),
       imageUrl: imageUrl,
       imageFrontUrl: productData['image_front_url']?.toString(),
+      imageFrontSmallUrl: productData['image_front_small_url']?.toString(),
+      imageNutritionUrl: productData['image_nutrition_url']?.toString(),
+      imageIngredientsUrl: productData['image_ingredients_url']?.toString(),
+      selectedImages: productData['selected_images'] as Map<String, dynamic>?,
+      ingredientsList: ingredientsList,
+      ingredientsText: productData['ingredients_text']?.toString(),
+      ingredientsTextEn: productData['ingredients_text_en']?.toString(),
+      ingredientsTags: ingredientsTags,
+      ingredientsAnalysisTags: ingredientsAnalysisTags,
+      ingredientsSweetenersN: ingredientsSweetenersN,
+      sugarsPer100g: sugarsPer100g,
+      sugarsServing: sugarsServing,
+      nutriments: nutriments,
+      nutrientLevels: nutrientLevels,
+      nutriscoreGrade: productData['nutriscore_grade']?.toString(),
+      nutriscoreScore: _parseInt(productData['nutriscore_score']),
+      nutriscoreData: productData['nutriscore'] as Map<String, dynamic>?,
       categories: categories,
       categoriesHierarchy: categoriesHierarchy,
       categoriesTags: categoriesTags,
+      additives: productData['additives']?.toString(),
       additivesTags: additivesTags,
+      additivesOriginalTags: additivesOriginalTags,
+      allergens: productData['allergens']?.toString(),
       allergensTags: allergensTags,
+      allergensFromIngredients: productData['allergens_from_ingredients']?.toString(),
+      allergensFromUser: productData['allergens_from_user']?.toString(),
+      traces: productData['traces']?.toString(),
       tracesTags: tracesTags,
-      ingredientsSweetenersN: ingredientsSweetenersN,
-      nutriments: nutriments,
+      labels: productData['labels']?.toString(),
+      labelsTags: labelsTags,
+      labelsHierarchy: labelsHierarchy,
+      ecoscoreGrade: productData['ecoscore_grade']?.toString(),
+      ecoscoreScore: _parseInt(productData['ecoscore_score']),
+      novaGroup: _parseInt(productData['nova_group']),
+      novaGroups: productData['nova_groups']?.toString(),
+      processing: productData['processing']?.toString(),
+      processingTags: processingTags,
+      packaging: productData['packaging']?.toString(),
+      packagingTags: packagingTags,
+      countries: productData['countries']?.toString(),
+      countriesTags: countriesTags,
+      origins: productData['origins']?.toString(),
+      originsTags: originsTags,
+      stores: productData['stores']?.toString(),
+      storesTags: storesTags,
+      purchasePlaces: productData['purchase_places']?.toString(),
+      purchasePlacesTags: purchasePlacesTags,
+      embCodes: productData['emb_codes']?.toString(),
+      embCodesTags: embCodesTags,
+      creator: productData['creator']?.toString(),
+      createdT: _parseInt(productData['created_t']),
+      lastModifiedT: _parseInt(productData['last_modified_t']),
+      completeness: _parseDouble(productData['completeness']),
+      popularityTags: popularityTags,
+      states: productData['states']?.toString(),
+      statesTags: statesTags,
+      interfaceVersionCreated: productData['interface_version_created']?.toString(),
+      interfaceVersionModified: productData['interface_version_modified']?.toString(),
+      unknownNutrientsTags: unknownNutrientsTags,
+      ingredientsN: _parseInt(productData['ingredients_n']),
+      rev: _parseInt(productData['rev']),
+      noNutriments: productData['no_nutriments']?.toString(),
+      ingredientsThatMayBeFromPalmOilN: _parseInt(productData['ingredients_that_may_be_from_palm_oil_n']),
+      ingredientsFromPalmOilN: _parseInt(productData['ingredients_from_palm_oil_n']),
+      ingredientsFromOrThatMayBeFromPalmOilN: _parseInt(productData['ingredients_from_or_that_may_be_from_palm_oil_n']),
+      nutritionGradeFr: productData['nutrition_grade_fr']?.toString(),
+      pnnsGroups1: productData['pnns_groups_1']?.toString(),
+      pnnsGroups2: productData['pnns_groups_2']?.toString(),
+      foodGroups: productData['food_groups']?.toString(),
+      foodGroupsTags: foodGroupsTags,
+      otherInformation: productData['other_information']?.toString(),
     );
 
     log('🌐 [API] Created Product: ${product.toString()}', name: 'Scan');
@@ -255,6 +376,13 @@ class OpenFoodFactsApi {
     if (value is double) return value;
     if (value is int) return value.toDouble();
     if (value is String) return double.tryParse(value);
+    return null;
+  }
+
+  int? _parseInt(dynamic value) {
+    if (value is int) return value;
+    if (value is double) return value.toInt();
+    if (value is String) return int.tryParse(value);
     return null;
   }
 }

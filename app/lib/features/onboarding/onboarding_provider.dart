@@ -1,14 +1,11 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sweetr/features/onboarding/data/onboarding_models.dart';
-import 'package:sweetr/features/onboarding/data/onboarding_service.dart';
+import 'package:cleanfood/features/onboarding/data/onboarding_models.dart';
+import 'package:cleanfood/features/onboarding/data/onboarding_service.dart';
 
 final onboardingDataProvider = StateNotifierProvider<OnboardingNotifier, OnboardingData>((ref) {
   return OnboardingNotifier();
 });
 
-final onboardingScreensProvider = Provider<List<OnboardingScreen>>((ref) {
-  return OnboardingService.getOnboardingScreens();
-});
 
 final testimonialsProvider = Provider<List<Testimonial>>((ref) {
   return OnboardingService.getTestimonials();
@@ -23,28 +20,44 @@ final hasCompletedOnboardingProvider = Provider<bool>((ref) {
 class OnboardingNotifier extends StateNotifier<OnboardingData> {
   OnboardingNotifier() : super(OnboardingService.getOnboardingData());
 
-  void updateSugarGoal(SugarGoal goal) {
-    state = state.copyWith(sugarGoal: goal);
+  void updateGender(String gender) {
+    state = state.copyWith(gender: gender);
     OnboardingService.saveOnboardingData(state);
   }
 
-  void updateMotivations(List<SugarMotivation> motivations) {
-    state = state.copyWith(motivations: motivations);
+  void updateDiscoverySource(String source) {
+    state = state.copyWith(discoverySource: source);
     OnboardingService.saveOnboardingData(state);
   }
 
-  void addMotivation(SugarMotivation motivation) {
-    final currentMotivations = List<SugarMotivation>.from(state.motivations);
-    if (!currentMotivations.contains(motivation)) {
-      currentMotivations.add(motivation);
-      updateMotivations(currentMotivations);
-    }
+  void updateHealthyFoodTaste(String taste) {
+    state = state.copyWith(healthyFoodTaste: taste);
+    OnboardingService.saveOnboardingData(state);
   }
 
-  void removeMotivation(SugarMotivation motivation) {
-    final currentMotivations = List<SugarMotivation>.from(state.motivations);
-    currentMotivations.remove(motivation);
-    updateMotivations(currentMotivations);
+  void updateComfortEating(String frequency) {
+    state = state.copyWith(comfortEating: frequency);
+    OnboardingService.saveOnboardingData(state);
+  }
+
+  void updateProcessedFoodFrequency(String frequency) {
+    state = state.copyWith(processedFoodFrequency: frequency);
+    OnboardingService.saveOnboardingData(state);
+  }
+
+  void updateStressEating(String frequency) {
+    state = state.copyWith(stressEating: frequency);
+    OnboardingService.saveOnboardingData(state);
+  }
+
+  void updateAgeRange(String age) {
+    state = state.copyWith(ageRange: age);
+    OnboardingService.saveOnboardingData(state);
+  }
+
+  void updateBoredomEating(String frequency) {
+    state = state.copyWith(boredomEating: frequency);
+    OnboardingService.saveOnboardingData(state);
   }
 
   Future<void> completeOnboarding() async {

@@ -1,11 +1,11 @@
 {
-    "name": "Clean Foods",
-    "short_name": "Clean Foods",
+    "name": "Flean",
+    "short_name": "Flean",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#00ff00",
-    "description": "A new Flutter project.",
+    "description": "Your healthy food scanner with barcode scanning for nutrition insights.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

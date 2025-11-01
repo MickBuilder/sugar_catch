@@ -2,10 +2,10 @@ import 'dart:developer';
 import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sweetr/features/scan/data/openfoodfacts_api.dart';
-import 'package:sweetr/features/scan/data/product_model.dart';
-import 'package:sweetr/core/services/history_service.dart';
-import 'package:sweetr/core/services/cache_service.dart';
+import 'package:cleanfood/features/scan/data/openfoodfacts_api.dart';
+import 'package:cleanfood/features/scan/data/product_model.dart';
+import 'package:cleanfood/core/services/history_service.dart';
+import 'package:cleanfood/core/services/cache_service.dart';
 
 part 'scan_provider.g.dart';
 

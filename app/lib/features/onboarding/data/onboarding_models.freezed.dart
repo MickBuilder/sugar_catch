@@ -21,8 +21,14 @@ OnboardingData _$OnboardingDataFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$OnboardingData {
-  SugarGoal get sugarGoal => throw _privateConstructorUsedError;
-  List<SugarMotivation> get motivations => throw _privateConstructorUsedError;
+  String? get gender => throw _privateConstructorUsedError;
+  String? get discoverySource => throw _privateConstructorUsedError;
+  String? get healthyFoodTaste => throw _privateConstructorUsedError;
+  String? get comfortEating => throw _privateConstructorUsedError;
+  String? get processedFoodFrequency => throw _privateConstructorUsedError;
+  String? get stressEating => throw _privateConstructorUsedError;
+  String? get ageRange => throw _privateConstructorUsedError;
+  String? get boredomEating => throw _privateConstructorUsedError;
   bool get hasCompletedOnboarding => throw _privateConstructorUsedError;
 
   /// Serializes this OnboardingData to a JSON map.
@@ -43,8 +49,14 @@ abstract class $OnboardingDataCopyWith<$Res> {
   ) = _$OnboardingDataCopyWithImpl<$Res, OnboardingData>;
   @useResult
   $Res call({
-    SugarGoal sugarGoal,
-    List<SugarMotivation> motivations,
+    String? gender,
+    String? discoverySource,
+    String? healthyFoodTaste,
+    String? comfortEating,
+    String? processedFoodFrequency,
+    String? stressEating,
+    String? ageRange,
+    String? boredomEating,
     bool hasCompletedOnboarding,
   });
 }
@@ -64,20 +76,50 @@ class _$OnboardingDataCopyWithImpl<$Res, $Val extends OnboardingData>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? sugarGoal = null,
-    Object? motivations = null,
+    Object? gender = freezed,
+    Object? discoverySource = freezed,
+    Object? healthyFoodTaste = freezed,
+    Object? comfortEating = freezed,
+    Object? processedFoodFrequency = freezed,
+    Object? stressEating = freezed,
+    Object? ageRange = freezed,
+    Object? boredomEating = freezed,
     Object? hasCompletedOnboarding = null,
   }) {
     return _then(
       _value.copyWith(
-            sugarGoal: null == sugarGoal
-                ? _value.sugarGoal
-                : sugarGoal // ignore: cast_nullable_to_non_nullable
-                      as SugarGoal,
-            motivations: null == motivations
-                ? _value.motivations
-                : motivations // ignore: cast_nullable_to_non_nullable
-                      as List<SugarMotivation>,
+            gender: freezed == gender
+                ? _value.gender
+                : gender // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            discoverySource: freezed == discoverySource
+                ? _value.discoverySource
+                : discoverySource // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            healthyFoodTaste: freezed == healthyFoodTaste
+                ? _value.healthyFoodTaste
+                : healthyFoodTaste // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            comfortEating: freezed == comfortEating
+                ? _value.comfortEating
+                : comfortEating // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            processedFoodFrequency: freezed == processedFoodFrequency
+                ? _value.processedFoodFrequency
+                : processedFoodFrequency // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            stressEating: freezed == stressEating
+                ? _value.stressEating
+                : stressEating // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            ageRange: freezed == ageRange
+                ? _value.ageRange
+                : ageRange // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            boredomEating: freezed == boredomEating
+                ? _value.boredomEating
+                : boredomEating // ignore: cast_nullable_to_non_nullable
+                      as String?,
             hasCompletedOnboarding: null == hasCompletedOnboarding
                 ? _value.hasCompletedOnboarding
                 : hasCompletedOnboarding // ignore: cast_nullable_to_non_nullable
@@ -98,8 +140,14 @@ abstract class _$$OnboardingDataImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    SugarGoal sugarGoal,
-    List<SugarMotivation> motivations,
+    String? gender,
+    String? discoverySource,
+    String? healthyFoodTaste,
+    String? comfortEating,
+    String? processedFoodFrequency,
+    String? stressEating,
+    String? ageRange,
+    String? boredomEating,
     bool hasCompletedOnboarding,
   });
 }
@@ -118,20 +166,50 @@ class __$$OnboardingDataImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? sugarGoal = null,
-    Object? motivations = null,
+    Object? gender = freezed,
+    Object? discoverySource = freezed,
+    Object? healthyFoodTaste = freezed,
+    Object? comfortEating = freezed,
+    Object? processedFoodFrequency = freezed,
+    Object? stressEating = freezed,
+    Object? ageRange = freezed,
+    Object? boredomEating = freezed,
     Object? hasCompletedOnboarding = null,
   }) {
     return _then(
       _$OnboardingDataImpl(
-        sugarGoal: null == sugarGoal
-            ? _value.sugarGoal
-            : sugarGoal // ignore: cast_nullable_to_non_nullable
-                  as SugarGoal,
-        motivations: null == motivations
-            ? _value._motivations
-            : motivations // ignore: cast_nullable_to_non_nullable
-                  as List<SugarMotivation>,
+        gender: freezed == gender
+            ? _value.gender
+            : gender // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        discoverySource: freezed == discoverySource
+            ? _value.discoverySource
+            : discoverySource // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        healthyFoodTaste: freezed == healthyFoodTaste
+            ? _value.healthyFoodTaste
+            : healthyFoodTaste // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        comfortEating: freezed == comfortEating
+            ? _value.comfortEating
+            : comfortEating // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        processedFoodFrequency: freezed == processedFoodFrequency
+            ? _value.processedFoodFrequency
+            : processedFoodFrequency // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        stressEating: freezed == stressEating
+            ? _value.stressEating
+            : stressEating // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        ageRange: freezed == ageRange
+            ? _value.ageRange
+            : ageRange // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        boredomEating: freezed == boredomEating
+            ? _value.boredomEating
+            : boredomEating // ignore: cast_nullable_to_non_nullable
+                  as String?,
         hasCompletedOnboarding: null == hasCompletedOnboarding
             ? _value.hasCompletedOnboarding
             : hasCompletedOnboarding // ignore: cast_nullable_to_non_nullable
@@ -145,33 +223,43 @@ class __$$OnboardingDataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$OnboardingDataImpl implements _OnboardingData {
   const _$OnboardingDataImpl({
-    this.sugarGoal = SugarGoal.moderate,
-    final List<SugarMotivation> motivations = const [],
+    this.gender,
+    this.discoverySource,
+    this.healthyFoodTaste,
+    this.comfortEating,
+    this.processedFoodFrequency,
+    this.stressEating,
+    this.ageRange,
+    this.boredomEating,
     this.hasCompletedOnboarding = false,
-  }) : _motivations = motivations;
+  });
 
   factory _$OnboardingDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$OnboardingDataImplFromJson(json);
 
   @override
-  @JsonKey()
-  final SugarGoal sugarGoal;
-  final List<SugarMotivation> _motivations;
+  final String? gender;
   @override
-  @JsonKey()
-  List<SugarMotivation> get motivations {
-    if (_motivations is EqualUnmodifiableListView) return _motivations;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_motivations);
-  }
-
+  final String? discoverySource;
+  @override
+  final String? healthyFoodTaste;
+  @override
+  final String? comfortEating;
+  @override
+  final String? processedFoodFrequency;
+  @override
+  final String? stressEating;
+  @override
+  final String? ageRange;
+  @override
+  final String? boredomEating;
   @override
   @JsonKey()
   final bool hasCompletedOnboarding;
 
   @override
   String toString() {
-    return 'OnboardingData(sugarGoal: $sugarGoal, motivations: $motivations, hasCompletedOnboarding: $hasCompletedOnboarding)';
+    return 'OnboardingData(gender: $gender, discoverySource: $discoverySource, healthyFoodTaste: $healthyFoodTaste, comfortEating: $comfortEating, processedFoodFrequency: $processedFoodFrequency, stressEating: $stressEating, ageRange: $ageRange, boredomEating: $boredomEating, hasCompletedOnboarding: $hasCompletedOnboarding)';
   }
 
   @override
@@ -179,12 +267,21 @@ class _$OnboardingDataImpl implements _OnboardingData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$OnboardingDataImpl &&
-            (identical(other.sugarGoal, sugarGoal) ||
-                other.sugarGoal == sugarGoal) &&
-            const DeepCollectionEquality().equals(
-              other._motivations,
-              _motivations,
-            ) &&
+            (identical(other.gender, gender) || other.gender == gender) &&
+            (identical(other.discoverySource, discoverySource) ||
+                other.discoverySource == discoverySource) &&
+            (identical(other.healthyFoodTaste, healthyFoodTaste) ||
+                other.healthyFoodTaste == healthyFoodTaste) &&
+            (identical(other.comfortEating, comfortEating) ||
+                other.comfortEating == comfortEating) &&
+            (identical(other.processedFoodFrequency, processedFoodFrequency) ||
+                other.processedFoodFrequency == processedFoodFrequency) &&
+            (identical(other.stressEating, stressEating) ||
+                other.stressEating == stressEating) &&
+            (identical(other.ageRange, ageRange) ||
+                other.ageRange == ageRange) &&
+            (identical(other.boredomEating, boredomEating) ||
+                other.boredomEating == boredomEating) &&
             (identical(other.hasCompletedOnboarding, hasCompletedOnboarding) ||
                 other.hasCompletedOnboarding == hasCompletedOnboarding));
   }
@@ -193,8 +290,14 @@ class _$OnboardingDataImpl implements _OnboardingData {
   @override
   int get hashCode => Object.hash(
     runtimeType,
-    sugarGoal,
-    const DeepCollectionEquality().hash(_motivations),
+    gender,
+    discoverySource,
+    healthyFoodTaste,
+    comfortEating,
+    processedFoodFrequency,
+    stressEating,
+    ageRange,
+    boredomEating,
     hasCompletedOnboarding,
   );
 
@@ -217,8 +320,14 @@ class _$OnboardingDataImpl implements _OnboardingData {
 
 abstract class _OnboardingData implements OnboardingData {
   const factory _OnboardingData({
-    final SugarGoal sugarGoal,
-    final List<SugarMotivation> motivations,
+    final String? gender,
+    final String? discoverySource,
+    final String? healthyFoodTaste,
+    final String? comfortEating,
+    final String? processedFoodFrequency,
+    final String? stressEating,
+    final String? ageRange,
+    final String? boredomEating,
     final bool hasCompletedOnboarding,
   }) = _$OnboardingDataImpl;
 
@@ -226,9 +335,21 @@ abstract class _OnboardingData implements OnboardingData {
       _$OnboardingDataImpl.fromJson;
 
   @override
-  SugarGoal get sugarGoal;
+  String? get gender;
   @override
-  List<SugarMotivation> get motivations;
+  String? get discoverySource;
+  @override
+  String? get healthyFoodTaste;
+  @override
+  String? get comfortEating;
+  @override
+  String? get processedFoodFrequency;
+  @override
+  String? get stressEating;
+  @override
+  String? get ageRange;
+  @override
+  String? get boredomEating;
   @override
   bool get hasCompletedOnboarding;
 

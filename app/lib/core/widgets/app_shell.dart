@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sweetr/core/analytics/analytics_service.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:cleanfood/core/analytics/analytics_service.dart';
 
 class AppShell extends ConsumerWidget {
   final Widget child;
@@ -30,31 +31,21 @@ class AppShell extends ConsumerWidget {
       activeColor: CupertinoColors.systemGreen,
       inactiveColor: CupertinoColors.systemGrey,
       height: 60,
-      items: const [
+      items: [
         BottomNavigationBarItem(
-          icon: Icon(CupertinoIcons.house),
-          activeIcon: Icon(CupertinoIcons.house_fill),
+          icon: HugeIcon(icon: HugeIcons.strokeRoundedHome01, size: 24, color: CupertinoColors.systemGrey),
+          activeIcon: HugeIcon(icon: HugeIcons.strokeRoundedHome01, size: 24, color: CupertinoColors.systemGreen),
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(CupertinoIcons.add_circled),
-          activeIcon: Icon(CupertinoIcons.add_circled_solid),
-          label: 'Track',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(CupertinoIcons.qrcode_viewfinder),
-          activeIcon: Icon(CupertinoIcons.qrcode_viewfinder),
+          icon: HugeIcon(icon: HugeIcons.strokeRoundedQrCode01, size: 24, color: CupertinoColors.systemGrey),
+          activeIcon: HugeIcon(icon: HugeIcons.strokeRoundedQrCode01, size: 24, color: CupertinoColors.systemGreen),
           label: 'Scan',
         ),
         BottomNavigationBarItem(
-          icon: Icon(CupertinoIcons.clock),
-          activeIcon: Icon(CupertinoIcons.clock_fill),
+          icon: HugeIcon(icon: HugeIcons.strokeRoundedClock01, size: 24, color: CupertinoColors.systemGrey),
+          activeIcon: HugeIcon(icon: HugeIcons.strokeRoundedClock01, size: 24, color: CupertinoColors.systemGreen),
           label: 'History',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(CupertinoIcons.chart_bar),
-          activeIcon: Icon(CupertinoIcons.chart_bar_fill),
-          label: 'Progress',
         ),
       ],
       currentIndex: currentIndex,
@@ -66,14 +57,10 @@ class AppShell extends ConsumerWidget {
     switch (location) {
       case '/home':
         return 0;
-      case '/track':
-        return 1;
       case '/scan':
-        return 2;
+        return 1;
       case '/history':
-        return 3;
-      case '/progress':
-        return 4;
+        return 2;
       default:
         return 0;
     }
@@ -96,16 +83,10 @@ class AppShell extends ConsumerWidget {
         context.go('/home');
         break;
       case 1:
-        context.go('/track');
-        break;
-      case 2:
         context.go('/scan');
         break;
-      case 3:
+      case 2:
         context.go('/history');
-        break;
-      case 4:
-        context.go('/progress');
         break;
     }
   }
@@ -114,7 +95,7 @@ class AppShell extends ConsumerWidget {
   Future<void> _trackTabSwitched(WidgetRef ref, int fromIndex, int toIndex) async {
     try {
       final analytics = await ref.read(analyticsServiceProvider.future);
-      final tabNames = ['home', 'track', 'scan', 'history', 'progress'];
+      final tabNames = ['home', 'scan', 'history'];
       await analytics.trackTabSwitched(
         tabNames[fromIndex],
         tabNames[toIndex],

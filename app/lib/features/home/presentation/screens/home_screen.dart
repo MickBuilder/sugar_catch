@@ -2,23 +2,22 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sweetr/core/analytics/analytics_service.dart';
-import 'package:sweetr/core/services/history_service.dart';
-import 'package:sweetr/core/utils/sugar_level_utils.dart';
-import 'package:sweetr/features/track/track_provider.dart';
-import 'package:sweetr/features/track/presentation/widgets/daily_log_entry_widget.dart';
-import 'package:sweetr/features/track/data/track_models.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:cleanfood/core/analytics/analytics_service.dart';
+import 'package:cleanfood/core/services/history_service.dart';
+import 'package:cleanfood/features/history/presentation/widgets/history_item_widget.dart';
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final weeklyData = useState<Map<String, double>>({});
+    final recentScans = useState<List<HistoryItem>>([]);
 
     useEffect(() {
-      // Load weekly data
-      weeklyData.value = HistoryService.getWeeklySugarData();
+      // Load recent scans
+      recentScans.value = HistoryService.getRecentHistory(limit: 5);
       
       // Track screen view
       _trackScreenViewed(ref);
@@ -27,7 +26,7 @@ class HomeScreen extends HookConsumerWidget {
     }, []);
 
     return CupertinoPageScaffold(
-      backgroundColor: CupertinoColors.systemGroupedBackground,
+      backgroundColor: const Color(0xFFF5F5F5), // Light gray background matching design
       navigationBar: CupertinoNavigationBar(
         backgroundColor: CupertinoColors.systemBackground,
         middle: const Text(
@@ -41,36 +40,33 @@ class HomeScreen extends HookConsumerWidget {
             _trackFeatureUsed(ref, 'notifications_bell');
             // TODO: Implement notifications
           },
-          child: const Icon(
-            CupertinoIcons.bell,
+          child: HugeIcon(
+            icon: HugeIcons.strokeRoundedNotification01,
             color: CupertinoColors.systemGrey,
             size: 24,
           ),
         ),
       ),
-      child: Column(
-        children: [
-          // Weekly Snapshot - Fixed at top
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: _buildWeeklySnapshot(weeklyData.value),
-          ),
+      child: SafeArea(
+        child: Column(
+          children: [
+            // Welcome Section
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: _buildWelcomeCard(context),
+            ),
 
-          
-          // Daily Log - Quick overview of today's sugar intake
-          Expanded(child: _buildDailyLogOverview()),
-        ],
+            // Recent Scans Section
+            Expanded(
+              child: _buildRecentScans(recentScans.value, context),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildWeeklySnapshot(Map<String, double> weeklyData) {
-    // Calculate average daily sugar consumption
-    final totalSugar = weeklyData.values.fold(0.0, (sum, value) => sum + value);
-    final averageDaily = weeklyData.isNotEmpty
-        ? totalSugar / weeklyData.length
-        : 0.0;
-
+  Widget _buildWelcomeCard(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -82,60 +78,47 @@ class HomeScreen extends HookConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Weekly Snapshot',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: CupertinoColors.label,
-                ),
-              ),
-              Text(
-                'Avg: ${averageDaily.toStringAsFixed(0)}g/day',
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: CupertinoColors.systemGrey,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-
-          // Days of week
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: ['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day) {
-              return Text(
-                day,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: CupertinoColors.systemGrey,
-                ),
-              );
-            }).toList(),
+          const Text(
+            '👋 Welcome to Flean',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: CupertinoColors.label,
+            ),
           ),
           const SizedBox(height: 12),
-
-          // Weekly chart placeholder
-          Container(
-            height: 100,
-            decoration: BoxDecoration(
-              color: CupertinoColors.systemGrey6,
-              borderRadius: BorderRadius.circular(8),
+          const Text(
+            'Scan any food product to see its complete nutritional breakdown, ingredients, additives, and health insights.',
+            style: TextStyle(
+              fontSize: 16,
+              color: CupertinoColors.systemGrey,
             ),
-            child: const Center(
-              child: Text(
-                'Weekly Chart\nComing Soon!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: CupertinoColors.systemGrey,
-                  fontSize: 14,
-                ),
+          ),
+          const SizedBox(height: 16),
+          CupertinoButton(
+            padding: EdgeInsets.zero,
+            color: CupertinoColors.systemGreen,
+            borderRadius: BorderRadius.circular(12),
+            onPressed: () {
+              context.go('/scan');
+            },
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  HugeIcon(icon: HugeIcons.strokeRoundedQrCode01, size: 20, color: CupertinoColors.white),
+                  SizedBox(width: 8),
+                  Text(
+                    'Scan a Product',
+                    style: TextStyle(
+                      color: CupertinoColors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -144,63 +127,58 @@ class HomeScreen extends HookConsumerWidget {
     );
   }
 
-
-  Widget _buildDailyLogOverview() {
-    return Consumer(
-      builder: (context, ref, child) {
-        final todaysLog = ref.watch(trackNotifierProvider);
-        
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Today\'s Sugar Intake',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: CupertinoColors.label,
-                    ),
-                  ),
-                  CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
-                      // Track feature usage
-                      _trackFeatureUsed(ref, 'track_more_button');
-                      // TODO: Navigate to full track screen
-                    },
-                    child: const Text(
-                      'Track More',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: CupertinoColors.systemGreen,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
+  Widget _buildRecentScans(List<HistoryItem> recentScans, BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Recent Scans',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: CupertinoColors.label,
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-
-            // Content - Takes remaining space
-            Expanded(
-              child: todaysLog.entries.isEmpty
-                  ? _buildEmptyDailyLog()
-                  : _buildDailyLogContent(todaysLog, ref),
-            ),
-          ],
-        );
-      },
+              if (recentScans.isNotEmpty)
+                CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: () {
+                    context.go('/history');
+                  },
+                  child: const Text(
+                    'View All',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: CupertinoColors.systemGreen,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        Expanded(
+          child: recentScans.isEmpty
+              ? _buildEmptyState()
+              : ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: recentScans.length,
+                  itemBuilder: (context, index) {
+                    return HistoryItemWidget(item: recentScans[index]);
+                  },
+                ),
+        ),
+      ],
     );
   }
 
-  Widget _buildEmptyDailyLog() {
+  Widget _buildEmptyState() {
     return Center(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -213,14 +191,14 @@ class HomeScreen extends HookConsumerWidget {
         child: const Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              CupertinoIcons.chart_bar,
+            HugeIcon(
+              icon: HugeIcons.strokeRoundedQrCode01,
               size: 48,
               color: CupertinoColors.systemGrey,
             ),
             SizedBox(height: 16),
             Text(
-              'No sugar logged today',
+              'No scans yet',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -229,7 +207,7 @@ class HomeScreen extends HookConsumerWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'Start tracking your sugar intake\nby adding products to your log',
+              'Start scanning products to see\nyour history here',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14,
@@ -242,68 +220,11 @@ class HomeScreen extends HookConsumerWidget {
     );
   }
 
-  Widget _buildDailyLogContent(DailyLog todaysLog, WidgetRef ref) {
-    return Column(
-      children: [
-        // Total sugar summary
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: CupertinoColors.systemBackground,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: CupertinoColors.separator, width: 0.5),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Total Sugar Today:',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: CupertinoColors.label,
-                ),
-              ),
-              Text(
-                '${todaysLog.totalSugar.toStringAsFixed(1)}g',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: SugarLevelUtils.getDailySugarColor(todaysLog.totalSugar),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-
-        // Log entries
-        Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: todaysLog.entries.length,
-            itemBuilder: (context, index) {
-              final entry = todaysLog.entries[index];
-              return DailyLogEntryWidget(
-                entry: entry,
-                onRemove: () {
-                  ref.read(trackNotifierProvider.notifier).removeLogEntry(entry.id);
-                },
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-
   // Analytics tracking methods
   Future<void> _trackScreenViewed(WidgetRef ref) async {
     try {
       final analytics = await ref.read(analyticsServiceProvider.future);
-      await analytics.trackScreenViewed('home', 0, null); // Time spent will be tracked elsewhere
+      await analytics.trackScreenViewed('home', 0, null);
     } catch (e) {
       log('Analytics error: $e', name: 'Home');
     }

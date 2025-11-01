@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sweetr/core/utils/sugar_level_utils.dart';
-import 'package:sweetr/features/scan/data/product_model.dart';
+import 'package:cleanfood/core/utils/sugar_level_utils.dart';
+import 'package:cleanfood/features/scan/data/product_model.dart';
 
 class SugarRiskAssessment {
   static const double dailySugarLimit = 25.0; // WHO recommendation (25g per day)

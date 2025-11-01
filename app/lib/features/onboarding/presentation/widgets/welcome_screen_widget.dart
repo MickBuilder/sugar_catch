@@ -1,25 +1,19 @@
 import 'package:flutter/cupertino.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sweetr/features/onboarding/onboarding_provider.dart';
-import 'package:sweetr/features/onboarding/presentation/widgets/onboarding_page_widget.dart';
+import 'package:hugeicons/hugeicons.dart';
 
-class WelcomeScreenWidget extends ConsumerWidget {
-  final VoidCallback? onNext;
-  
-  const WelcomeScreenWidget({super.key, this.onNext});
+class WelcomeScreenWidget extends StatelessWidget {
+  final VoidCallback onNext;
+
+  const WelcomeScreenWidget({super.key, required this.onNext});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final screens = ref.watch(onboardingScreensProvider);
-    final currentScreen = screens[0];
-
-    return OnboardingPageWidget(
-      onNext: onNext,
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
         children: [
-          // App icon at the top
+          // App Icon/Logo
           Container(
             width: 80,
             height: 80,
@@ -47,11 +41,12 @@ class WelcomeScreenWidget extends ConsumerWidget {
           const SizedBox(height: 24),
 
           // Title
-          Text(
-            currentScreen.title,
-            style: const TextStyle(
+          const Text(
+            'Welcome To Flean',
+            style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
+              color: CupertinoColors.label,
             ),
             textAlign: TextAlign.center,
           ),
@@ -61,10 +56,10 @@ class WelcomeScreenWidget extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Text(
-              'Unlock the truth about your food.',
+              'Processed foods are damaging your health, even if you don\'t know it yet. Let\'s fix that.',
               style: const TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w400,
                 color: CupertinoColors.systemGrey,
                 height: 1.3,
               ),
@@ -79,7 +74,7 @@ class WelcomeScreenWidget extends ConsumerWidget {
           // Main illustration - Phone mockup with AR overlay
           Container(
             width: 280,
-            height: 400,
+            height: 380,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
@@ -97,6 +92,31 @@ class WelcomeScreenWidget extends ConsumerWidget {
                 width: 280,
                 height: 400,
                 fit: BoxFit.cover,
+              ),
+            ),
+          ),
+
+          // Begin Button
+          SizedBox(
+            width: double.infinity,
+            child: CupertinoButton(
+              color: CupertinoColors.systemGreen,
+              borderRadius: BorderRadius.circular(12),
+              onPressed: onNext,
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Begin',
+                    style: TextStyle(
+                      color: CupertinoColors.white,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  HugeIcon(icon: HugeIcons.strokeRoundedArrowRight01, size: 20, color: CupertinoColors.white),
+                ],
               ),
             ),
           ),

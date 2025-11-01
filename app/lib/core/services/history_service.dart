@@ -1,11 +1,11 @@
 import 'dart:developer';
 import 'dart:convert';
 import 'package:hive_ce_flutter/hive_flutter.dart';
-import 'package:sweetr/features/scan/data/product_model.dart';
+import 'package:cleanfood/features/scan/data/product_model.dart';
 
 class HistoryService {
   static const String _historyBoxName = 'scan_history';
-  static const int _maxHistoryItems = 50; // Keep last 50 scanned items
+  // No limit - store all scanned items indefinitely
 
   static Box<String>? _historyBox;
 
@@ -80,22 +80,21 @@ class HistoryService {
         log('📚 [HISTORY] Added new product to history: ${product.productName}', name: 'Service');
       }
 
-      // Clean up old items if we exceed the limit
-      await _cleanupOldItems();
+      // No cleanup - store all items indefinitely
+      log('📚 [HISTORY] Total items in history: ${_historyBox?.length ?? 0}', name: 'Service');
     }
   }
 
-  // Get recent scan history
-  static List<HistoryItem> getRecentHistory({int limit = 10}) {
+  // Get all scan history (no limit by default)
+  static List<HistoryItem> getAllHistory() {
     if (_historyBox == null) return [];
 
     final allKeys = _historyBox!.keys.toList();
     allKeys.sort((a, b) => b.compareTo(a)); // Sort descending (newest first)
 
-    final recentKeys = allKeys.take(limit).toList();
     final historyItems = <HistoryItem>[];
 
-    for (final key in recentKeys) {
+    for (final key in allKeys) {
       final historyJsonString = _historyBox!.get(key);
       if (historyJsonString != null) {
         try {
@@ -110,6 +109,56 @@ class HistoryService {
     }
 
     return historyItems;
+  }
+
+  // Get paginated history (for progressive loading)
+  static PaginatedHistoryResult getHistoryPaginated({
+    int offset = 0,
+    int limit = 20,
+  }) {
+    if (_historyBox == null) {
+      return PaginatedHistoryResult(items: [], hasMore: false, total: 0);
+    }
+
+    final allKeys = _historyBox!.keys.toList();
+    allKeys.sort((a, b) => b.compareTo(a)); // Sort descending (newest first)
+
+    final total = allKeys.length;
+    final hasMore = offset + limit < total;
+
+    final paginatedKeys = allKeys.skip(offset).take(limit).toList();
+    final historyItems = <HistoryItem>[];
+
+    for (final key in paginatedKeys) {
+      final historyJsonString = _historyBox!.get(key);
+      if (historyJsonString != null) {
+        try {
+          final historyJson =
+              jsonDecode(historyJsonString) as Map<String, dynamic>;
+          final historyItem = HistoryItem.fromJson(historyJson);
+          historyItems.add(historyItem);
+        } catch (e) {
+          log('📚 [HISTORY] Error parsing history item: $e', name: 'Service');
+        }
+      }
+    }
+
+    return PaginatedHistoryResult(
+      items: historyItems,
+      hasMore: hasMore,
+      total: total,
+    );
+  }
+
+  // Get recent scan history (with optional limit for UI display)
+  static List<HistoryItem> getRecentHistory({int? limit}) {
+    final allItems = getAllHistory();
+    
+    if (limit != null && limit > 0) {
+      return allItems.take(limit).toList();
+    }
+    
+    return allItems;
   }
 
   // Get weekly sugar consumption data
@@ -162,24 +211,23 @@ class HistoryService {
 
   // Get history statistics
   static Map<String, int> getHistoryStats() {
-    return {'total_scans': _historyBox?.length ?? 0};
+    final totalItems = _historyBox?.length ?? 0;
+    final uniqueProducts = getAllHistory().map((item) => item.product.code).toSet().length;
+    
+    return {
+      'total_scans': totalItems,
+      'unique_products': uniqueProducts,
+    };
   }
 
-  // Private helper methods
-  static Future<void> _cleanupOldItems() async {
-    if (_historyBox == null) return;
+  // Get unique products count (products scanned at least once)
+  static int getUniqueProductsCount() {
+    return getAllHistory().map((item) => item.product.code).toSet().length;
+  }
 
-    final allKeys = _historyBox!.keys.toList();
-    if (allKeys.length > _maxHistoryItems) {
-      allKeys.sort(); // Sort ascending (oldest first)
-      final keysToDelete = allKeys.take(allKeys.length - _maxHistoryItems);
-
-      for (final key in keysToDelete) {
-        await _historyBox!.delete(key);
-      }
-
-      log('📚 [HISTORY] Cleaned up ${keysToDelete.length} old items', name: 'Service');
-    }
+  // Get total scan count across all products
+  static int getTotalScanCount() {
+    return getAllHistory().fold(0, (sum, item) => sum + item.scanCount);
   }
 
   static String _getDayKey(DateTime date) {
@@ -233,7 +281,19 @@ class HistoryService {
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     return days[date.weekday - 1];
   }
+}
 
+// Paginated result model
+class PaginatedHistoryResult {
+  final List<HistoryItem> items;
+  final bool hasMore;
+  final int total;
+
+  PaginatedHistoryResult({
+    required this.items,
+    required this.hasMore,
+    required this.total,
+  });
 }
 
 class HistoryItem {

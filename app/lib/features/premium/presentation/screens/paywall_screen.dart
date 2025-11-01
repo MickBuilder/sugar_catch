@@ -3,8 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:sweetr/core/providers/premium_provider.dart';
-import 'package:sweetr/core/services/revenuecat_service.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:cleanfood/core/providers/premium_provider.dart';
+import 'package:cleanfood/core/services/revenuecat_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Helper function to show paywall as bottom sheet
@@ -216,8 +217,8 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                 color: CupertinoColors.systemGrey5,
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: const Icon(
-                CupertinoIcons.xmark,
+              child: HugeIcon(
+                icon: HugeIcons.strokeRoundedCancelCircle,
                 size: 14,
                 color: CupertinoColors.systemGrey,
               ),
@@ -259,7 +260,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         
         // Title
         const Text(
-          'Get Clean Foods Premium',
+          'Get Flean Premium',
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
@@ -273,9 +274,9 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
 
   Widget _buildFeaturesList() {
     final features = [
-      {'icon': '🔍', 'title': 'Uncover hidden sugars', 'description': 'Reveal the shocking truth about sugar in "healthy" products'},
-      {'icon': '📈', 'title': 'Achieve your sugar detox faster', 'description': 'Track progress and stay motivated with detailed insights'},
-      {'icon': '💡', 'title': 'Make smarter food choices', 'description': 'Get instant recommendations for healthier alternatives'},
+      {'icon': '🛡️', 'title': 'Feel protected', 'description': 'Know exactly what you\'re feeding yourself and your family—no more guessing'},
+      {'icon': '💪', 'title': 'Feel empowered', 'description': 'Take back control of your health with instant transparency about your food'},
+      {'icon': '😌', 'title': 'Feel confident', 'description': 'Make informed choices at the supermarket without the stress and uncertainty'},
     ];
 
     return Column(
@@ -437,8 +438,8 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                                 ),
                               ),
                               child: isSelected
-                                  ? const Icon(
-                                      CupertinoIcons.checkmark,
+                                  ? HugeIcon(
+                                      icon: HugeIcons.strokeRoundedCheckmarkCircle01,
                                       size: 12,
                                       color: CupertinoColors.white,
                                     )

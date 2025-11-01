@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:sweetr/features/scan/data/product_model.dart';
-import 'package:sweetr/core/services/cache_service.dart';
+import 'package:cleanfood/features/scan/data/product_model.dart';
+import 'package:cleanfood/core/services/cache_service.dart';
 
 class RecommendationsService {
   // Sugar thresholds to determine when to show recommendations

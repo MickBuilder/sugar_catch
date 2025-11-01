@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sweetr/core/services/revenuecat_service.dart';
+import 'package:cleanfood/core/services/revenuecat_service.dart';
 
 /// Premium state management
 class PremiumState {

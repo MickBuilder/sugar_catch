@@ -2,13 +2,12 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sweetr/core/analytics/analytics_service.dart';
-import 'package:sweetr/core/router/app_router.dart';
-import 'package:sweetr/core/services/cache_service.dart';
-import 'package:sweetr/core/services/history_service.dart';
-import 'package:sweetr/features/track/data/track_service.dart';
-import 'package:sweetr/features/onboarding/data/onboarding_service.dart';
-import 'package:sweetr/core/providers/premium_provider.dart';
+import 'package:cleanfood/core/analytics/analytics_service.dart';
+import 'package:cleanfood/core/router/app_router.dart';
+import 'package:cleanfood/core/services/cache_service.dart';
+import 'package:cleanfood/core/services/history_service.dart';
+import 'package:cleanfood/features/onboarding/data/onboarding_service.dart';
+import 'package:cleanfood/core/providers/premium_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,23 +20,22 @@ void main() async {
   // Initialize services
   await CacheService.init();
   await HistoryService.init();
-  await TrackService.init();
   await OnboardingService.init();
 
   // Uncomment the line below to force show onboarding on app restart (for testing)
   // await OnboardingService.resetOnboardingStatus();
 
-  runApp(const ProviderScope(child: SweetrApp()));
+  runApp(const ProviderScope(child: FleanApp()));
 }
 
-class SweetrApp extends ConsumerStatefulWidget {
-  const SweetrApp({super.key});
+class FleanApp extends ConsumerStatefulWidget {
+  const FleanApp({super.key});
 
   @override
-  ConsumerState<SweetrApp> createState() => _SweetrAppState();
+  ConsumerState<FleanApp> createState() => _FleanAppState();
 }
 
-class _SweetrAppState extends ConsumerState<SweetrApp> {
+class _FleanAppState extends ConsumerState<FleanApp> {
   @override
   void initState() {
     super.initState();
@@ -70,7 +68,7 @@ class _SweetrAppState extends ConsumerState<SweetrApp> {
     final router = ref.watch(appRouterProvider);
 
     return CupertinoApp.router(
-      title: 'Clean Foods',
+      title: 'Flean',
       debugShowCheckedModeBanner: false,
       theme: const CupertinoThemeData(
         primaryColor: CupertinoColors.systemGreen,

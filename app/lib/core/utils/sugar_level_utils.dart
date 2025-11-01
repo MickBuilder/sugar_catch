@@ -21,7 +21,7 @@ class SugarLevelUtils {
       const Color(0xFF8BC34A),   // Low impact - Light green (okay)
       const Color(0xFFFF9800),  // A bit too sweet - Orange (caution)
       const Color(0xFFF44336),  // Too sweet - Red (bad)
-      const Color(0xFFB71C1C),  // Much too sweet - Dark red (very bad)
+      const Color(0xFFB71C1C),  // Dangerously sweet - Dark red (very bad)
     ];
     List<double> thresholds;
     if (unit == 'ml') {
@@ -42,7 +42,7 @@ class SugarLevelUtils {
     final unit = productUnit.toLowerCase();
     List<double> thresholds;
     // Use Yuka-style labels for better user understanding
-    List<String> labels = ['Low sugar', 'Low impact', 'A bit too sweet', 'Too sweet', 'Much too sweet'];
+    List<String> labels = ['Low sugar', 'Low impact', 'A bit too sweet', 'Too sweet', 'Dangerously sweet'];
 
     if (unit == 'ml') {
       thresholds = [_mlLowThreshold, _mlModerateThreshold, _mlHighThreshold, _mlVeryHighThreshold];

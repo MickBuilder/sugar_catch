@@ -1,17 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sweetr/features/home/presentation/screens/home_screen.dart';
-import 'package:sweetr/features/scan/presentation/screens/scan_screen.dart';
-import 'package:sweetr/features/scan/presentation/screens/product_screen.dart';
-import 'package:sweetr/features/track/presentation/screens/track_screen.dart';
-import 'package:sweetr/features/history/presentation/screens/history_screen.dart';
-import 'package:sweetr/features/progress/presentation/screens/progress_screen.dart';
-import 'package:sweetr/features/onboarding/presentation/screens/onboarding_screen.dart';
-import 'package:sweetr/features/onboarding/onboarding_provider.dart';
-import 'package:sweetr/features/premium/presentation/screens/paywall_screen.dart';
-import 'package:sweetr/core/providers/premium_provider.dart';
-import 'package:sweetr/core/widgets/app_shell.dart';
+import 'package:cleanfood/features/home/presentation/screens/home_screen.dart';
+import 'package:cleanfood/features/scan/presentation/screens/scan_screen.dart';
+import 'package:cleanfood/features/scan/presentation/screens/product_screen.dart';
+import 'package:cleanfood/features/history/presentation/screens/history_screen.dart';
+import 'package:cleanfood/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:cleanfood/features/onboarding/onboarding_provider.dart';
+import 'package:cleanfood/features/premium/presentation/screens/paywall_screen.dart';
+import 'package:cleanfood/core/providers/premium_provider.dart';
+import 'package:cleanfood/core/widgets/app_shell.dart';
 
 // Wrapper widget that checks premium access and shows paywall as bottom sheet
 class PremiumAccessWrapper extends ConsumerWidget {
@@ -68,19 +66,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const HomeScreen(),
           ),
           GoRoute(
-            path: '/track',
-            name: 'track',
-            builder: (context, state) => const TrackScreen(),
-          ),
-          GoRoute(
             path: '/history',
             name: 'history',
             builder: (context, state) => const HistoryScreen(),
-          ),
-          GoRoute(
-            path: '/progress',
-            name: 'progress',
-            builder: (context, state) => const ProgressScreen(),
           ),
         ],
       ),

@@ -6,8 +6,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sweetr/core/analytics/analytics_service.dart';
-import 'package:sweetr/features/scan/scan_provider.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:cleanfood/core/analytics/analytics_service.dart';
+import 'package:cleanfood/features/scan/scan_provider.dart';
 
 class ScanScreen extends HookConsumerWidget {
   const ScanScreen({super.key});
@@ -48,7 +49,7 @@ class ScanScreen extends HookConsumerWidget {
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () => context.go('/home'),
-          child: const Icon(CupertinoIcons.xmark, color: CupertinoColors.white),
+          child: HugeIcon(icon: HugeIcons.strokeRoundedCancelCircle, color: CupertinoColors.white, size: 24),
         ),
         middle: const Text(
           'Scan Barcode',
@@ -205,8 +206,8 @@ class ScanScreen extends HookConsumerWidget {
                   ),
                   prefix: const Padding(
                     padding: EdgeInsets.only(left: 16),
-                    child: Icon(
-                      CupertinoIcons.search,
+                    child: HugeIcon(
+                      icon: HugeIcons.strokeRoundedSearch01,
                       color: CupertinoColors.systemGrey,
                       size: 20,
                     ),
@@ -256,8 +257,8 @@ class ScanScreen extends HookConsumerWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(
-                          CupertinoIcons.qrcode_viewfinder,
+                        HugeIcon(
+                          icon: HugeIcons.strokeRoundedQrCode01,
                           color: CupertinoColors.systemGreen,
                           size: 24,
                         ),

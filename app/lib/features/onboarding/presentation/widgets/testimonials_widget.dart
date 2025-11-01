@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:sweetr/features/onboarding/onboarding_provider.dart';
-import 'package:sweetr/features/onboarding/presentation/widgets/onboarding_page_widget.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:cleanfood/features/onboarding/onboarding_provider.dart';
+import 'package:cleanfood/features/onboarding/presentation/widgets/onboarding_page_widget.dart';
 
 class TestimonialsWidget extends ConsumerStatefulWidget {
   final VoidCallback? onNext;
@@ -145,8 +146,8 @@ class _TestimonialsWidgetState extends ConsumerState<TestimonialsWidget> {
                             ),
                           ),
                           Row(
-                            children: List.generate(5, (index) => const Icon(
-                              CupertinoIcons.star_fill,
+                            children: List.generate(5, (index) => HugeIcon(
+                              icon: HugeIcons.strokeRoundedStar,
                               color: Color(0xFFFFD700),
                               size: 16,
                             )),
@@ -202,8 +203,8 @@ class _TestimonialsWidgetState extends ConsumerState<TestimonialsWidget> {
             errorBuilder: (context, error, stackTrace) {
               return Container(
                 color: CupertinoColors.systemGrey6,
-                child: const Icon(
-                  CupertinoIcons.person_fill,
+                child: HugeIcon(
+                  icon: HugeIcons.strokeRoundedUser,
                   color: CupertinoColors.systemGrey,
                   size: 20,
                 ),

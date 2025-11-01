@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'dart:convert';
 import 'package:hive_ce_flutter/hive_flutter.dart';
-import 'package:sweetr/features/scan/data/product_model.dart';
+import 'package:cleanfood/features/scan/data/product_model.dart';
 
 class CacheService {
   static const String _productBoxName = 'products';
