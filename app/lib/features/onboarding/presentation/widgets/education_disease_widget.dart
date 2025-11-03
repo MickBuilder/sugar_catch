@@ -22,13 +22,14 @@ class EducationDiseaseWidget extends StatelessWidget {
           Container(
             width: 120,
             height: 120,
+            padding: EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: CupertinoColors.systemRed.withOpacity(0.2),
               shape: BoxShape.circle,
             ),
             child: HugeIcon(
               icon: HugeIcons.strokeRoundedHeartbreak,
-              size: 60,
+              size: 50,
               color: CupertinoColors.systemRed,
             ),
           ),
@@ -92,6 +93,7 @@ class EducationDiseaseWidget extends StatelessWidget {
                   Text(
                     'Next',
                     style: TextStyle(
+                      color: CupertinoColors.white,
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
                     ),

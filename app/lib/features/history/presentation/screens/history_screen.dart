@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:cleanfood/core/services/history_service.dart';
+import 'package:cleanfood/core/services/favorites_service.dart';
 import 'package:cleanfood/features/history/presentation/widgets/history_item_widget.dart';
 
 class HistoryScreen extends HookConsumerWidget {
@@ -40,10 +41,10 @@ class HistoryScreen extends HookConsumerWidget {
       return () => scrollController.removeListener(onScroll);
     }, [scrollController, isLoading.value, hasMore.value, history.value.length]);
 
-    // Filter by favorites if needed (for now just show all)
+    // Filter by favorites if needed
     final displayedHistory = selectedTab.value == 'All' 
         ? history.value 
-        : history.value; // TODO: Implement favorites filtering
+        : history.value.where((item) => FavoritesService.isFavorite(item.product.code)).toList();
 
     return CupertinoPageScaffold(
       backgroundColor: const Color(0xFFF5F5F5), // Light gray background
@@ -84,6 +85,7 @@ class HistoryScreen extends HookConsumerWidget {
                 isLoading.value,
                 hasMore.value,
                 scrollController,
+                selectedTab.value,
               ),
             ),
           ],
@@ -136,9 +138,10 @@ class HistoryScreen extends HookConsumerWidget {
     bool isLoading,
     bool hasMore,
     ScrollController scrollController,
+    String selectedTab,
   ) {
     if (historyList.isEmpty && !isLoading) {
-      return _buildEmptyState();
+      return _buildEmptyState(selectedTab);
     }
 
     return ListView.builder(
@@ -202,7 +205,9 @@ class HistoryScreen extends HookConsumerWidget {
     }
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(String selectedTab) {
+    final isEmptyFavorites = selectedTab == 'Favorites';
+    
     return Center(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -216,24 +221,28 @@ class HistoryScreen extends HookConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             HugeIcon(
-              icon: HugeIcons.strokeRoundedQrCode01,
+              icon: isEmptyFavorites 
+                  ? HugeIcons.strokeRoundedBookmark01
+                  : HugeIcons.strokeRoundedQrCode01,
               size: 48,
               color: CupertinoColors.systemGrey,
             ),
             const SizedBox(height: 16),
-            const Text(
-              'No scans yet',
-              style: TextStyle(
+            Text(
+              isEmptyFavorites ? 'No favorites yet' : 'No scans yet',
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
                 color: CupertinoColors.systemGrey,
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Start scanning products to see your history here',
+            Text(
+              isEmptyFavorites
+                  ? 'Bookmark products you love to see them here'
+                  : 'Start scanning products to see your history here',
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 color: CupertinoColors.systemGrey2,
               ),

@@ -67,20 +67,20 @@ class OnboardingService {
       Testimonial(
         name: 'Sarah M.',
         handle: '@sarah_m',
-        quote: 'Lost 15lbs in 2 months by tracking hidden sugars',
-        beforeAfter: '15lbs lost',
+        quote: 'I\'ll never buy groceries without scanning them with Flean first. I\'m shocked by how processed everything is.',
+        beforeAfter: '10,000+ scans',
       ),
       Testimonial(
         name: 'Mike H.',
         handle: '@mike_health',
-        quote: 'My energy levels are through the roof!',
-        beforeAfter: 'Energy +200%',
+        quote: 'Finally an app that shows me what\'s actually in my food—especially the processing level. Game changer.',
+        beforeAfter: '5,000+ products',
       ),
       Testimonial(
         name: 'Jenny F.',
         handle: '@jenny_fit',
-        quote: 'Finally found alternatives to my favorite snacks',
-        beforeAfter: '50+ alternatives found',
+        quote: 'I had no idea how many weird additives and chemicals were in foods I thought were healthy.',
+        beforeAfter: '700+ additives',
       ),
     ];
   }

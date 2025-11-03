@@ -56,7 +56,7 @@ class _TestimonialsWidgetState extends ConsumerState<TestimonialsWidget> {
 
           // Subtitle
           Text(
-            'Clean Foods is supported by and made for people like you',
+            'Flean is supported by and made for people like you',
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
@@ -68,7 +68,7 @@ class _TestimonialsWidgetState extends ConsumerState<TestimonialsWidget> {
 
           // Community Section
           const Text(
-            'Clean Foods is backed by people like you',
+            'Flean is backed by people like you',
             style: TextStyle(
               fontSize: 16,
               color: CupertinoColors.black,
@@ -146,8 +146,8 @@ class _TestimonialsWidgetState extends ConsumerState<TestimonialsWidget> {
                             ),
                           ),
                           Row(
-                            children: List.generate(5, (index) => HugeIcon(
-                              icon: HugeIcons.strokeRoundedStar,
+                            children: List.generate(5, (index) => const Icon(
+                              CupertinoIcons.star_fill,
                               color: Color(0xFFFFD700),
                               size: 16,
                             )),

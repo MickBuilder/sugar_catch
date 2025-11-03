@@ -160,14 +160,14 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   children: [
-                    // Header with app icon and title
+                    // Header with title
                     _buildHeader(),
                     const SizedBox(height: 32),
                     
-                    // Features list
-                    _buildFeaturesList(),
+                    // Shopping illustration
+                    _buildShoppingIllustration(),
                     
-                    const SizedBox(height: 40), // Bottom padding instead of Spacer
+                    const SizedBox(height: 32), // Bottom padding instead of Spacer
                   ],
                 ),
               ),
@@ -182,13 +182,13 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                   _buildPricingOptions(),
                   const SizedBox(height: 12),
                   
-                  // Disclaimer text
-                  _buildDisclaimerText(),
-                  const SizedBox(height: 12),
-                  
                   // CTA button
                   _buildCTAButton(),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 8),
+                  
+                  // Disclaimer text
+                  _buildDisclaimerText(),
+                  const SizedBox(height: 8),
                   
                   // Footer links
                   _buildFooterLinks(),
@@ -262,9 +262,18 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         const Text(
           'Get Flean Premium',
           style: TextStyle(
-            fontSize: 28,
+            fontSize: 32,
             fontWeight: FontWeight.bold,
             color: CupertinoColors.black,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 8),
+        const Text(
+          'Know what you\'re buying',
+          style: TextStyle(
+            fontSize: 16,
+            color: CupertinoColors.systemGrey,
           ),
           textAlign: TextAlign.center,
         ),
@@ -272,64 +281,23 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     );
   }
 
-  Widget _buildFeaturesList() {
-    final features = [
-      {'icon': '🛡️', 'title': 'Feel protected', 'description': 'Know exactly what you\'re feeding yourself and your family—no more guessing'},
-      {'icon': '💪', 'title': 'Feel empowered', 'description': 'Take back control of your health with instant transparency about your food'},
-      {'icon': '😌', 'title': 'Feel confident', 'description': 'Make informed choices at the supermarket without the stress and uncertainty'},
-    ];
-
-    return Column(
-      children: features.map((feature) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: Row(
-            children: [
-              // Feature icon
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: CupertinoColors.systemGreen.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: Center(
-                  child: Text(
-                    feature['icon']!,
-                    style: const TextStyle(fontSize: 24),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              
-              // Feature text
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      feature['title']!,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: CupertinoColors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      feature['description']!,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: CupertinoColors.systemGrey,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      }).toList(),
+  Widget _buildShoppingIllustration() {
+    return Container(
+      height: 180,
+      constraints: const BoxConstraints(maxWidth: 350),
+      child: Image.asset(
+        'assets/images/shopping_illustration.png',
+        fit: BoxFit.contain,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            height: 200,
+            color: CupertinoColors.systemGrey6,
+            child: const Center(
+              child: Text('Illustration not found'),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -527,32 +495,56 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
 
   Widget _buildDisclaimerText() {
     return const Text(
-      'No Commitment, Cancel Anytime',
+      'No Payment Due Now',
       style: TextStyle(
-        fontSize: 14,
-        color: CupertinoColors.systemGrey,
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        color: CupertinoColors.black,
       ),
       textAlign: TextAlign.center,
     );
   }
 
   Widget _buildCTAButton() {
-    return SizedBox(
+    return Container(
       width: double.infinity,
       height: 50,
+      decoration: BoxDecoration(
+        color: const Color(0xFF34C759),
+        borderRadius: BorderRadius.circular(28),
+        boxShadow: [
+          BoxShadow(
+            color: CupertinoColors.systemGreen.withValues(alpha: 0.3),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
       child: CupertinoButton(
         onPressed: _isLoading ? null : _startTrial,
-        color: CupertinoColors.systemGreen,
-        borderRadius: BorderRadius.circular(25),
+        padding: EdgeInsets.zero,
+        borderRadius: BorderRadius.circular(28),
         child: _isLoading
             ? const CupertinoActivityIndicator(color: CupertinoColors.white)
-            : const Text(
-                '7 day free trial',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: CupertinoColors.white,
-                ),
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Start 7-day free trial',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: CupertinoColors.white,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  HugeIcon(
+                    icon: HugeIcons.strokeRoundedArrowRight01,
+                    size: 20,
+                    color: CupertinoColors.white,
+                  ),
+                ],
               ),
       ),
     );

@@ -22,6 +22,7 @@ class EducationAnxietyWidget extends StatelessWidget {
           Container(
             width: 120,
             height: 120,
+            alignment: Alignment.center,
             decoration: BoxDecoration(
               color: CupertinoColors.systemYellow.withOpacity(0.2),
               shape: BoxShape.circle,
@@ -29,6 +30,7 @@ class EducationAnxietyWidget extends StatelessWidget {
             child: const Text(
               '😰',
               style: TextStyle(fontSize: 60),
+              textAlign: TextAlign.center,
             ),
           ),
           const SizedBox(height: 40),
@@ -93,6 +95,7 @@ class EducationAnxietyWidget extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
+                      color: CupertinoColors.white,
                     ),
                   ),
                   SizedBox(width: 8),

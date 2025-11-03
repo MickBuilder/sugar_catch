@@ -22,6 +22,7 @@ class EducationSupportWidget extends StatelessWidget {
           Container(
             width: 120,
             height: 120,
+            padding: EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: CupertinoColors.systemGreen.withOpacity(0.2),
               shape: BoxShape.circle,
@@ -73,6 +74,7 @@ class EducationSupportWidget extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
+                      color: CupertinoColors.white,
                     ),
                   ),
                   SizedBox(width: 8),

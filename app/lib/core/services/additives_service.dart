@@ -7,8 +7,8 @@ class AdditivesService {
   static Map<String, String>? _additivesCache;
   static DateTime? _lastFetch;
 
-  // Cache validity: 24 hours
-  static const Duration _cacheValidity = Duration(hours: 24);
+  // Cache validity: 1 month
+  static const Duration _cacheValidity = Duration(days: 30);
 
   /// Fetches additives data from OpenFoodFacts API and caches it
   static Future<Map<String, String>> _fetchAdditivesData() async {
@@ -94,6 +94,29 @@ class AdditivesService {
 
     String eCode = tag.substring(3);
     return sweetenerPrefixes.any((prefix) => eCode.contains(prefix));
+  }
+
+  /// Initializes the service by pre-fetching additives data at startup
+  /// This ensures smooth user experience when scanning products
+  static Future<void> init() async {
+    try {
+      log('🚀 [AdditivesService] Initializing additives service...', name: 'Service');
+      
+      // Check if cache is still valid
+      if (_additivesCache != null && 
+          _lastFetch != null && 
+          DateTime.now().difference(_lastFetch!) < _cacheValidity) {
+        log('✅ [AdditivesService] Using cached additives data (${_additivesCache!.length} additives)', name: 'Service');
+        return;
+      }
+      
+      // Pre-fetch additives data in background
+      await _fetchAdditivesData();
+      log('✅ [AdditivesService] Initialization complete', name: 'Service');
+    } catch (e) {
+      log('⚠️ [AdditivesService] Initialization failed, will fetch on first use: $e', name: 'Service');
+      // Don't throw - allow app to continue, will fetch when needed
+    }
   }
 
   /// Clears the cache (useful for testing or forced refresh)

@@ -149,6 +149,7 @@ class FeatureAdditivesWidget extends StatelessWidget {
                   Text(
                     'Continue',
                     style: TextStyle(
+                      color: CupertinoColors.white,
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
                     ),

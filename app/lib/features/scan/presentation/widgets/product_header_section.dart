@@ -227,6 +227,8 @@ class ProductHeaderSection extends StatelessWidget {
   List<Widget> _buildNutriscoreIcons(Product product, int healthScore) {
     final icons = <Widget>[];
     final nutriscoreData = product.nutriscoreData;
+
+    String productUnit = product.productQuantityUnit!;
     
     if (nutriscoreData == null) return icons;
     
@@ -264,7 +266,7 @@ class ProductHeaderSection extends StatelessWidget {
             icons.add(
               Padding(
                 padding: const EdgeInsets.only(right: 0),
-                child: _buildNutriscoreComponentIcon(id, value, points, false),
+                child: _buildNutriscoreComponentIcon(id, value, productUnit, points, false),
               ),
             );
           }
@@ -285,7 +287,7 @@ class ProductHeaderSection extends StatelessWidget {
             icons.add(
               Padding(
                 padding: const EdgeInsets.only(right: 16),
-                child: _buildNutriscoreComponentIcon(id, value, points, true),
+                child: _buildNutriscoreComponentIcon(id, value, productUnit, points, true),
               ),
             );
           }
@@ -296,7 +298,7 @@ class ProductHeaderSection extends StatelessWidget {
     return icons;
   }
 
-  Widget _buildNutriscoreComponentIcon(String id, dynamic value, int points, bool isPositive) {
+  Widget _buildNutriscoreComponentIcon(String id, dynamic value, String productUnit, int points, bool isPositive) {
     dynamic icon;
     Color color;
     String name;
@@ -333,7 +335,7 @@ class ProductHeaderSection extends StatelessWidget {
         // Use sugar level utils for color (sugar is in g per 100g)
         // Default to 'g' unit for per 100g values
         if (numericValue != null && numericValue > 0) {
-          color = SugarLevelUtils.getSugarLevelColor(numericValue, 'g');
+          color = SugarLevelUtils.getSugarLevelColor(numericValue, productUnit);
         } else {
           color = const Color(0xFF2E7D32); // No sugar = dark green (good)
         }

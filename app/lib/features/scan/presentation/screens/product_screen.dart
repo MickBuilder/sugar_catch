@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:cleanfood/core/analytics/analytics_service.dart';
+import 'package:cleanfood/core/services/favorites_service.dart';
 import 'package:cleanfood/features/scan/data/product_model.dart';
 import 'package:cleanfood/features/scan/scan_provider.dart';
 import 'package:cleanfood/features/scan/presentation/widgets/product_header_section.dart';
@@ -12,14 +13,31 @@ import 'package:cleanfood/features/scan/presentation/widgets/additives_section.d
 import 'package:cleanfood/features/scan/presentation/widgets/allergy_diet_section.dart';
 import 'package:cleanfood/features/scan/presentation/widgets/ingredients_section.dart';
 
-class ProductScreen extends ConsumerWidget {
+class ProductScreen extends ConsumerStatefulWidget {
   final String barcode;
 
   const ProductScreen({super.key, required this.barcode});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final productAsync = ref.watch(productByBarcodeProvider(barcode));
+  ConsumerState<ProductScreen> createState() => _ProductScreenState();
+}
+
+class _ProductScreenState extends ConsumerState<ProductScreen> {
+  bool _isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFavoriteStatus();
+  }
+
+  void _loadFavoriteStatus() {
+    _isFavorite = FavoritesService.isFavorite(widget.barcode);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final productAsync = ref.watch(productByBarcodeProvider(widget.barcode));
 
     // Track product view when data is available
     productAsync.whenData((data) {
@@ -66,17 +84,12 @@ class ProductScreen extends ConsumerWidget {
             color: CupertinoColors.black,
           ),
         ),
-        trailing: CupertinoButton(
-          padding: EdgeInsets.zero,
-          onPressed: () {
-            HapticFeedback.selectionClick();
-            // TODO: Implement favorite/bookmark functionality
-          },
-          child: HugeIcon(
-            icon: HugeIcons.strokeRoundedBookmark01,
-            color: CupertinoColors.black,
-            size: 24,
-          ),
+        trailing: productAsync.when(
+          data: (scanState) => scanState == null
+              ? const SizedBox.shrink()
+              : _buildFavoriteButton(scanState.product),
+          loading: () => const SizedBox.shrink(),
+          error: (error, stackTrace) => const SizedBox.shrink(),
         ),
       ),
       child: productAsync.when(
@@ -114,12 +127,33 @@ class ProductScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
               CupertinoButton(
-                onPressed: () => ref.refresh(productByBarcodeProvider(barcode)),
+                onPressed: () => ref.refresh(productByBarcodeProvider(widget.barcode)),
                 child: const Text('Retry'),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildFavoriteButton(Product product) {
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      onPressed: () async {
+        HapticFeedback.selectionClick();
+        await FavoritesService.toggleFavorite(product);
+        setState(() {
+          _isFavorite = FavoritesService.isFavorite(widget.barcode);
+        });
+        HapticFeedback.mediumImpact();
+      },
+      child: HugeIcon(
+        icon: HugeIcons.strokeRoundedBookmark01,
+        color: _isFavorite 
+            ? CupertinoColors.systemGreen
+            : CupertinoColors.black,
+        size: 24,
       ),
     );
   }

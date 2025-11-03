@@ -6,6 +6,8 @@ import 'package:cleanfood/core/analytics/analytics_service.dart';
 import 'package:cleanfood/core/router/app_router.dart';
 import 'package:cleanfood/core/services/cache_service.dart';
 import 'package:cleanfood/core/services/history_service.dart';
+import 'package:cleanfood/core/services/additives_service.dart';
+import 'package:cleanfood/core/services/favorites_service.dart';
 import 'package:cleanfood/features/onboarding/data/onboarding_service.dart';
 import 'package:cleanfood/core/providers/premium_provider.dart';
 
@@ -20,7 +22,11 @@ void main() async {
   // Initialize services
   await CacheService.init();
   await HistoryService.init();
+  await FavoritesService.init();
   await OnboardingService.init();
+  
+  // Pre-fetch additives data for smooth scanning experience
+  await AdditivesService.init();
 
   // Uncomment the line below to force show onboarding on app restart (for testing)
   // await OnboardingService.resetOnboardingStatus();
