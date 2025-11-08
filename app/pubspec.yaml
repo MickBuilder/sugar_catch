@@ -2,7 +2,7 @@ name: cleanfood
 description: "Flean - Your healthy food scanner with barcode scanning for nutrition insights."
 publish_to: 'none'
 
-version: 2.2.0+1
+version: 2.5.0
 
 environment:
   sdk: ^3.9.2
