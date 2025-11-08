@@ -5,8 +5,21 @@ import 'package:cleanfood/features/scan/data/product_model.dart';
 class FavoritesService {
   static const String _favoritesBoxName = 'favorites';
   static Box<String>? _favoritesBox;
+  static bool _isInitialized = false;
+  static Future<void>? _initFuture;
 
   static Future<void> init() async {
+    // Prevent duplicate initializations
+    if (_isInitialized) return;
+    if (_initFuture != null) return _initFuture;
+    
+    _initFuture = _doInit();
+    await _initFuture;
+    _isInitialized = true;
+    _initFuture = null;
+  }
+
+  static Future<void> _doInit() async {
     _favoritesBox = await Hive.openBox<String>(_favoritesBoxName);
   }
 

@@ -6,8 +6,21 @@ import 'package:cleanfood/features/onboarding/data/onboarding_models.dart';
 class OnboardingService {
   static const String _onboardingBoxName = 'onboarding';
   static Box<String>? _onboardingBox;
+  static bool _isInitialized = false;
+  static Future<void>? _initFuture;
 
   static Future<void> init() async {
+    // Prevent duplicate initializations
+    if (_isInitialized) return;
+    if (_initFuture != null) return _initFuture;
+    
+    _initFuture = _doInit();
+    await _initFuture;
+    _isInitialized = true;
+    _initFuture = null;
+  }
+
+  static Future<void> _doInit() async {
     _onboardingBox = await Hive.openBox<String>(_onboardingBoxName);
   }
 

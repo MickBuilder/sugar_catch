@@ -6,7 +6,6 @@ import 'package:cleanfood/core/analytics/analytics_service.dart';
 import 'package:cleanfood/core/router/app_router.dart';
 import 'package:cleanfood/core/services/cache_service.dart';
 import 'package:cleanfood/core/services/history_service.dart';
-import 'package:cleanfood/core/services/additives_service.dart';
 import 'package:cleanfood/core/services/favorites_service.dart';
 import 'package:cleanfood/features/onboarding/data/onboarding_service.dart';
 import 'package:cleanfood/core/providers/premium_provider.dart';
@@ -19,14 +18,8 @@ void main() async {
   
   await Hive.initFlutter();
 
-  // Initialize services
-  await CacheService.init();
-  await HistoryService.init();
-  await FavoritesService.init();
+  // Only initialize OnboardingService synchronously (needed for router)
   await OnboardingService.init();
-  
-  // Pre-fetch additives data for smooth scanning experience
-  await AdditivesService.init();
 
   // Uncomment the line below to force show onboarding on app restart (for testing)
   // await OnboardingService.resetOnboardingStatus();
@@ -45,6 +38,12 @@ class _FleanAppState extends ConsumerState<FleanApp> {
   @override
   void initState() {
     super.initState();
+    
+    // Initialize non-critical services after first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeServicesAsync();
+    });
+    
     // Initialize premium provider
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(premiumProvider.notifier).initialize();
@@ -56,6 +55,19 @@ class _FleanAppState extends ConsumerState<FleanApp> {
         _trackAppOpened();
       });
     });
+  }
+
+  Future<void> _initializeServicesAsync() async {
+    try {
+      await Future.wait([
+        CacheService.init(),
+        HistoryService.init(),
+        FavoritesService.init(),
+      ]);
+      log('✅ [Main] Non-critical services initialized in background', name: 'Main');
+    } catch (e) {
+      log('⚠️ [Main] Failed to initialize services in background: $e', name: 'Main');
+    }
   }
 
         Future<void> _trackAppOpened() async {

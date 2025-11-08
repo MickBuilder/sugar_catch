@@ -44,6 +44,9 @@ class AdditivesService {
 
   /// Gets the official name for an E-code or additive tag
   static Future<String> getAdditiveName(String tag) async {
+    // Ensure service is initialized (lazy loading)
+    await _ensureInitialized();
+    
     // Check if cache is valid
     if (_additivesCache == null || 
         _lastFetch == null || 
@@ -72,8 +75,11 @@ class AdditivesService {
     return fullName;
   }
 
-  /// Gets multiple additive names at once,
+  /// Gets multiple additive names at once
   static Future<List<String>> getAdditiveNames(List<String> tags) async {
+    // Ensure service is initialized (lazy loading)
+    await _ensureInitialized();
+    
     final names = <String>[];
     for (final tag in tags) {
       final name = await getAdditiveName(tag);
@@ -96,9 +102,13 @@ class AdditivesService {
     return sweetenerPrefixes.any((prefix) => eCode.contains(prefix));
   }
 
-  /// Initializes the service by pre-fetching additives data at startup
-  /// This ensures smooth user experience when scanning products
+  static bool _isInitialized = false;
+
+  /// Initializes the service by pre-fetching additives data
+  /// This is now called lazily when first needed, not at app startup
   static Future<void> init() async {
+    if (_isInitialized) return;
+    
     try {
       log('🚀 [AdditivesService] Initializing additives service...', name: 'Service');
       
@@ -107,15 +117,24 @@ class AdditivesService {
           _lastFetch != null && 
           DateTime.now().difference(_lastFetch!) < _cacheValidity) {
         log('✅ [AdditivesService] Using cached additives data (${_additivesCache!.length} additives)', name: 'Service');
+        _isInitialized = true;
         return;
       }
       
       // Pre-fetch additives data in background
       await _fetchAdditivesData();
+      _isInitialized = true;
       log('✅ [AdditivesService] Initialization complete', name: 'Service');
     } catch (e) {
       log('⚠️ [AdditivesService] Initialization failed, will fetch on first use: $e', name: 'Service');
       // Don't throw - allow app to continue, will fetch when needed
+    }
+  }
+  
+  /// Ensures the service is initialized before use
+  static Future<void> _ensureInitialized() async {
+    if (!_isInitialized) {
+      await init();
     }
   }
 

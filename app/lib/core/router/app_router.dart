@@ -5,8 +5,10 @@ import 'package:cleanfood/features/home/presentation/screens/home_screen.dart';
 import 'package:cleanfood/features/scan/presentation/screens/scan_screen.dart';
 import 'package:cleanfood/features/scan/presentation/screens/product_screen.dart';
 import 'package:cleanfood/features/history/presentation/screens/history_screen.dart';
-import 'package:cleanfood/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:cleanfood/features/onboarding/presentation/screens/onboarding_page_screen.dart';
+import 'package:cleanfood/features/onboarding/core/onboarding_routes.dart';
 import 'package:cleanfood/features/onboarding/onboarding_provider.dart';
+import 'package:cleanfood/features/onboarding/data/onboarding_service.dart';
 import 'package:cleanfood/features/premium/presentation/screens/paywall_screen.dart';
 import 'package:cleanfood/core/providers/premium_provider.dart';
 import 'package:cleanfood/core/widgets/app_shell.dart';
@@ -23,11 +25,19 @@ class PremiumAccessWrapper extends ConsumerWidget {
     
     // If user doesn't have access, show paywall as bottom sheet
     if (!hasAccess) {
+      final currentRoute = GoRouterState.of(context).uri.path;
+      final hasCompletedOnboarding = ref.read(hasCompletedOnboardingProvider);
+      
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await showPaywallBottomSheet(context);
-        // When paywall is dismissed, redirect back to onboarding completion
-        if (context.mounted) {
-          context.go('/onboarding');
+        // When paywall is dismissed, only redirect if not already on onboarding
+        // and if onboarding is completed (to show last page)
+        if (context.mounted && !currentRoute.startsWith('/onboarding')) {
+          if (hasCompletedOnboarding) {
+            context.go(OnboardingRoutes.getStarted);
+          } else {
+            context.go(OnboardingRoutes.welcome);
+          }
         }
       });
     }
@@ -37,20 +47,25 @@ class PremiumAccessWrapper extends ConsumerWidget {
 }
 
 final appRouterProvider = Provider<GoRouter>((ref) {
-  final hasCompletedOnboarding = ref.watch(hasCompletedOnboardingProvider);
+  // Read onboarding status directly from service to avoid provider dependency
+  // This prevents blocking router creation if provider isn't ready
   final hasAccess = ref.watch(premiumAccessProvider);
+  final hasCompletedOnboarding = OnboardingService.hasCompletedOnboarding();
   
   // Determine initial location based on onboarding and premium status
   String initialLocation;
   if (!hasCompletedOnboarding) {
-    initialLocation = '/onboarding';
+    initialLocation = OnboardingRoutes.welcome;
   } else if (!hasAccess) {
-    initialLocation = '/onboarding';
+    initialLocation = OnboardingRoutes.getStarted;
   } else {
     initialLocation = '/home';
   }
   
-  return GoRouter(
+  // Use keepAlive to prevent router recreation and optimize performance
+  ref.keepAlive();
+  
+  final router = GoRouter(
     initialLocation: initialLocation,
     routes: [
       ShellRoute(
@@ -85,10 +100,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return ProductScreen(barcode: barcode);
         },
       ),
+      // Legacy onboarding route - redirect to welcome
       GoRoute(
         path: '/onboarding',
-        name: 'onboarding',
-        builder: (context, state) => const OnboardingScreen(),
+        redirect: (context, state) => OnboardingRoutes.welcome,
+      ),
+      // Individual onboarding page routes
+      GoRoute(
+        path: '/onboarding/:page',
+        name: 'onboarding-page',
+        builder: (context, state) {
+          final page = state.pathParameters['page']!;
+          return OnboardingPageScreen(page: page);
+        },
       ),
       GoRoute(
         path: '/paywall',
@@ -97,4 +121,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
     ],
   );
+  
+  return router;
 });

@@ -48,7 +48,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     }
   }
 
-  Future<void> _startTrial() async {
+  Future<void> _subscribe() async {
     if (_selectedPackage == null) return;
 
     setState(() {
@@ -62,14 +62,14 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
       
       if (success) {
         HapticFeedback.heavyImpact();
-        log('✅ [Paywall] Trial started successfully', name: 'Paywall');
+        log('✅ [Paywall] Subscription started successfully', name: 'Paywall');
         // Navigation will be handled by the router based on premium status
       } else {
         HapticFeedback.heavyImpact();
-        _showErrorDialog('Failed to start trial. Please try again.');
+        _showErrorDialog('Failed to subscribe. Please try again.');
       }
     } catch (e) {
-      log('❌ [Paywall] Trial start error: $e', name: 'Paywall');
+      log('❌ [Paywall] Subscription error: $e', name: 'Paywall');
       _showErrorDialog('An error occurred. Please try again.');
     } finally {
       setState(() {
@@ -184,10 +184,6 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                   
                   // CTA button
                   _buildCTAButton(),
-                  const SizedBox(height: 8),
-                  
-                  // Disclaimer text
-                  _buildDisclaimerText(),
                   const SizedBox(height: 8),
                   
                   // Footer links
@@ -493,17 +489,6 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     return discount;
   }
 
-  Widget _buildDisclaimerText() {
-    return const Text(
-      'No Payment Due Now',
-      style: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-        color: CupertinoColors.black,
-      ),
-      textAlign: TextAlign.center,
-    );
-  }
 
   Widget _buildCTAButton() {
     return Container(
@@ -521,7 +506,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         ],
       ),
       child: CupertinoButton(
-        onPressed: _isLoading ? null : _startTrial,
+        onPressed: _isLoading ? null : _subscribe,
         padding: EdgeInsets.zero,
         borderRadius: BorderRadius.circular(28),
         child: _isLoading
@@ -530,7 +515,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    'Start 7-day free trial',
+                    'Unlock Now',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:cleanfood/core/analytics/analytics_service.dart';
 import 'package:cleanfood/features/onboarding/onboarding_provider.dart';
+import 'package:flutter/painting.dart';
 import 'package:cleanfood/features/onboarding/presentation/widgets/welcome_screen_widget.dart';
 import 'package:cleanfood/features/onboarding/presentation/widgets/gender_question_widget.dart';
 import 'package:cleanfood/features/onboarding/presentation/widgets/discovery_question_widget.dart';
@@ -57,7 +58,21 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   @override
   void initState() {
     super.initState();
+    // Precache images for first screen to avoid loading delay
+    _precacheWelcomeImages();
     _trackScreenViewed(0);
+  }
+
+  /// Precache images used in welcome screen for instant display
+  void _precacheWelcomeImages() {
+    // Precache images after first frame to avoid blocking initial render
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        final context = this.context;
+        precacheImage(const AssetImage('assets/images/icon.png'), context);
+        precacheImage(const AssetImage('assets/images/welcome_screen.png'), context);
+      }
+    });
   }
 
   @override
@@ -105,27 +120,27 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     }
   }
 
-  // Analytics tracking methods
-  Future<void> _trackScreenViewed(int screenIndex) async {
-    try {
-      final analytics = await ref.read(analyticsServiceProvider.future);
-      await analytics.trackOnboardingScreenViewed(screenIndex, _screenNames[screenIndex]);
-      _screenStartTime = DateTime.now();
-    } catch (e) {
+  // Analytics tracking methods - non-blocking for better performance
+  void _trackScreenViewed(int screenIndex) {
+    // Don't await - fire and forget to avoid blocking UI
+    _screenStartTime = DateTime.now();
+    ref.read(analyticsServiceProvider.future).then((analytics) {
+      analytics.trackOnboardingScreenViewed(screenIndex, _screenNames[screenIndex]);
+    }).catchError((e) {
       log('Analytics error: $e', name: 'Onboarding');
-    }
+    });
   }
 
-  Future<void> _trackScreenCompleted(int screenIndex) async {
-    try {
-      final analytics = await ref.read(analyticsServiceProvider.future);
-      final timeSpent = _screenStartTime != null 
-          ? DateTime.now().difference(_screenStartTime!).inMilliseconds 
-          : 0;
-      await analytics.trackOnboardingScreenCompleted(screenIndex, timeSpent);
-    } catch (e) {
+  void _trackScreenCompleted(int screenIndex) {
+    // Don't await - fire and forget to avoid blocking UI
+    final timeSpent = _screenStartTime != null 
+        ? DateTime.now().difference(_screenStartTime!).inMilliseconds 
+        : 0;
+    ref.read(analyticsServiceProvider.future).then((analytics) {
+      analytics.trackOnboardingScreenCompleted(screenIndex, timeSpent);
+    }).catchError((e) {
       log('Analytics error: $e', name: 'Onboarding');
-    }
+    });
   }
 
   Future<void> _trackOnboardingCompleted() async {
@@ -143,6 +158,73 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       );
     } catch (e) {
       log('Analytics error: $e', name: 'Onboarding');
+    }
+  }
+
+  /// Lazy widget factory - builds widgets only when needed
+  /// This helps with tree-shaking and defers loading of non-visible widgets
+  Widget _buildOnboardingWidget(int index) {
+    switch (index) {
+      case 0:
+        return WelcomeScreenWidget(onNext: _nextPage);
+      case 1:
+        return GenderQuestionWidget(
+          onNext: _nextPage,
+          onPrevious: _previousPage,
+        );
+      case 2:
+        return DiscoveryQuestionWidget(
+          onNext: _nextPage,
+          onPrevious: _previousPage,
+        );
+      case 3:
+        return HealthyTasteQuestionWidget(
+          onNext: _nextPage,
+          onPrevious: _previousPage,
+        );
+      case 4:
+        return ComfortEatingQuestionWidget(
+          onNext: _nextPage,
+          onPrevious: _previousPage,
+        );
+      case 5:
+        return FrequencyQuestionWidget(
+          onNext: _nextPage,
+          onPrevious: _previousPage,
+        );
+      case 6:
+        return StressEatingQuestionWidget(
+          onNext: _nextPage,
+          onPrevious: _previousPage,
+        );
+      case 7:
+        return AgeQuestionWidget(
+          onNext: _nextPage,
+          onPrevious: _previousPage,
+        );
+      case 8:
+        return BoredomEatingQuestionWidget(
+          onNext: _nextPage,
+          onPrevious: _previousPage,
+        );
+      case 9:
+        return PersonalizingWidget(onNext: _nextPage);
+      case 10:
+        return EducationWeightWidget(onNext: _nextPage);
+      case 11:
+        return EducationDiseaseWidget(onNext: _nextPage);
+      case 12:
+        return EducationAnxietyWidget(onNext: _nextPage);
+      case 13:
+        return EducationSupportWidget(onNext: _nextPage);
+      case 14:
+        return FeatureScanningWidget(onNext: _nextPage);
+      case 15:
+        return FeatureAdditivesWidget(onNext: _nextPage);
+      case 16:
+        return TestimonialsWidget(onNext: _nextPage);
+      default:
+        return WelcomeScreenWidget(onNext: _nextPage);
     }
   }
 
@@ -166,68 +248,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 },
                 itemCount: 17, // Total number of screens
                 itemBuilder: (context, index) {
-                  switch (index) {
-                    case 0:
-                      return WelcomeScreenWidget(onNext: _nextPage);
-                    case 1:
-                      return GenderQuestionWidget(
-                        onNext: _nextPage,
-                        onPrevious: _previousPage,
-                      );
-                    case 2:
-                      return DiscoveryQuestionWidget(
-                        onNext: _nextPage,
-                        onPrevious: _previousPage,
-                      );
-                    case 3:
-                      return HealthyTasteQuestionWidget(
-                        onNext: _nextPage,
-                        onPrevious: _previousPage,
-                      );
-                    case 4:
-                      return ComfortEatingQuestionWidget(
-                        onNext: _nextPage,
-                        onPrevious: _previousPage,
-                      );
-                    case 5:
-                      return FrequencyQuestionWidget(
-                        onNext: _nextPage,
-                        onPrevious: _previousPage,
-                      );
-                    case 6:
-                      return StressEatingQuestionWidget(
-                        onNext: _nextPage,
-                        onPrevious: _previousPage,
-                      );
-                    case 7:
-                      return AgeQuestionWidget(
-                        onNext: _nextPage,
-                        onPrevious: _previousPage,
-                      );
-                    case 8:
-                      return BoredomEatingQuestionWidget(
-                        onNext: _nextPage,
-                        onPrevious: _previousPage,
-                      );
-                    case 9:
-                      return PersonalizingWidget(onNext: _nextPage);
-                    case 10:
-                      return EducationWeightWidget(onNext: _nextPage);
-                    case 11:
-                      return EducationDiseaseWidget(onNext: _nextPage);
-                    case 12:
-                      return EducationAnxietyWidget(onNext: _nextPage);
-                    case 13:
-                      return EducationSupportWidget(onNext: _nextPage);
-                    case 14:
-                      return FeatureScanningWidget(onNext: _nextPage);
-                    case 15:
-                      return FeatureAdditivesWidget(onNext: _nextPage);
-                    case 16:
-                      return TestimonialsWidget(onNext: _nextPage);
-                    default:
-                      return WelcomeScreenWidget(onNext: _nextPage);
-                  }
+                  // Lazy widget factory - only builds the widget when the page is actually needed
+                  // This allows better tree-shaking and defers loading of non-visible widgets
+                  return _buildOnboardingWidget(index);
                 },
               ),
             ),

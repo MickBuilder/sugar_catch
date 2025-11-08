@@ -19,8 +19,7 @@ class FeatureScanningWidget extends StatelessWidget {
         final textHeight = 80.0; // Approximate text height
         final spacing = 75.0; // Two SizedBox heights (slightly reduced)
         final buttonHeight = 50.0; // Button height
-        final buffer = 30.0; // Extra buffer for safety
-        final imageMaxHeight = (availableHeight - textHeight - spacing - buttonHeight - buffer).clamp(200.0, 450.0);
+        final imageMaxHeight = (availableHeight - textHeight - spacing - buttonHeight).clamp(200.0, 450.0);
         
         return Padding(
           padding: const EdgeInsets.all(24.0),
@@ -37,7 +36,7 @@ class FeatureScanningWidget extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 35),
+              Spacer(),
               
               // Screenshot image - clipped to prevent overflow
               ClipRect(

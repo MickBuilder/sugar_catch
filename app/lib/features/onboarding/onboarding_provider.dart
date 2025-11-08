@@ -18,7 +18,17 @@ final hasCompletedOnboardingProvider = Provider<bool>((ref) {
 });
 
 class OnboardingNotifier extends StateNotifier<OnboardingData> {
-  OnboardingNotifier() : super(OnboardingService.getOnboardingData());
+  OnboardingNotifier() : super(_loadInitialData());
+  
+  /// Load initial data - this is safe because OnboardingService.init() is called before runApp()
+  static OnboardingData _loadInitialData() {
+    try {
+      return OnboardingService.getOnboardingData();
+    } catch (e) {
+      // If service isn't ready, return default data
+      return const OnboardingData();
+    }
+  }
 
   void updateGender(String gender) {
     state = state.copyWith(gender: gender);

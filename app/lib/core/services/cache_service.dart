@@ -14,8 +14,21 @@ class CacheService {
   static Box<String>? _productBox;
   static Box<String>? _sugarInfoBox;
   static Box<String>? _recommendationsBox;
+  static bool _isInitialized = false;
+  static Future<void>? _initFuture;
 
   static Future<void> init() async {
+    // Prevent duplicate initializations
+    if (_isInitialized) return;
+    if (_initFuture != null) return _initFuture;
+    
+    _initFuture = _doInit();
+    await _initFuture;
+    _isInitialized = true;
+    _initFuture = null;
+  }
+
+  static Future<void> _doInit() async {
     _productBox = await Hive.openBox<String>(_productBoxName);
     _sugarInfoBox = await Hive.openBox<String>(_sugarInfoBoxName);
     _recommendationsBox = await Hive.openBox<String>(_recommendationsBoxName);
